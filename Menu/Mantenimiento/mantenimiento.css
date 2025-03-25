@@ -1,0 +1,701 @@
+/* Contenedor principal */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fa;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 100px 1fr;
+    grid-template-areas: 
+        "header header"
+        "sidebar main";
+    height: 100vh;
+    color: #333;
+}
+
+/* Encabezado */
+header {
+    grid-area: header;
+    background-color: #4a76a8;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* Sidebar (botones circulares) */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #4a76a8;
+    padding: 15px;
+    border-radius: 8px;
+    gap: 15px;
+}
+
+.btn-circle {
+    background-color: white;
+    color: #4a76a8;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-circle:hover {
+    background-color: #e6edf6;
+    color: #2c4e6b;
+}
+
+.btn-circle i {
+    pointer-events: none;
+}
+
+/* Configuración del contenedor principal */
+.main-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px; /* Espacio entre sidebar y tabla */
+    height: 100vh; /* Ajusta la altura completa */
+}
+
+/* Contenedor de los botones */
+.table-container .buttons {
+    display: flex; /* Alinear en fila */
+    gap: 10px; /* Espacio entre los botones */
+    justify-content: center; /* Centrar los botones en el contenedor */
+    margin-bottom: 20px; /* Separar los botones de la tabla */
+}
+
+/* Estilo para los botones con emojis */
+.table-container .buttons button {
+    padding: 10px 20px; /* Tamaño adecuado del botón */
+    font-size: 14px; /* Tamaño del texto */
+    font-weight: bold;
+    display: flex;
+    align-items: center; /* Alinear texto y emoji */
+    gap: 5px; /* Espacio entre el emoji y el texto */
+    background-color: #f0f8ff; /* Fondo claro */
+    color: #4a76a8; /* Texto azul */
+    border: 2px solid #4a76a8; /* Borde azul */
+    border-radius: 8px; /* Esquinas redondeadas */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Efecto hover en los botones */
+.table-container .buttons button:hover {
+    background-color: #4a76a8; /* Fondo azul al pasar el mouse */
+    color: white; /* Texto blanco al pasar el mouse */
+}
+
+/* Centrando el título de "Mantenimientos Programados" */
+.table-container h3 {
+    text-align: center;
+    margin-bottom: 20px; /* Espaciado entre el título y los botones */
+}
+
+/* Ajustar el tamaño de la tabla */
+.table-container {
+    max-width: 1100px; /* Define un ancho máximo para la tabla */
+    margin: 0 auto; /* Centrar la tabla dentro del contenedor */
+}
+
+/* Estilo de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem; /* Reduce el tamaño del texto */
+    text-align: left;
+}
+
+/* Encabezado de la tabla */
+table thead {
+    background-color: #4a76a8;
+    color: white;
+}
+
+table th, table td {
+    padding: 10px; /* Espaciado interno de las celdas */
+    border: 1px solid #ddd; /* Bordes suaves */
+    vertical-align: middle; /* Centrar verticalmente el contenido */
+}
+
+/* Alternar colores en las filas */
+table tbody tr:nth-child(even) {
+    background-color: #f2f6fc;
+}
+
+table tbody tr:hover {
+    background-color: #e6edf6; /* Cambio de color al pasar el mouse */
+}
+
+/* Secciones ocultas */
+.hidden {
+    display: none;
+}
+
+
+/* Botones individuales (Finalizar y los de arriba) */
+button {
+    padding: 8px 12px; /* Tamaño del botón */
+    font-size: 14px; /* Tamaño de texto */
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #4a76a8; /* Azul */
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4a76a8; /* Azul más oscuro al pasar el mouse */
+}
+
+/* Botón de "Finalizar" específico */
+.table-container table button {
+    padding: 5px 10px; /* Tamaño más pequeño */
+    font-size: 12px; /* Texto más pequeño */
+}
+
+/* Estilo para dispositivos móviles */
+@media (max-width: 768px) {
+    body {
+        grid-template-columns: 80px 1fr;
+    }
+
+    .btn-circle {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    .table-container {
+        padding: 10px;
+    }
+
+    table th, table td {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+}
+
+/*****************************************************************/
+/* Contenedor general de lista de equipos */
+#listaEquipos {
+    margin: 20px auto;
+    max-width: 90%;
+    background: linear-gradient(135deg, #ffffff, #f0f8ff);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    transition: transform 0.3s ease-in-out;
+    height: auto; /* Permite ajustar la altura según la tabla */
+}
+
+/* Ajuste dinámico de tamaño */
+#listaEquipos.reducido {
+    max-height: 300px; /* Reduce la altura del contenedor */
+    overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
+}
+
+#listaEquipos:hover {
+    transform: scale(1.02); /* Efecto de ampliación al pasar el ratón */
+}
+
+/* Título estilizado */
+#listaEquipos h3 {
+    text-align: center;
+    font-size: 2rem;
+    color: #4a76a8;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabla de equipos */
+#tablaEquipos {
+    width: 90%; /* Reduce el ancho visual de la tabla */
+    margin: 0 auto; /* Centra la tabla dentro del contenedor */
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    font-size: 0.9rem; /* Reduce el tamaño del texto */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, width 0.3s ease;
+}
+
+#tablaEquipos.reducido {
+    width: 70%; /* Reduce el ancho aún más cuando está en modo reducido */
+}
+
+/* Encabezado de la tabla */
+#tablaEquipos thead {
+    background: linear-gradient(135deg, #4a76a8, #375b7a);
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Celdas de la tabla */
+#tablaEquipos th, #tablaEquipos td {
+    padding: 10px; /* Reduce el espacio interno */
+    border: 1px solid #ddd;
+    text-align: left;
+    vertical-align: middle;
+}
+
+/* Alternar colores y efecto hover */
+#tablaEquipos tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#tablaEquipos tbody tr:hover {
+    background-color: #e6edf6;
+    transition: background-color 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Botón de programar mantenimiento */
+#listaEquipos button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 15px;
+    font-size: 0.9rem; /* Reduce el tamaño del botón */
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #4a76a8, #375b7a);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#listaEquipos button:hover {
+    background-color: #2c4e6b;
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenedor del formulario */
+#formularioMantenimiento {
+    margin: 20px auto;
+    max-width: 600px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, flex 0.3s ease-in-out;
+    flex: 1; /* Toma menos espacio inicialmente */
+}
+
+#formularioMantenimiento:hover {
+    transform: translateY(-5px);
+}
+
+/* Título del formulario */
+#formularioMantenimiento h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #4a76a8;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Etiquetas y campos del formulario */
+#formularioMantenimiento label {
+    display: block;
+    font-weight: bold;
+    color: #4a76a8;
+    margin-bottom: 8px;
+}
+
+#formularioMantenimiento select,
+#formularioMantenimiento input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#formularioMantenimiento select:focus,
+#formularioMantenimiento input:focus {
+    border-color: #4a76a8;
+    box-shadow: 0 0 6px rgba(74, 118, 168, 0.5);
+}
+
+/* Botones del formulario */
+#formularioMantenimiento button {
+    width: calc(50% - 10px);
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #4a76a8, #375b7a);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#formularioMantenimiento button:hover {
+    background-color: #2c4e6b;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto hover en ambos contenedores */
+#listaEquipos:hover, #formularioMantenimiento:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    #listaEquipos {
+        flex: 1; /* Se reduce para pantallas pequeñas */
+    }
+
+    #formularioMantenimiento {
+        flex: 1;
+        padding: 15px;
+    }
+}
+
+/***************************************************************/
+
+/* Contenedor general del cronograma con scroll horizontal */
+#cronograma {
+    margin: 20px auto;
+    max-width: 100%; /* Ocupa el ancho completo */
+    background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Activar scroll horizontal */
+    white-space: nowrap; /* Evita el salto de línea de las celdas */
+}
+
+/* Título del cronograma */
+#cronograma h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #4a76a8;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#cronograma h2 span {
+    color: #375b7a;
+    font-weight: bold;
+}
+
+
+/* Contenedor interno para centrar la tabla */
+#cronograma table {
+    min-width: 1500px; /* Define un ancho mínimo para garantizar visibilidad */
+    border-collapse: collapse;
+}
+
+/* Encabezado principal */
+#tablaCronograma thead tr:nth-child(1) th {
+    background: linear-gradient(135deg, #4a76a8, #375b7a);
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* Subencabezado de semanas */
+#tablaCronograma thead tr:nth-child(2) th {
+    background: #375b7a;
+    color: white;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Celdas de la tabla */
+#tablaCronograma td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Alternar colores en las filas */
+#tablaCronograma tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#tablaCronograma tbody tr:hover {
+    background-color: #e6edf6;
+    transition: background-color 0.3s ease;
+}
+
+/* Resaltar semanas programadas */
+#tablaCronograma td.programado {
+    background-color: #4caf50; /* Verde */
+    color: white;
+    font-weight: bold;
+}
+
+/* Resaltar semanas ejecutadas */
+#tablaCronograma td.ejecutado {
+    background-color: #ff9800; /* Naranja */
+    color: white;
+    font-weight: bold;
+}
+
+/* Botones del cronograma */
+#cronograma div {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#cronograma button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #4a76a8, #375b7a);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#cronograma button:hover {
+    background-color: #2c4e6b;
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo para celdas vacías */
+#tablaCronograma td:not(.programado):not(.ejecutado) {
+    background-color: #f9f9f9;
+}
+
+/* Responsive: Ajustar diseño para pantallas pequeñas */
+@media (max-width: 768px) {
+    #cronograma {
+        padding: 15px;
+    }
+
+    #tablaCronograma th, #tablaCronograma td {
+        font-size: 0.8rem;
+        padding: 8px;
+    }
+
+    #cronograma button {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+}
+
+/************************************************************/
+/* Contenedor general del historial */
+#historial {
+    margin: 20px auto;
+    max-width: 90%;
+    background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+/* Título del historial */
+#historial h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #4a76a8;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabla del historial */
+#historial table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado de la tabla */
+#historial thead {
+    background: linear-gradient(135deg, #4a76a8, #375b7a);
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#historial thead th {
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+/* Celdas de la tabla */
+#historial td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Alternar colores en las filas */
+#historial tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#historial tbody tr:hover {
+    background-color: #e6edf6;
+    transition: background-color 0.3s ease;
+}
+
+/* Botón de acciones */
+#historial td button {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #4a76a8, #375b7a);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#historial td button:hover {
+    background-color: #2c4e6b;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Modal para detalles del equipo */
+#modalDetalles {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Fijo en la pantalla */
+    top: 0; /* Desde la parte superior */
+    left: 0; /* Desde la parte izquierda */
+    width: 100%; /* Cubre toda la pantalla horizontalmente */
+    height: 100%; /* Cubre toda la pantalla verticalmente */
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    z-index: 999; /* Capa superior */
+    display: flex; /* Flexbox para centrar */
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    padding: 20px; /* Espaciado alrededor del modal */
+}
+
+
+/* Contenedor interno del modal */
+#modalDetalles div {
+    background: white; /* Fondo blanco */
+    padding: 20px; /* Espaciado interno */
+    width: 70%; /* Ancho del modal */
+    max-width: 800px; /* Ancho máximo */
+    max-height: 70%; /* Limitar la altura máxima del modal */
+    border-radius: 15px; /* Bordes redondeados */
+    overflow-y: auto; /* Scroll para contenido largo */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra del modal */
+    animation: fadeIn 0.3s ease; /* Animación de aparición */
+}
+
+/* Título del modal */
+#modalDetalles h3 {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #4a76a8;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Texto del modal */
+#modalDetalles p {
+    font-size: 0.7rem;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* Botón del modal */
+#modalDetalles button {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #4a76a8, #375b7a);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#modalDetalles button:hover {
+    background-color: #2c4e6b;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Animación para el modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive: Ajustar diseño para pantallas pequeñas */
+@media (max-width: 768px) {
+    #modalDetalles div {
+        width: 90%; /* Reduce el tamaño del modal */
+        padding: 15px;
+    }
+
+    #modalDetalles h3 {
+        font-size: 1.5rem;
+    }
+
+    #modalDetalles p {
+        font-size: 1rem;
+    }
+}

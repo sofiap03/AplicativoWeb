@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Panel de Administrador</title>
+        <link rel="stylesheet" href="dashboard.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">   
+        <script src="https://unpkg.com/i18next/i18next.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    
+    <body>
+        <header class="navbar"> 
+            <!-- Botón del menú dentro de la barra de navegación -->
+            <button id="menuButton" class="menu-icon">
+                <i class="fas fa-bars"></i>
+            </button>
+        
+            <div class="logo-container">
+                <img src="logo.png" alt="Logo" />
+                <h1 data-i18n="header.title" id="dashboardTitle" style="cursor: pointer;">
+                    Gestión de Equipos Médicos
+                </h1>
+            </div>
+        
+            <button id="logoutButton" class="logout-btn" data-i18n="header.logout">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </header>
+        
+        
+        <!--************************************************************************-->
+        <!-- Contenedor del menú desplegable -->
+        <nav id="menuDesplegable" class="menu-desplegable">
+            <span class="close-menu" id="closeMenu">✖</span>
+            <a href="../Menu/Inventario/prueba1..html" data-i18n="menu.inventory"><i class="fas fa-boxes"></i> Inventario</a>
+            <a href="../Menu/Mantenimiento/cambios_mantenimiento.html" data-i18n="menu.maintenance"><i class="fas fa-tools"></i> Mantenimientos</a>
+            <!--<a href="reportes.html" data-i18n="menu.reports"><i class="fas fa-chart-line"></i> Reportes</a>-->
+            <a href="#" id="configuracionLink" data-i18n="menu.settings"><i class="fas fa-cog"></i> Configuración</a>
+            
+            <div id="submenuConfiguracion" class="submenu">
+                <a href="#" data-section="interface-settings" data-i18n="submenu.interface">Personalización de la Interfaz</a>
+                <a href="#" data-section="security-privacy" data-i18n="submenu.security">Seguridad y Privacidad</a>
+                <a href="#" data-section="management" data-i18n="submenu.userManagement">Gestión de Usuarios y Servicios</a>
+            </div>
+            <a href= "../Menu/Asistencia_tecnica/asistencia_tecnica.html" data-i18n="menu.support"><i class="fas fa-life-ring"></i> Asistencia técnica</a>
+        </nav>
+        
+        <!--*********************************************************************************-->
+        <!-- Contenido del dashboard --> 
+        <main class="main-content"> 
+            <section id="saludo-usuario">  
+                <h2 id="mensaje-bienvenida" data-i18n="dashboard.welcome">¡Bienvenido, Usuario!</h2>     
+                <p data-i18n="dashboard.status">Estado Actual</p> 
+                
+                <div class="summary-cards">     
+                    <div class="card">  
+                        <h3 data-i18n="dashboard.operational">Equipos Operativos</h3> 
+                        <p id="equipos-operativos">0%</p>
+                    </div>
+            
+                    <div class="card">    
+                        <h3 data-i18n="dashboard.pending">Mantenimiento Pendiente</h3>    
+                        <p id="mantenimiento-pendiente">0</p>
+                
+                    </div>
+                 
+                </div> 
+            </section>
+
+            <!--***********************************************************************-->
+            <!-- Calendario -->
+            <div class="calendar-charts-wrapper">
+                <!-- Calendario -->
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <button id="prevMonth">&lt;</button>
+                        <h2 id="calendarMonthYear"></h2>
+                        <button id="nextMonth">&gt;</button>
+                    </div>
+                    <div class="calendar-body">
+                        <table class="calendar-table">
+                            <thead>
+                                <tr>
+                                    <th>D</th>
+                                    <th>L</th>
+                                    <th>M</th>
+                                    <th>X</th>
+                                    <th>J</th>
+                                    <th>V</th>
+                                    <th>S</th>
+                                </tr>
+                            </thead>
+                            <tbody id="calendarDays"></tbody>
+                        </table>
+                    </div>
+                </div>
+            
+                <!-- Gráficas -->
+                <div class="charts-section">
+                    <div class="charts-row">
+                        <div class="chart-container">
+                            <canvas id="equiposPorEstado"></canvas>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div id="eventModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalDate">Fecha</h2>
+                        <button id="closeModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h3>Eventos Programados:</h3>
+                        <ul id="eventList"></ul>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="text" id="eventTitle" placeholder="Título del evento" />
+                        <label>Inicio:</label>
+                        <input type="datetime-local" id="eventStartDate" />
+                        <label>Fin:</label>
+                        <input type="datetime-local" id="eventEndDate" />
+                        <button id="addEventButton">Añadir/Actualizar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--***********************************************************************-->
+          
+
+            <!--**************************************************************************-->
+            <!--Gestion de tareas-->
+
+            <section id="task-management" class="task-management">
+                <h2>Gestión de Tareas</h2>
+            
+                <div class="tasks-wrapper">
+                    <!-- Tareas Pendientes -->
+                    <div class="tasks-column">
+                        <h3>Mantenimientos Próximos</h3>
+                        <ul id="pending-tasks-list">
+                            <!-- Se llenará dinámicamente -->
+                        </ul>
+                    </div>
+            
+                    <!-- Tareas Asignadas -->
+                    <div class="tasks-column">
+                        <h3>Empresas Encargadas</h3>
+                        <ul id="assigned-tasks-list">
+                            <!-- Se llenará dinámicamente -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!--**************************************************************************-->
+            
+            <!--*****************************************************************-->
+          
+            <!-- SECCIÓN DE SEGUIMIENTO DE ENVÍOS -->   
+            <div id="tracking-section">
+                <h2>Seguimiento de Envío</h2>
+                <!-- Contenedor de la animación -->
+                <div id="tracking-animation" class="tracking-animation"></div>
+        
+                <div class="tracking-wrapper">
+                    <select id="courier-select">
+                        <option value="">Seleccione una transportadora</option>
+                        <option value="servientrega">Servientrega</option>
+                        <option value="deprisa">Deprisa</option>
+                        <option value="coordinadora">Coordinadora</option>
+                        <option value="interrapidisimo">Interrapidísimo</option>
+                        <option value="envia">Envia</option>
+                    </select>
+                    <button id="trackShipment">Realizar Seguimiento</button>
+                </div>
+            </div>
+        </div>
+
+            <!--************************************************************************-->
+            <!--SECCION DE CONFIGURACIONES-->
+            <section id="config-section-interface-settings" class="config-section">  
+                <h2 data-i18n="settings.interface.title">Personalización de la Interfaz</h2>
+            
+                <div id="theme-selection">
+                    <h3>Seleccionar Tema</h3>
+                    <div id="theme-options">
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="default" style="background: #ffffff; border: 1px solid #ccc;"></div>
+                            <span class="theme-label">Predeterminado</span>
+                        </div>
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="dark" style="background: #2c3e50;"></div>
+                            <span class="theme-label">Oscuro</span>
+                        </div>
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="light" style="background: #ecf0f1;"></div>
+                            <span class="theme-label">Claro</span>
+                        </div>
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="blue" style="background: #3498db;"></div>
+                            <span class="theme-label">Azul</span>
+                        </div>
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="purple" style="background: #9b59b6;"></div>
+                            <span class="theme-label">Morado Pastel</span>
+                        </div>
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="pink" style="background: #ff6b81;"></div>
+                            <span class="theme-label">Rosa Pastel</span>
+                        </div>
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="yellow" style="background: #f1c40f;"></div>
+                            <span class="theme-label">Amarillo Pastel</span>
+                        </div>
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="green" style="background: #2ecc71;"></div>
+                            <span class="theme-label">Verde Pastel</span>
+                        </div>
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="seafoam" style="background: #16a085;"></div>
+                            <span class="theme-label">Espuma de Mar</span>
+                        </div>
+                        <div class="theme-container">
+                            <div class="theme-box" data-theme="navy" style="background: #34495e;"></div>
+                            <span class="theme-label">Azul Marino</span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="option"> 
+                    <label for="language-select" data-i18n="settings.interface.language">Idioma:</label> 
+                    <select id="language-select">
+                        <option value="es">Español</option> 
+                        <option value="en">English</option>  
+                    </select>  
+                </div> 
+
+                <!-- Nueva sección de personalización de fuente -->
+                <div id="font-selection">
+                    <h3 data-i18n="settings.interface.font">Seleccionar Fuente</h3>
+                    <select id="fontSelect">
+                        <option value="default">Por Defecto</option>
+                        <option value="arial">Arial</option>
+                        <option value="times-new-roman">Times New Roman</option>
+                        <option value="verdana">Verdana</option>
+                        <option value="georgia">Georgia</option>
+                    </select>
+                </div>
+
+                <!-- Nueva sección de personalización de tamaño de texto -->
+                <div id="text-size-selection">
+                    <h3 data-i18n="settings.interface.textSize">Tamaño del Texto</h3>
+                    <select id="textSizeSelect">
+                        <option value="small">Pequeño</option>
+                        <option value="medium" selected>Mediano</option>
+                        <option value="large">Grande</option>
+                        <option value="extra-large">Extra Grande</option>
+                    </select>
+                </div>
+
+                <div id="page-layout-selection">
+                    <h3 data-i18n="settings.interface.pageLayout">Diseño de Página</h3>
+                    <select id="pageLayoutSelect">
+                        <option value="wide" selected>Amplio</option>
+                        <option value="compact">Compacto</option>
+                    </select>
+                </div>     
+            </section>
+        
+        
+            <section id="config-section-security-privacy" class="config-section">
+                <h2 class="section-title">🔒 Seguridad y Privacidad</h2>
+                <p class="section-description">Administra la seguridad de tu cuenta, contraseñas y accesos.</p>
+            
+                <div class="security-container">
+                    <!-- 🔑 Primera fila: Contraseñas y Configuración de Sesión -->
+                    <div class="security-row">
+                        <div class="security-card">
+                            <h3 class="security-title">🔑 Gestión de Contraseñas</h3>
+                            <form id="change-password-form">
+                                <div class="form-group">
+                                    <label for="currentPassword">Contraseña Actual:</label>
+                                    <input type="password" id="currentPassword" name="currentPassword" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword">Nueva Contraseña:</label>
+                                    <input type="password" id="newPassword" name="newPassword" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirmar Contraseña:</label>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" required />
+                                </div>
+                                <button type="submit" id="changePasswordButton" class="btn">Cambiar Contraseña</button>
+                            </form>
+                        </div>
+                
+                        <div class="security-card">
+                            <h3 class="security-title">⏳ Configuración de Sesión</h3>
+                            <div class="form-group">
+                                <label for="sessionExpiration">Expiración de Sesión (min):</label>
+                                <input type="number" id="sessionExpiration" name="sessionExpiration" min="1" max="120" value="30" />
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="stayLoggedIn" />
+                                    Mantener sesión iniciada
+                                </label>
+                            </div>
+                            <button id="saveSessionSettings" class="btn">Guardar Configuración</button>
+                        </div>
+                    </div>
+                
+                    <!-- 🛡 Segunda fila: Gestión de Permisos y Dispositivos -->
+                    <div class="security-row">
+                        <div class="security-card">
+                            <h3 class="security-title">🛡️ Gestión de Permisos</h3>
+                            <div class="permissions-grid">
+                                <label class="permission-item">
+                                    <input type="checkbox" id="allowInventoryAccess" />
+                                    <span class="permission-icon">📦</span>
+                                    <span class="permission-text">Acceso al Inventario</span>
+                                </label>
+                                <label class="permission-item">
+                                    <input type="checkbox" id="allowMaintenanceAccess" />
+                                    <span class="permission-icon">🛠️</span>
+                                    <span class="permission-text">Acceso a Mantenimientos</span>
+                                </label>
+                                <label class="permission-item">
+                                    <input type="checkbox" id="allowReportsAccess" />
+                                    <span class="permission-icon">📊</span>
+                                    <span class="permission-text">Acceso a Reportes</span>
+                                </label>
+                            </div>
+                        </div>
+                
+                        <div class="security-card">
+                            <h3 class="security-title">📱 Gestión de Dispositivos</h3>
+                            <ul id="connectedDevices">
+                                <li><span>💻 Laptop - Chrome</span> <button class="logout-device-btn">Cerrar Sesión</button></li>
+                                <li><span>📱 Smartphone - Safari</span> <button class="logout-device-btn">Cerrar Sesión</button></li>
+                            </ul>
+                            <button id="logoutAllDevices" class="btn">Cerrar Todas las Sesiones</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </section>
+            
+            <section id="config-section-management" class="config-section">
+                <h2>🔧 Gestión de Usuarios y Servicios</h2>
+                
+                <div class="config-management-container">
+                    <!-- 📌 Gestión de Usuarios -->
+                    <div class="management-box">
+                        <h3>👤 Gestión de Usuarios</h3>
+                        <form id="createUserForm">
+                            <div class="form-group">
+                                <label for="newUsername">Nombre de Usuario:</label>
+                                <input type="text" id="newUsername" name="newUsername" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">Contraseña:</label>
+                                <input type="password" id="newPassword" name="newPassword" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirmar Contraseña:</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" required />
+                            </div>
+                            <button type="submit" id="createUserButton" class="btn">Crear Usuario</button>
+                        </form>
+                
+                        <div id="userManagementMessage" class="message"></div>
+                
+                        <h3>Usuarios Existentes</h3>
+                        <ul id="userList"></ul>
+                    </div>
+            
+                    <!-- 📌 Gestión de Servicios -->
+                    <div class="management-box">
+                        <h3>🛠️ Gestión de Servicios</h3>
+                        <p>Administra los servicios disponibles para asignar a los equipos en inventario.</p>
+                
+                        <form id="createServiceForm">
+                            <div class="form-group">
+                                <label for="serviceName">Nombre del Servicio:</label>
+                                <input type="text" id="serviceName" name="serviceName" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="serviceDescription">Descripción:</label>
+                                <textarea id="serviceDescription" name="serviceDescription" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" id="createServiceButton" class="btn">Crear Servicio</button>
+                        </form>
+                
+                        <div id="serviceMessage" class="message"></div>
+                
+                        <h3>Servicios Existentes</h3>
+                        <ul id="serviceList"></ul>
+                    </div>
+                </div>
+            </section>
+            
+
+        </main>
+
+ 
+        <!--****************************************************************************-->
+        <!-- Librería de Lottie -->
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
+
+        <script>
+        
+            document.addEventListener('DOMContentLoaded', function() {   
+                // Elementos principales
+                const menuButton = document.getElementById('menuButton');
+                const menuDesplegable = document.getElementById('menuDesplegable');
+                const closeMenu = document.getElementById('closeMenu');
+                const configuracionLink = document.getElementById('configuracionLink');
+                const submenuConfiguracion = document.getElementById('submenuConfiguracion');
+                const configSections = document.querySelectorAll('.config-section');
+                const mainContent = document.querySelector('.main-content');
+                const saludoUsuario = document.getElementById('saludo-usuario'); // Sección de bienvenida
+                const themeToggle = document.getElementById('theme-toggle');
+                const logoutButton = document.getElementById('logoutButton');
+                const languageSelect = document.getElementById('language-select');
+                const themeSelect = document.getElementById('themeSelect');
+                const fontSelect = document.getElementById('fontSelect');
+                const textSizeSelect = document.getElementById('textSizeSelect');
+                const emailNotificationsCheckbox = document.getElementById('emailNotifications');
+                const smsNotificationsCheckbox = document.getElementById('smsNotifications');
+                const appNotificationsCheckbox = document.getElementById('appNotifications');
+                const frequencySelect = document.getElementById('notificationFrequency');
+                const savedFrequency = localStorage.getItem('notificationFrequency') || 'daily';
+                const defaultPanelSelect = document.getElementById('defaultPanel');
+                const changePasswordForm = document.getElementById('change-password-form');
+                const passwordChangeMessage = document.getElementById('passwordChangeMessage');
+                const sessionExpirationInput = document.getElementById('sessionExpiration');
+                const stayLoggedInCheckbox = document.getElementById('stayLoggedIn');
+                const saveSessionSettingsButton = document.getElementById('saveSessionSettings');
+                const sessionMessage = document.getElementById('sessionMessage');
+                const allowInventoryAccess = document.getElementById('allowInventoryAccess'); 
+                const allowMaintenanceAccess = document.getElementById('allowMaintenanceAccess');
+                const allowReportsAccess = document.getElementById('allowReportsAccess');
+                const connectedDevicesList = document.getElementById('connectedDevices');
+                const logoutAllDevicesButton = document.getElementById('logoutAllDevices');
+                const createUserForm = document.getElementById('createUserForm');
+                const userManagementMessage = document.getElementById('userManagementMessage');
+                const userList = document.getElementById('userList');
+                const dashboardTitle = document.getElementById('dashboardTitle');
+                const calendarEl = document.getElementById('calendar');
+
+                // Redirige al dashboard al hacer clic en el título
+                if (dashboardTitle) {
+                    dashboardTitle.addEventListener('click', function () { 
+                        window.location.href = 'admin-dashboard.html'; // Cambia a la ruta del dashboard si es necesario
+                    });
+                }
+
+               // Cargar el nombre del usuario desde localStorage
+               const nombreUsuario = localStorage.getItem("nombreUsuario") || "Usuario";
+               document.getElementById("mensaje-bienvenida").textContent = `¡Bienvenido, ${nombreUsuario}!`;
+
+                // Cargar el idioma guardado en localStorage
+                const savedLanguage = localStorage.getItem('language') || 'es';
+                languageSelect.value = savedLanguage;
+    
+                // Inicializar i18next
+                i18next.init(  
+                {  
+                    lng: savedLanguage, // Usar el idioma guardado 
+                    resources: { 
+                        es: {  
+                            translation: {   
+                                settings: {
+                                    interface: { theme: 'Seleccionar Tema' },
+                                    darkMode: 'Modo Oscuro:',
+                                    language: 'Idioma:',
+                                },
+
+                                theme: { default: 'Por Defecto', dark: 'Oscuro', light: 'Claro', blue: 'Azul' },
+                                menu: { inventory: 'Inventario', maintenance: 'Mantenimientos', settings: 'Configuración' },  
+                                title: 'Panel de Administrador',      
+                                header: { title: 'Gestión de Equipos Médicos', logout: 'Cerrar Sesión' },    
+                                
+                                menu: {                    
+                                    button: 'Menú', 
+                                    inventory: 'Inventario',  
+                                    maintenance: 'Mantenimientos',   
+                                    reports: 'Reportes',  
+                                    settings: 'Configuración', 
+                                    support: 'Asistencia técnica',
+                                },
+                        
+                                submenu: {   
+                                    interface: 'Personalización de la Interfaz', 
+                                    userPreferences: 'Preferencias del Usuario',  
+                                    security: 'Seguridad y Privacidad', 
+                                    userManagement: 'Gestión de Usuarios y Servicios', // Traducción al español
+                                },
+                        
+                                dashboard: {
+                                    welcome: '¡Bienvenido, Usuario!',
+                                    status: 'Estado Actual',
+                                    operational: 'Equipos Operativos', 
+                                    pending: 'Mantenimiento Pendiente', 
+                                    alerts: 'Alertas Críticas',  
+                                    cost: 'Costo Mantenimiento Mensual',     
+                                },
+                        
+                                settings: {
+                                    interface: {   
+                                        title: 'Personalización de la Interfaz', 
+                                        theme: 'Seleccionar Tema',
+                                        language: 'Idioma:',
+                                        font: 'Seleccionar Fuente',
+                                        textSize: 'Tamaño del Texto',
+                                        pageLayout: 'Diseño de Página',
+                                    },
+                            
+                                    userPreferences: { 
+                                        title: 'Preferencias del Usuario',          
+                                        description: 'Aquí puedes gestionar notificaciones, vistas predeterminadas, etc.',
+          
+                                        notifications: {
+                                            title: 'Configuración de Notificaciones',     
+                                            email: 'Notificaciones por Correo Electrónico',
+                                            sms: 'Notificaciones por SMS',
+                                            app: 'Notificaciones en la Aplicación',
+            
+                                            frequency: {
+                                                title: 'Frecuencia de Notificaciones:',
+                                                daily: 'Diaria', 
+                                                weekly: 'Semanal', 
+                                                monthly: 'Mensual',
+                                            },
+                                        },
+         
+                                        defaultPanel: {
+                                            title: 'Panel Inicial',
+                                            label: 'Seleccionar Panel Inicial:',
+                                            dashboard: 'Dashboard',
+                                            inventory: 'Inventario',
+                                            maintenance: 'Mantenimiento',
+                                            reports: 'Reportes',
+                                            settings: 'Configuración',
+                                        },
+                                    },
+
+                                    userManagement: {
+                                        title: 'Gestión de Usuarios',
+                                        username: 'Nombre de Usuario:',
+                                        password: 'Contraseña:',
+                                        confirmPassword: 'Confirmar Contraseña:',          
+                                        create: 'Crear Usuario',
+                                        existingUsers: 'Usuarios Existentes',
+                                    },
+                            
+                                    security: {   
+                                        title: 'Seguridad y Privacidad',
+                                        description: 'Opciones relacionadas con contraseñas, permisos y privacidad.',
+          
+                                        passwordManagement: {
+                                            title: 'Gestión de Contraseñas',
+                                            currentPassword: 'Contraseña Actual:',
+                                            newPassword: 'Nueva Contraseña:',
+                                            confirmPassword: 'Confirmar Contraseña:',
+                                            changePassword: 'Cambiar Contraseña',
+                                        },
+          
+                                        session: {
+                                            title: 'Configuración de Sesión',
+                                            expiration: 'Tiempo de Expiración de Sesión (minutos):',
+                                            stayLoggedIn: 'Mantener sesión iniciada',
+                                            saveSettings: 'Guardar Configuración',
+          
+                                        },
+                                        permissions: {
+                                            title: 'Gestión de Permisos y Dispositivos',
+                                            access: 'Definir Acceso',
+                                            inventoryAccess: 'Acceso al Inventario',
+                                            maintenanceAccess: 'Acceso a Mantenimientos',
+                                            reportsAccess: 'Acceso a Reportes',
+                                            devices: 'Gestión de Dispositivos Conectados',
+                                            logoutAll: 'Cerrar Todas las Sesiones',
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                
+                        en: {
+                            translation: {
+                                settings: {    
+                                    interface: { theme: 'Select Theme' },                   
+                                    darkMode: 'Dark Mode:',
+                                    language: 'Language:',
+                                },
+
+                                theme: { default: 'Default', dark: 'Dark', light: 'Light', blue: 'Blue' },
+                                menu: { inventory: 'Inventory', maintenance: 'Maintenance', settings: 'Settings' },
+                                title: 'Admin Panel',
+                                header: { title: 'Medical Equipment Management', logout: 'Logout' },
+                        
+                                menu: {
+                                    button: 'Menu',  
+                                    inventory: 'Inventory',
+                                    maintenance: 'Maintenance',
+                                    reports: 'Reports',
+                                    settings: 'Settings',
+                                    support: 'Technical Support',
+                                },
+                        
+                                submenu: {
+                                    interface: 'Interface Customization',
+                                    userPreferences: 'User Preferences',
+                                    security: 'Security and Privacy',
+                                    userManagement: 'User and Services Management', // Traducción al inglés
+                                },
+                        
+                                dashboard: {
+                                    welcome: 'Welcome, User!',
+                                    status: 'Current Status',
+                                    operational: 'Operational Equipment',
+                                    pending: 'Pending Maintenance',
+                                    alerts: 'Critical Alerts',
+                                    cost: 'Monthly Maintenance Cost',
+                                },
+                        
+                                settings: {
+                                    interface: { 
+                                        title: 'Interface Customization',       
+                                        theme: 'Select Theme',
+                                        language: 'Language:',
+                                        font: 'Select Font',
+                                        textSize: 'Text Size',
+                                        pageLayout: 'Page Layout',
+                                    },
+                            
+                                    userPreferences: {
+                                        title: 'User Preferences',
+                                        description: 'Manage notifications, default views, etc.',
+          
+                                        notifications: {
+                                            title: 'Notification Settings',
+                                            email: 'Email Notifications',
+                                            sms: 'SMS Notifications',
+                                            app: 'In-App Notifications',
+            
+                                            frequency: {
+                                                title: 'Notification Frequency:',
+                                                daily: 'Daily',
+                                                weekly: 'Weekly',
+                                                monthly: 'Monthly',
+                                            },
+                                        },
+
+                                        defaultPanel: {
+                                            title: 'Default Panel',
+                                            label: 'Select Default Panel:',
+                                            dashboard: 'Dashboard',
+                                            inventory: 'Inventory',
+                                            maintenance: 'Maintenance',
+                                            reports: 'Reports',
+                                            settings: 'Settings', 
+                                        },
+
+                                        userManagement: {
+                                            title: 'User Management',
+                                            username: 'Username:',
+                                            password: 'Password:',
+                                            confirmPassword: 'Confirm Password:',
+                                            create: 'Create User',
+                                            existingUsers: 'Existing Users',
+                                        },
+                                    },
+                            
+                                    security: {
+                                        title: 'Security and Privacy',
+                                        description: 'Options related to passwords, permissions, and privacy.',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+        
+                function (err, t) {
+                    if (err) console.error(err);
+                    updateContent(); // Actualizar la traducción inicial
+                });
+  
+                // Función para actualizar textos dinámicos
+                function updateContent() {
+                    document.querySelectorAll('[data-i18n]').forEach((element) => {
+                        const key = element.getAttribute('data-i18n');
+                        element.textContent = i18next.t(key);
+                    });
+
+                    document.querySelectorAll('[data-i18n-placeholder]').forEach((element) => {
+                        const key = element.getAttribute('data-i18n-placeholder');
+                        element.placeholder = i18next.t(key);
+                    });
+                }
+     
+                // Manejar cambio de idioma
+                languageSelect.addEventListener('change', function () {
+                    const selectedLanguage = languageSelect.value;
+                    i18next.changeLanguage(selectedLanguage, updateContent);
+                    localStorage.setItem('language', selectedLanguage);
+                    alert(selectedLanguage === 'es' ? 'Idioma cambiado a Español' : 'Language changed to English');
+                });
+
+                // Cargar datos del inventario desde localStorage
+                const inventarioEquipos = JSON.parse(localStorage.getItem('inventarioEquipos')) || [];
+                console.log('Inventario Equipos:', inventarioEquipos);
+
+                // Calcular estadísticas del inventario
+                let totalEquipos = inventarioEquipos.length;
+                let equiposOperativos = 0;
+                let enMantenimiento = 0;
+                let fueraDeServicio = 0;
+       
+                inventarioEquipos.forEach(equipo => {
+                    const estadoNormalizado = equipo.estado.trim().toLowerCase();
+                
+                    if (estadoNormalizado === 'operativo') {
+                        equiposOperativos++;
+                    } else if (estadoNormalizado === 'mantenimiento') {   
+                        enMantenimiento++;
+                    } else if (estadoNormalizado === 'fuera de servicio') { 
+                        fueraDeServicio++;
+                    }
+                });
+
+                const porcentajeOperativos = totalEquipos > 0 ? (equiposOperativos / totalEquipos) * 100 : 0;
+
+                // Actualizar el dashboard con los datos obtenidos
+                document.getElementById('equipos-operativos').textContent = `${porcentajeOperativos.toFixed(2)}%`;
+                document.getElementById('mantenimiento-pendiente').textContent = enMantenimiento;
+               
+                //***************************************************************************************
+                // Mostrar/ocultar el menú principal
+                menuButton.addEventListener('click', function () {
+                    menuDesplegable.classList.add('active');
+                    if (menuDesplegable.classList.contains('active')) {
+                        mainContent.style.marginLeft = '250px'; // Ajustar el margen
+                    } else {
+                        mainContent.style.marginLeft = '0'; // Restaurar el margen
+                    }
+                });
+
+                closeMenu.addEventListener('click', function () {
+                    menuDesplegable.classList.remove('active');
+                    mainContent.style.marginLeft = '0';
+                });
+
+                // Mostrar/ocultar el submenú de configuración
+                configuracionLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    submenuConfiguracion.classList.toggle('active');
+
+                    // Obtener la visibilidad actual del submenú
+    const isConfigOpen = submenuConfiguracion.classList.contains('active');
+
+if (isConfigOpen) {
+    // Ocultar el dashboard cuando la configuración está activa
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('saludo-usuario').style.display = 'none';
+    document.querySelector('.calendar-charts-wrapper').style.display = 'none';
+    document.getElementById('task-management').style.display = 'none';
+    document.getElementById('tracking-section').style.display = 'none';
+
+    // Mostrar las secciones de configuración
+    document.getElementById('configuracion-section').style.display = 'block';
+    document.getElementById('personalizacion-interfaz').style.display = 'block';
+    document.getElementById('preferencias-usuario').style.display = 'block';
+    document.getElementById('seguridad-privacidad').style.display = 'block';
+    document.getElementById('gestion-usuarios').style.display = 'block';
+} else {
+    // Mostrar el dashboard y ocultar la configuración cuando se cierre el submenú
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('saludo-usuario').style.display = 'block';
+    document.querySelector('.calendar-charts-wrapper').style.display = 'block';
+    document.getElementById('task-management').style.display = 'block';
+    document.getElementById('tracking-section').style.display = 'block';
+
+    // Ocultar las secciones de configuración
+    document.getElementById('configuracion-section').style.display = 'none';
+    document.getElementById('personalizacion-interfaz').style.display = 'none';
+    document.getElementById('preferencias-usuario').style.display = 'none';
+    document.getElementById('seguridad-privacidad').style.display = 'none';
+    document.getElementById('gestion-usuarios').style.display = 'none';
+}
+                    
+                });
+
+                // Manejar clic en opciones del submenú de configuración
+                submenuConfiguracion.addEventListener('click', function (e) {
+
+                    e.preventDefault();
+                    const targetSection = e.target.getAttribute('data-section');
+
+                    if (targetSection) {  
+                        // Ocultar la sección de bienvenida y el estado actual
+                        saludoUsuario.style.display = 'none';
+                        document.querySelector('.calendar-charts-wrapper').style.display = 'none';  // Oculta calendario y gráfico
+                        document.getElementById('task-management').style.display = 'none'; // Oculta gestión de tareas
+                        document.getElementById('tracking-section').style.display = 'none'; // Oculta seguimiento de envíos
+
+                        // Ocultar todas las secciones dinámicas del dashboard
+        document.querySelectorAll('.dashboard-section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Ocultar todas las secciones dinámicas de configuración
+        configSections.forEach(section => {
+            section.classList.remove('active');
+            section.style.display = 'none';
+        });
+
+        // Mostrar solo la sección de configuración seleccionada
+        const sectionToShow = document.getElementById(`config-section-${targetSection}`);
+        if (sectionToShow) {
+            sectionToShow.classList.add('active');
+            sectionToShow.style.display = 'block';
+        }
+                    }
+                });
+
+                
+
+
+
+
+                //********************************************************************
+                // Obtener la selección de tema del usuario
+                const savedTheme = localStorage.getItem('theme') || 'default';
+  
+                // Aplicar el tema guardado al cargar la página
+                applyTheme(savedTheme);
+                if (themeSelect) themeSelect.value = savedTheme;
+
+                // Manejar el cambio de tema
+                if (themeSelect) {
+                    themeSelect.addEventListener('change', function () {
+                        const selectedTheme = themeSelect.value;
+                        applyTheme(selectedTheme);
+
+                        // Guardar la selección de tema en localStorage
+                        localStorage.setItem('theme', selectedTheme);
+                    });
+                }
+
+                // Función para aplicar un tema
+                function applyTheme(theme) {
+        
+                    // Eliminar todas las clases de temas existentes
+                    document.body.className = document.body.className.replace(/theme-\S+/g, '');
+
+                    // Añadir la clase del tema seleccionado
+                    document.body.classList.add(`theme-${theme}`);
+                }
+
+                //***********************************************************************************
+      
+                // Cargar configuraciones guardadas
+                const savedFont = localStorage.getItem('font') || 'default';
+                const savedTextSize = localStorage.getItem('textSize') || 'medium';
+
+                // Aplicar configuraciones al cargar la página
+                applyFont(savedFont);
+                applyTextSize(savedTextSize);
+
+                // Establecer las opciones seleccionadas en los selectores
+                fontSelect.value = savedFont;
+                textSizeSelect.value = savedTextSize;
+
+                // Manejar el cambio de fuente
+                fontSelect.addEventListener('change', function () {
+                    const selectedFont = fontSelect.value;
+                    applyFont(selectedFont);
+
+                    // Guardar la selección en localStorage
+                    localStorage.setItem('font', selectedFont);
+                });
+
+                // Manejar el cambio de tamaño de texto
+                textSizeSelect.addEventListener('change', function () {
+                    const selectedTextSize = textSizeSelect.value;
+                    applyTextSize(selectedTextSize);
+
+                    // Guardar la selección en localStorage
+                    localStorage.setItem('textSize', selectedTextSize);
+                });
+
+                // Función para aplicar la fuente
+                function applyFont(font) {
+                    document.body.className = document.body.className.replace(/font-\S+/g, '');
+                    if (font !== 'default') {
+                        document.body.classList.add(`font-${font}`);
+                    }
+                }
+
+                // Función para aplicar el tamaño de texto
+                function applyTextSize(size) {
+                    document.body.className = document.body.className.replace(/text-\S+/g, '');
+                    document.body.classList.add(`text-${size}`);
+                }
+
+                //**********************************************************************************
+
+                // Obtener el selector de diseño
+                const pageLayoutSelect = document.getElementById('pageLayoutSelect');
+
+    
+                // Cargar el diseño guardado en localStorage
+                const savedLayout = localStorage.getItem('pageLayout') || 'wide';
+                applyPageLayout(savedLayout);
+                pageLayoutSelect.value = savedLayout;
+
+                // Manejar el cambio de diseño
+                pageLayoutSelect.addEventListener('change', function () {
+                    const selectedLayout = pageLayoutSelect.value;
+                    applyPageLayout(selectedLayout);
+
+                    // Guardar la selección en localStorage
+                    localStorage.setItem('pageLayout', selectedLayout);
+                });
+
+                // Función para aplicar el diseño de página
+                function applyPageLayout(layout) {
+                    document.body.className = document.body.className.replace(/layout-\S+/g, '');
+                    document.body.classList.add(`layout-${layout}`);
+                }
+
+
+                
+
+                //***********************************************************************************
+
+                //PANEL INCIAL - FALTA ORGANIZARLO 
+             
+   
+                //************************************************************************
+
+                changePasswordForm.addEventListener('submit', function (event) {
+        
+                    event.preventDefault();
+      
+                    const currentPassword = document.getElementById('currentPassword').value;
+                    const newPassword = document.getElementById('newPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+        
+                    // Validación básica
+                    if (newPassword !== confirmPassword) { 
+                        passwordChangeMessage.textContent = 'Las contraseñas no coinciden.';
+                        passwordChangeMessage.style.color = 'red';  
+                        return; 
+                    }
+
+                    // Simulación de cambio de contraseña (puedes integrar una API aquí)
+                    const savedPassword = localStorage.getItem('userPassword') || '1234'; // Contraseña actual simulada
+
+                    if (currentPassword !== savedPassword) {
+                        passwordChangeMessage.textContent = 'La contraseña actual no es correcta.'; 
+                        passwordChangeMessage.style.color = 'red';
+                        return;
+                    }
+
+                    // Guardar la nueva contraseña
+                    localStorage.setItem('userPassword', newPassword);
+                    passwordChangeMessage.textContent = 'Contraseña cambiada exitosamente.';
+                    passwordChangeMessage.style.color = 'green';
+
+                    // Limpiar los campos del formulario
+                    changePasswordForm.reset();   
+                });
+
+                //*************************************************************************************
+                // Cargar configuraciones guardadas
+
+                const savedSessionExpiration = localStorage.getItem('sessionExpiration') || 30; // Valor por defecto: 30 minutos
+                const savedStayLoggedIn = localStorage.getItem('stayLoggedIn') === 'true';
+
+                // Aplicar configuraciones guardadas
+                sessionExpirationInput.value = savedSessionExpiration;
+                stayLoggedInCheckbox.checked = savedStayLoggedIn;
+
+                // Guardar configuraciones al hacer clic en "Guardar Configuración"
+                saveSessionSettingsButton.addEventListener('click', function () {
+        
+                    const sessionExpiration = sessionExpirationInput.value;
+                    const stayLoggedIn = stayLoggedInCheckbox.checked;
+
+                    if (sessionExpiration < 1 || sessionExpiration > 120) { 
+                        sessionMessage.textContent = 'El tiempo de expiración debe estar entre 1 y 120 minutos.';
+                        sessionMessage.style.color = 'red';
+                        return;
+                    }
+
+                    localStorage.setItem('sessionExpiration', sessionExpiration);
+                    localStorage.setItem('stayLoggedIn', stayLoggedIn);
+
+                    sessionMessage.textContent = 'Configuración de sesión guardada exitosamente.';
+                    sessionMessage.style.color = 'green';
+                });
+
+                // Manejar expiración de sesión
+                function handleSessionExpiration() {
+                    const stayLoggedIn = localStorage.getItem('stayLoggedIn') === 'true';
+
+                    if (!stayLoggedIn) {
+                        const sessionExpiration = parseInt(localStorage.getItem('sessionExpiration'), 10) || 30; // Tiempo en minutos
+            
+                        setTimeout(() => {   
+                            alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                            localStorage.removeItem('nombreUsuario'); // Elimina datos de sesión
+                            window.location.href = '../login/index.html'; // Redirige al inicio de sesión
+                        }, 
+                        sessionExpiration * 60 * 1000); // Convertir minutos a milisegundos
+                    }
+                }
+
+                // Llamar a la función de manejo de expiración
+                handleSessionExpiration();
+
+                //********************************************************************************
+    
+                //PERMISOS
+                // Cargar permisos guardados
+
+                const savedPermissions = JSON.parse(localStorage.getItem('permissions')) || {
+                    inventory: true,
+                    maintenance: true,
+                    reports: true,
+                };
+
+                // Aplicar permisos guardados
+                allowInventoryAccess.checked = savedPermissions.inventory;
+                allowMaintenanceAccess.checked = savedPermissions.maintenance;
+                allowReportsAccess.checked = savedPermissions.reports;
+
+                // Guardar permisos al cambiar
+                function savePermissions() {
+                    const permissions = {
+                        inventory: allowInventoryAccess.checked,
+                        maintenance: allowMaintenanceAccess.checked,
+                        reports: allowReportsAccess.checked,
+                    };
+                    localStorage.setItem('permissions', JSON.stringify(permissions));
+                }
+
+                allowInventoryAccess.addEventListener('change', savePermissions);
+                allowMaintenanceAccess.addEventListener('change', savePermissions);
+                allowReportsAccess.addEventListener('change', savePermissions);
+
+                // Gestión de dispositivos conectados
+                const connectedDevices = JSON.parse(localStorage.getItem('connectedDevices')) || [
+                    { id: 'device1', name: 'Laptop - Chrome', lastActive: 'Hace 10 minutos' },
+                    { id: 'device2', name: 'Smartphone - Safari', lastActive: 'Hace 2 horas' },
+                ];
+
+            
+                // Renderizar lista de dispositivos
+                function renderConnectedDevices() {  
+                    connectedDevicesList.innerHTML = '';
+                    connectedDevices.forEach((device) => { 
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                        <span>${device.name} (${device.lastActive})</span>
+                        <button class="logout-device-btn" data-id="${device.id}">Cerrar Sesión</button>
+                        `;
+                        connectedDevicesList.appendChild(li);
+                    });
+
+                // Manejar clic en "Cerrar Sesión" de un dispositivo
+                const logoutButtons = document.querySelectorAll('.logout-device-btn');
+                logoutButtons.forEach((button) => {
+                    button.addEventListener('click', function () {
+                        const deviceId = button.getAttribute('data-id');
+                        logoutDevice(deviceId);
+                    });
+                });
+            }
+
+            // Función para cerrar sesión de un dispositivo
+            function logoutDevice(deviceId) {
+        
+                const deviceIndex = connectedDevices.findIndex((device) => device.id === deviceId);
+                if (deviceIndex !== -1) {
+                    connectedDevices.splice(deviceIndex, 1); 
+                    localStorage.setItem('connectedDevices', JSON.stringify(connectedDevices));  
+                    renderConnectedDevices();
+                    alert('Sesión cerrada para el dispositivo seleccionado.');
+                }
+            }
+
+            // Cerrar todas las sesiones
+            logoutAllDevicesButton.addEventListener('click', function () {
+                localStorage.removeItem('connectedDevices');
+                renderConnectedDevices();
+                alert('Se han cerrado todas las sesiones activas en otros dispositivos.');
+            });
+
+            // Renderizar dispositivos al cargar la página
+            renderConnectedDevices();
+
+            //*******************************************************************************
+    
+            // Cargar usuarios existentes
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+    
+            function renderUserList() {
+                userList.innerHTML = '';
+        
+                users.forEach((user, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = user.username;
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Eliminar';
+                    deleteButton.addEventListener('click', () => {  
+                        users.splice(index, 1);
+                        localStorage.setItem('users', JSON.stringify(users));
+                        renderUserList();
+                    });
+                    li.appendChild(deleteButton);
+                    userList.appendChild(li);
+                });
+            }
+
+            renderUserList();
+            
+            // Manejar la creación de nuevos usuarios
+            createUserForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const newUsername = document.getElementById('newUsername').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (newPassword !== confirmPassword) {
+                    userManagementMessage.textContent = 'Las contraseñas no coinciden.';
+                    userManagementMessage.style.color = 'red';
+                    return;
+                }
+
+                if (users.some(user => user.username === newUsername)) {
+                    userManagementMessage.textContent = 'El usuario ya existe.';
+                    userManagementMessage.style.color = 'red';
+                    return;
+                }
+
+                users.push({ username: newUsername, password: newPassword });
+                localStorage.setItem('users', JSON.stringify(users));  
+                userManagementMessage.textContent = 'Usuario creado exitosamente.';
+                userManagementMessage.style.color = 'green';
+
+                createUserForm.reset();
+                renderUserList();
+            });
+
+            // Elementos del DOM en Configuración
+const serviceList = document.getElementById('serviceList');
+const createServiceForm = document.getElementById('createServiceForm');
+const serviceMessage = document.getElementById('serviceMessage');
+
+// Cargar servicios existentes desde localStorage
+let services = JSON.parse(localStorage.getItem('services')) || [];
+
+// Función para renderizar la lista de servicios en la Configuración
+function renderServiceList() {
+    serviceList.innerHTML = '';
+
+    services.forEach((service, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${service.name} - ${service.description}`;
+
+        // Botón para eliminar servicio
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Eliminar';
+        deleteButton.addEventListener('click', () => {
+            services.splice(index, 1);
+            localStorage.setItem('services', JSON.stringify(services));
+            renderServiceList();
+        });
+
+        li.appendChild(deleteButton);
+        serviceList.appendChild(li);
+    });
+}
+
+// Manejar la creación de nuevos servicios
+createServiceForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const serviceName = document.getElementById('serviceName').value.trim();
+    const serviceDescription = document.getElementById('serviceDescription').value.trim();
+
+    if (serviceName === '' || serviceDescription === '') {
+        serviceMessage.textContent = 'Por favor, completa todos los campos.';
+        serviceMessage.style.color = 'red';
+        return;
+    }
+
+    if (services.some(service => service.name === serviceName)) {
+        serviceMessage.textContent = 'El servicio ya existe.';
+        serviceMessage.style.color = 'red';
+        return;
+    }
+
+    // Agregar nuevo servicio
+    services.push({ name: serviceName, description: serviceDescription });
+    localStorage.setItem('services', JSON.stringify(services));
+
+    serviceMessage.textContent = 'Servicio creado exitosamente.';
+    serviceMessage.style.color = 'green';
+
+    createServiceForm.reset();
+    renderServiceList();
+});
+
+// Renderizar al cargar la página
+document.addEventListener('DOMContentLoaded', function () {
+    renderServiceList();
+});
+
+
+            //*********************************************************************************
+
+            // Procesar datos para los gráficos
+            const estados = { operativo: 0, mantenimiento: 0, fueraDeServicio: 0 };
+            
+            // Contar estados de los equipos en inventario
+inventarioEquipos.forEach(equipo => {
+    const estadoNormalizado = equipo.estado?.trim().toLowerCase();
+    if (estadoNormalizado in estados) {
+        estados[estadoNormalizado]++;
+    }
+});
+
+               // Contar estados de los equipos en inventario
+inventarioEquipos.forEach(equipo => {
+    const estadoNormalizado = equipo.estado?.trim().toLowerCase();
+    if (estadoNormalizado in estados) {
+        estados[estadoNormalizado]++;
+    }
+});
+
+            // Gráfico: Equipos por Estado
+            const ctxEstado = document.getElementById('equiposPorEstado').getContext('2d');
+            new Chart(ctxEstado, {
+                type: 'bar',
+                data: {
+                    labels: ['Operativos', 'En Mantenimiento',],
+                    datasets: [{
+                        label: 'Cantidad de Equipos',
+                        data: Object.values(estados),
+                        backgroundColor: ['#4caf50', '#ff9800', '#f44336']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                        },
+                        title: {
+                            display: true,
+                            text: 'Equipos por Estado'
+                        }
+                    }
+                }
+            });
+
+         
+
+            //***************************************************************************
+            //CALENDARIO
+            const today = new Date(); 
+                let currentMonth = today.getMonth();
+                let currentYear = today.getFullYear();
+     
+                const monthNames = [
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+                ];
+
+                const calendarDays = document.getElementById('calendarDays');
+                const calendarMonthYear = document.getElementById('calendarMonthYear');
+                const modal = document.getElementById('eventModal');
+                const modalDate = document.getElementById('modalDate');
+                const eventList = document.getElementById('eventList');
+                const closeModal = document.getElementById('closeModal');
+                const eventTitleInput = document.getElementById('eventTitle');
+                const eventStartTimeInput = document.getElementById('eventStartTime');
+                const eventEndTimeInput = document.getElementById('eventEndTime');
+                const eventStartDateInput = document.getElementById('eventStartDate');
+                const eventEndDateInput = document.getElementById('eventEndDate');
+                const addEventButton = document.getElementById('addEventButton');
+                
+                const events = JSON.parse(localStorage.getItem("events")) || {};
+
+            
+                function renderCalendar(month, year) {      
+                    const firstDay = new Date(year, month, 1).getDay();            
+                    const daysInMonth = new Date(year, month + 1, 0).getDate();
+             
+                    calendarDays.innerHTML = "";          
+                    calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
+               
+                    let date = 1;
+                
+                    for (let i = 0; i < 6; i++) {                 
+                        const row = document.createElement("tr");
+  
+                        for (let j = 0; j < 7; j++) {                   
+                            const cell = document.createElement("td");
+                                
+                            if (i === 0 && j < firstDay) { 
+                                row.appendChild(cell);   
+                            } else if (date > daysInMonth) {     
+                                break;    
+                            } else {
+                        
+                                const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;                
+                                cell.textContent = date;
+       
+                                if (fullDate === formatDate(today)) {           
+                                    cell.classList.add("today");    
+                                }
+   
+                                if (events[fullDate]) {
+                                    cell.classList.add("event");
+                        
+                                }
+              
+                                cell.addEventListener("click", () => openModal(fullDate));          
+                                row.appendChild(cell);    
+                                date++;  
+                            }
+                        }
+                        calendarDays.appendChild(row);
+                    }  
+                }
+
+                function formatDate(date) {    
+                    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                }
+
+                function openModal(date) {
+                    modalDate.textContent = `Eventos para: ${date}`;
+                    modal.style.display = "flex";    
+                    renderEventList(date);
+  
+                    addEventButton.onclick = () => {     
+                        const eventTitle = eventTitleInput.value.trim();
+                        const startTime = eventStartTimeInput.value.trim();
+                        const endTime = eventEndTimeInput.value.trim();
+                        const startDate = eventStartDateInput.value.trim();
+                        const endDate = eventEndDateInput.value.trim();
+ 
+                        if (!eventTitle || !startDate || !endDate) {
+                            alert("Por favor, completa todos los campos obligatorios.");
+                            return;
+                        }
+
+                        // Asegurar que endDate sea al menos igual a startDate
+                        const start = new Date(startDate);
+                        const end = new Date(endDate || startDate);
+
+                        if (start > end) {
+                            alert("La fecha de finalización no puede ser anterior a la de inicio.");
+                            return;
+                        }
+
+                        for (let d = new Date(startDate); d <= new Date(endDate || startDate); d.setDate(d.getDate() + 1)) {
+                            const fullDate = formatDate(d);
+                    
+                            if (!events[fullDate]) {
+                                events[fullDate] = [];
+                            }
+                            events[fullDate].push({  
+                                title: eventTitle,
+                                startTime,
+                                endTime,
+                            });
+                        }
+
+                        // Guardar eventos en localStorage
+                        localStorage.setItem("events", JSON.stringify(events));
+
+
+                        // Limpiar inputs y actualizar la vista
+                        eventTitleInput.value = "";
+                        eventStartTimeInput.value = "";
+                        eventEndTimeInput.value = "";
+                        eventStartDateInput.value = "";
+                        eventEndDateInput.value = "";
+
+                        renderEventList(startDate);
+                        renderCalendar(currentMonth, currentYear);
+                    };      
+                }
+
+                function renderEventList(date) {
+                    eventList.innerHTML = ""; 
+                    
+                    if (events[date]) {   
+                        events[date].forEach((event, index) => {  
+                            const li = document.createElement("li"); 
+                            const span = document.createElement("span"); 
+                            span.textContent = `${event.title} (${event.startTime} - ${event.endTime})`;
+                            
+                            // Botón para editar el evento
+                            const editButton = document.createElement("button");
+                            editButton.textContent = "✏️ Editar";
+                            editButton.onclick = () => editEvent(date, index);
+                                        
+                            //Boton para eliminar el evento
+                            const deleteButton = document.createElement("button");
+                            deleteButton.textContent = "🗑️";
+                            deleteButton.onclick = () => deleteEvent(date, index); 
+
+                            li.appendChild(span); 
+                            li.appendChild(editButton);
+                            li.appendChild(deleteButton);
+                            eventList.appendChild(li);
+                        });
+                    }
+                }
+
+                function editEvent(date, index) {
+                    // Obtener el evento a editar
+                    const event = events[date][index];
+
+                    // Prellenar el formulario del modal con los detalles del evento
+                    eventTitleInput.value = event.title;
+                    eventStartTimeInput.value = event.startTime;
+                    eventEndTimeInput.value = event.endTime;
+                    eventStartDateInput.value = date;
+                    eventEndDateInput.value = date;
+
+                    // Cambiar el texto del botón a "Guardar cambios"
+                    addEventButton.textContent = "Guardar cambios";
+
+                    // Reemplazar el comportamiento del botón
+                    addEventButton.onclick = () => {
+    
+                        const updatedTitle = eventTitleInput.value.trim();
+                        const updatedStartTime = eventStartTimeInput.value.trim();
+                        const updatedEndTime = eventEndTimeInput.value.trim();
+
+                        if (!updatedTitle || !updatedStartTime || !updatedEndTime) {
+                            alert("Por favor, completa todos los campos.");
+                            return;
+                        }
+
+                        // Actualizar los detalles del evento
+                        events[date][index] = {
+                            title: updatedTitle,
+                            startTime: updatedStartTime,
+                            endTime: updatedEndTime,
+                        };
+
+                        // Guardar en localStorage y actualizar la vista
+                        localStorage.setItem("events", JSON.stringify(events));
+                        addEventButton.textContent = "Añadir"; // Restaurar el texto original del botón
+        
+                        renderEventList(date);
+                        renderCalendar(currentMonth, currentYear);
+                        modal.style.display = "none"; // Cerrar el modal
+                    };
+                }
+
+                function deleteEvent(date, index) {
+                    if (confirm("¿Estás seguro de eliminar este evento?")) {
+                        events[date].splice(index, 1);
+                        if (events[date].length === 0) {  
+                            delete events[date];
+                        }
+                
+                        localStorage.setItem("events", JSON.stringify(events));
+                        renderEventList(date);
+                        renderCalendar(currentMonth, currentYear);
+                    }
+                }
+
+                closeModal.addEventListener("click", () => {
+                    modal.style.display = "none";
+                });
+
+                document.getElementById('prevMonth').addEventListener('click', () => {
+                    currentMonth--;
+                    if (currentMonth < 0) {
+                        currentMonth = 11;
+                        currentYear--;
+                    }
+                    renderCalendar(currentMonth, currentYear);
+                });
+
+                document.getElementById('nextMonth').addEventListener('click', () => {
+                    currentMonth++;
+                    if (currentMonth > 11) {
+                        currentMonth = 0;
+                        currentYear++;
+                    }
+                    renderCalendar(currentMonth, currentYear);
+                });
+
+                renderCalendar(currentMonth, currentYear);
+        
+
+                //para sincronizar el calendario con el gmail (falta unificarlo)
+                function loadGoogleCalendarAPI() {
+                    gapi.load("client:auth2", () => {
+                        gapi.client.init({
+                            apiKey: "TU_API_KEY", // Reemplaza con tu API key
+                            clientId: "TU_CLIENT_ID.apps.googleusercontent.com", // Reemplaza con tu Client ID  
+                            discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],    
+                            scope: "https://www.googleapis.com/auth/calendar.events",
+                        }).then(() => {        
+                            console.log("Google Calendar API cargada.");
+                        }).catch((error) => {
+                            console.error("Error al cargar la API de Google Calendar:", error);
+                        });
+                    });
+                }
+
+                // Carga la API al iniciar la página
+                document.addEventListener("DOMContentLoaded", loadGoogleCalendarAPI);
+
+
+            //*****************************************************************************
+
+            // Obtener datos de mantenimientos desde localStorage
+            const mantenimientos = JSON.parse(localStorage.getItem("mantenimientos")) || [];
+            const pendingTasksList = document.getElementById("pending-tasks-list");
+            const assignedTasksList = document.getElementById("assigned-tasks-list");
+
+            /**
+            * Función para cargar tareas pendientes desde la sesión de mantenimientos.
+            */
+    
+            function loadPendingTasks() {
+                pendingTasksList.innerHTML = ""; // Limpiar la lista de tareas pendientes
+
+        
+                const today = new Date();
+
+                mantenimientos.forEach((mantenimiento) => {
+                    const fechaInicio = new Date(mantenimiento.fechaInicio);
+
+                    // Filtrar mantenimientos futuros
+                    if (fechaInicio >= today) {
+                        const li = document.createElement("li");
+                        li.textContent = `Equipo: ${mantenimiento.equipo}, Fecha: ${mantenimiento.fechaInicio}, Tipo: ${mantenimiento.tipo}`;
+                        pendingTasksList.appendChild(li);
+                    }
+                });
+
+                if (pendingTasksList.innerHTML === "") {
+                    pendingTasksList.innerHTML = "<li>No hay tareas pendientes.</li>";
+                }
+            }
+
+    
+            /*Función para cargar tareas asignadas desde las empresas responsables.*/
+            function loadAssignedTasks() {
+                assignedTasksList.innerHTML = ""; // Limpiar la lista de tareas asignadas
+
+                const empresasAsignadas = {};
+        
+                mantenimientos.forEach((mantenimiento) => {
+                    if (mantenimiento.empresaResponsable) {
+                        if (!empresasAsignadas[mantenimiento.empresaResponsable]) {
+                            empresasAsignadas[mantenimiento.empresaResponsable] = [];
+                        }
+                        empresasAsignadas[mantenimiento.empresaResponsable].push(mantenimiento.equipo);
+                    }
+                });
+        
+                // Renderizar empresas y equipos asignados
+                for (const [empresa, equipos] of Object.entries(empresasAsignadas)) {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                    <span><strong>${empresa}</strong>: ${equipos.join(", ")}</span>
+                    `;
+                    assignedTasksList.appendChild(li);
+                }
+
+                if (assignedTasksList.innerHTML === "") {
+                    assignedTasksList.innerHTML = "<li>No hay tareas asignadas.</li>";
+                }
+            }
+
+            /*Función para sincronizar mantenimientos con el calendario.*/
+            function syncCalendarWithTasks() {
+                const events = JSON.parse(localStorage.getItem("events")) || {};
+
+                Object.entries(events).forEach(([date, eventList]) => {
+                    eventList.forEach((event) => {
+                        const mantenimiento = {
+                            fechaInicio: date,
+                            equipo: event.title,
+                            tipo: "Programado",
+                            empresaResponsable: event.empresa || "No asignada",
+                        };
+
+                        // Evitar duplicados
+                        if (!mantenimientos.some((m) => m.fechaInicio === date && m.equipo === event.title)) {
+                            mantenimientos.push(mantenimiento);
+                        }
+                    });
+                });
+
+                localStorage.setItem("mantenimientos", JSON.stringify(mantenimientos));
+                loadPendingTasks();
+                loadAssignedTasks();
+            }
+
+            // Sincronizar con el calendario al cargar la página
+            syncCalendarWithTasks();
+
+            // Llamar a las funciones para cargar las tareas al inicio
+            loadPendingTasks();
+            loadAssignedTasks();
+
+
+            //**************************************************************************
+
+
+            //**********************************************************
+
+
+            document.getElementById('trackShipment').addEventListener('click', function() {
+    const courier = document.getElementById('courier-select').value;
+
+    if (!courier) {
+        alert("Por favor, seleccione una transportadora.");
+        return;
+    }
+
+    let trackingURL = '';
+    switch (courier) {
+        case 'servientrega':
+            trackingURL = `https://www.servientrega.com/`;
+            break;
+        case 'deprisa':
+            trackingURL = `https://www.deprisa.com/`;
+            break;
+        case 'coordinadora':
+            trackingURL = `https://www.coordinadora.com/`;
+            break;
+        case 'interrapidisimo':
+            trackingURL = `https://www.interrapidisimo.com/`;
+            break;
+        case 'envia':
+            trackingURL = `https://envia.co/`;
+            break;
+    }
+
+    if (trackingURL) {
+        window.open(trackingURL, '_blank');
+    }
+});
+
+
+            //****************************************************************************
+
+                // Cerrar sesión redirigiendo al login
+                logoutButton.addEventListener('click', function () { 
+                    localStorage.removeItem("nombreUsuario");
+                    window.location.href = '../login/index.html';
+                });
+            });
+
+        </script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

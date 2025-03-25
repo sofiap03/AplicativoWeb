@@ -1,0 +1,847 @@
+/* --------------------- */
+/*  ESTILOS BOTON VOLVER */
+/* --------------------- */
+/* Contenedor del botón */
+.contenedor-boton-mantenimiento {
+    display: flex;
+    justify-content: flex-start;
+    margin: 20px;
+}
+
+/* Estilos para el botón de volver */
+.boton-volver {
+    background-color: #4a76a8; /* Rojo profesional */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaciado entre el icono y el texto */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto hover */
+.boton-volver:hover {
+    background-color: #3b5c80; /* Rojo más oscuro */
+    transform: scale(1.05);
+}
+
+/* Efecto activo (clic) */
+.boton-volver:active {
+    background-color: #333;
+    transform: scale(0.95);
+}
+
+/* Ícono */
+.boton-volver i {
+    font-size: 18px;
+}
+
+/* --------------------- */
+/*  ESTILOS TITULO */
+/* --------------------- */
+
+/* Contenedor del encabezado */
+header {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #2c4e6b; /* Color oscuro para el texto */
+    padding: 0; /* Elimina el padding extra */
+    background: none; /* Quita el fondo de color */
+    box-shadow: none; /* Elimina cualquier sombra */
+}
+
+/*----------------------------------------------------*/
+/* 📌 Contenedor General */
+.hoja-vida-container {
+    width: 95%;
+    margin: 20px auto;
+    background: white;
+    padding: 0;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 Estilos de la tabla */
+.hoja-vida {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* 📌 Títulos de sección */
+.titulo-seccion {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-size: 18px;
+}
+
+/* 📌 Espacio entre filas */
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 📌 Inputs y Selects */
+td input, td select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* 📌 Imagen del equipo */
+.imagen-columna {
+    text-align: center;
+    padding: 15px;
+    width: 180px;
+}
+
+#labelImagenEquipo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 15px;
+    border: 2px dashed #4a76a8;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #4a76a8;
+    font-weight: bold;
+    width: 150px;
+    height: 150px;
+    transition: all 0.3s;
+}
+
+#labelImagenEquipo:hover {
+    background-color: rgba(74, 118, 168, 0.1);
+}
+
+
+/* 📌 Asegurar continuidad visual */
+.hoja-vida tbody {
+    margin-bottom: 0;
+}
+
+/* 📌 Estilos para el Registro Histórico */
+.registro-historico {
+    width: 100%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* 📌 Título de la sección */
+.titulo-seccion {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+/* 📌 Estilo para los campos */
+.campo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* 📌 Etiquetas */
+.campo label {
+    width: 25%;
+    font-weight: bold;
+    text-align: right;
+    padding-right: 15px;
+}
+
+/* 📌 Inputs y Selects */
+.campo select,
+.campo input {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* 📌 Espaciado uniforme */
+.campo select {
+    width: auto;
+    min-width: 180px;
+}
+
+.campo input {
+    flex: 1;
+}
+
+/*====================================================*/
+/* 📌 Estilos generales de la tabla */
+.tabla-registro {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* 📌 Título principal */
+.titulo-seccion {
+    text-align: center;
+    font-weight: bold;
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* 📌 Subtítulos de las columnas */
+.titulo-sub {
+    text-align: center;
+    font-weight: bold;
+    background-color: #34495e;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #000; /* 🔹 Agrega línea de separación */
+}
+
+/* 📌 Asegurar que las columnas de los subtítulos ocupen el espacio correcto */
+.titulo-sub:nth-child(1) {
+    width: 33.3%;
+}
+.titulo-sub:nth-child(2) {
+    width: 33.3%;
+}
+.titulo-sub:nth-child(3) {
+    width: 33.3%;
+}
+
+/* 📌 Ajustar el tamaño de los checkboxes */
+.tabla-registro input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+/* 📌 Ajuste de celdas */
+.tabla-registro td {
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+}
+
+/* 📌 Categoría alineada en el centro */
+.categoria {
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #ecf0f1;
+}
+
+/* 📌 Checkboxes alineados con el texto */
+.tabla-registro input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+/* 📌 Ajuste de espaciado entre filas */
+.tabla-registro tr {
+    height: 40px; /* Ajusta la altura de las filas */
+}
+
+/* 📌 Estilo para resaltar filas alternas */
+.tabla-registro tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* 📌 Mejorando la legibilidad del texto */
+.tabla-registro td {
+    font-size: 14px;
+}
+
+/* 📌 Centrar el contenido de los encabezados */
+.tabla-registro th {
+    text-align: center;
+}
+
+/* 📌 Reducir el espacio entre texto y checkboxes */
+.tabla-registro td input[type="checkbox"] {
+    margin-left: 5px;
+    transform: scale(1.1); /* Hace los checkboxes un poco más grandes */
+}
+
+/* --------------------- */
+/*  ESTILOS TABLA SECCIÓN 4 */
+/* --------------------- */
+.tabla-caracteristicas {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.tabla-caracteristicas th {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.tabla-caracteristicas td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Ajustar ancho de columnas */
+.tabla-caracteristicas td:nth-child(odd) {
+    font-weight: bold;
+    background-color: #ecf0f1;
+    width: 25%;
+}
+
+.tabla-caracteristicas td:nth-child(even) {
+    width: 25%;
+}
+
+/* --------------------- */
+/*  INPUTS Y SELECTS     */
+/* --------------------- */
+.tabla-caracteristicas input[type="text"], select {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* --------------------- */
+/*  RESPONSIVE DESIGN    */
+/* --------------------- */
+@media (max-width: 768px) {
+    .tabla-caracteristicas {
+        font-size: 12px;
+    }
+    .tabla-caracteristicas th {
+        font-size: 16px;
+    }
+    .tabla-caracteristicas td {
+        padding: 6px;
+    }
+    .tabla-caracteristicas input[type="text"], select {
+        font-size: 12px;
+    }
+}
+
+/* --------------------- */
+/*  ESTILOS TABLA SECCIÓN 5 */
+/* --------------------- */
+.tabla-instalacion {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.tabla-instalacion th {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.tabla-instalacion td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Ajustar ancho de columnas */
+.tabla-instalacion td:nth-child(odd) {
+    font-weight: bold;
+    background-color: #ecf0f1;
+    width: 25%;
+}
+
+.tabla-instalacion td:nth-child(even) {
+    width: 25%;
+}
+
+/* --------------------- */
+/*  INPUTS Y SELECTS     */
+/* --------------------- */
+.tabla-instalacion input[type="text"], select {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* --------------------- */
+/*  RESPONSIVE DESIGN    */
+/* --------------------- */
+@media (max-width: 768px) {
+    .tabla-instalacion {
+        font-size: 12px;
+    }
+    .tabla-instalacion th {
+        font-size: 16px;
+    }
+    .tabla-instalacion td {
+        padding: 6px;
+    }
+    .tabla-instalacion input[type="text"], select {
+        font-size: 12px;
+    }
+}
+
+/* --------------------- */
+/*  ESTILOS TABLA SECCIÓN 6 */
+/* --------------------- */
+.tabla-funcionamiento {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.tabla-funcionamiento th {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-size: 18px;
+}
+
+.tabla-funcionamiento td {
+    padding: 8px;
+    text-align: left;
+    background-color: #f8f9fa;
+}
+
+/* Evita que los textos en negrita ocupen demasiado espacio */
+.tabla-funcionamiento td:nth-child(odd) {
+    font-weight: bold;
+    width: 20%;
+    white-space: nowrap; /* Evita saltos de línea */
+}
+
+/* Asegura que los input no se aplasten */
+.tabla-funcionamiento td:nth-child(even) {
+    width: 30%;
+}
+
+/* --------------------- */
+/*  INPUTS Y SELECTS     */
+/* --------------------- */
+.tabla-funcionamiento input[type="text"] {
+    width: 98%;  /* Ocupar casi todo el espacio disponible */
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Ajustar margen inferior para evitar espacios grandes */
+.tabla-funcionamiento tr:last-child td {
+    padding-bottom: 10px;
+}
+
+/* --------------------- */
+/*  AJUSTE DE CELDAS VACÍAS */
+/* --------------------- */
+.tabla-funcionamiento td:last-child {
+    min-width: 150px; /* Asegura suficiente espacio para los inputs */
+}
+
+/* --------------------- */
+/*  RESPONSIVE DESIGN    */
+/* --------------------- */
+@media (max-width: 768px) {
+    .tabla-funcionamiento {
+        font-size: 12px;
+    }
+    .tabla-funcionamiento th {
+        font-size: 16px;
+    }
+    .tabla-funcionamiento td {
+        padding: 6px;
+    }
+    .tabla-funcionamiento input[type="text"] {
+        font-size: 12px;
+        width: 100%;
+    }
+}
+
+/* --------------------- */
+/*  SESION 6 ESTILO REGISTRO DE APOYO TÉCNICO */
+/* --------------------- */
+
+#registroApoyoTecnico {
+    background-color: #f9f9f9;
+}
+
+/* Estilos generales de la tabla */
+.tabla-registro {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+/* Estilo del encabezado */
+.tabla-registro th {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+}
+
+/* Estilo de las celdas */
+.tabla-registro td {
+    padding: 8px;
+    text-align: left;
+    font-size: 14px;
+    border: 1px solid #ddd;
+}
+
+/* Ajuste de los campos de entrada */
+.tabla-registro input[type="text"] {
+    width: 98%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Para evitar que los títulos ocupen demasiado espacio */
+.tabla-registro .titulo-campo {
+    font-weight: bold;
+    white-space: nowrap;
+    width: 20%;
+}
+
+/* --------------------- */
+/*  RESPONSIVE DESIGN    */
+/* --------------------- */
+@media (max-width: 768px) {
+    .tabla-registro td {
+        font-size: 12px;
+    }
+    .tabla-registro th {
+        font-size: 14px;
+    }
+    .tabla-registro input[type="text"] {
+        width: 100%;
+        font-size: 12px;
+    }
+}
+
+/* --------------------- */
+/*  ESTILO SECCIÓN MANTENIMIENTO */
+/* --------------------- */
+
+#mantenimiento {
+    background-color: #f9f9f9;
+}
+
+/* Estilos generales de la tabla */
+.tabla-registro {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+/* Estilo del encabezado */
+.tabla-registro th {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+}
+
+/* Estilo de las celdas */
+.tabla-registro td {
+    padding: 8px;
+    text-align: left;
+    font-size: 14px;
+    border: 1px solid #ddd;
+}
+
+/* Ajuste de los campos de entrada */
+.tabla-registro input[type="text"] {
+    width: 98%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Para evitar que los títulos ocupen demasiado espacio */
+.tabla-registro .titulo-campo {
+    font-weight: bold;
+    white-space: nowrap;
+    width: 20%;
+}
+
+/* --------------------- */
+/*  RESPONSIVE DESIGN    */
+/* --------------------- */
+@media (max-width: 768px) {
+    .tabla-registro td {
+        font-size: 12px;
+    }
+    .tabla-registro th {
+        font-size: 14px;
+    }
+    .tabla-registro input[type="text"] {
+        width: 100%;
+        font-size: 12px;
+    }
+}
+
+/* --------------------- */
+/*  ESTILO SECCIÓN COMPONENTES */
+/* --------------------- */
+
+/* 📌 Estilos generales para la tabla de componentes */
+.tabla-componentes {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* 📌 Estilo para el título de la sección */
+.titulo-seccion-componentes {
+    background-color: #2c3e50;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* 📌 Estilo para los subtítulos de la tabla */
+.titulo-sub-componentes {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* 📌 Estilo para las celdas de la tabla */
+.listaComponentes td {
+    padding: 6px;
+    border: 1px solid #ddd;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+/* 📌 Ajuste del ancho de cada columna */
+.listaComponentes td:nth-child(1) {
+    width: 40%;
+}
+
+.listaComponentes td:nth-child(2),
+.listaComponentes td:nth-child(3),
+.listaComponentes td:nth-child(4) {
+    width: 20%;
+}
+
+/* 📌 Estilo para los inputs */
+.input-componente,
+.input-fabricante,
+.input-referencia,
+.input-numero-serie {
+    width: 95%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* 📌 Ajuste del tamaño del input de Número de Serie */
+.input-numero-serie {
+    width: 80%;
+}
+
+/* 📌 Estilo para hacer la tabla más responsiva en pantallas pequeñas */
+@media (max-width: 768px) {
+    .tabla-componentes {
+        font-size: 12px;
+    }
+    .titulo-seccion-componentes {
+        font-size: 14px;
+    }
+    .titulo-sub-componentes {
+        font-size: 13px;
+    }
+    .input-componente,
+    .input-fabricante,
+    .input-referencia,
+    .input-numero-serie {
+        font-size: 12px;
+        padding: 4px;
+    }
+}
+
+/* --------------------- */
+/*  ESTILO SECCIÓN LISTA DE CHEQUEO */
+/* --------------------- */
+
+/* 📌 Estilos generales de la tabla */
+.tabla-chequeo {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* 📌 Estilos para los subtítulos */
+.titulo-sub-chequeo {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* 📌 Estilos de las celdas */
+.listaChequeo td {
+    padding: 6px;
+    border: 1px solid #ddd;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+/* 📌 Ajuste del ancho de cada columna */
+.listaChequeo td:nth-child(1) {
+    width: 5%; /* No. */
+}
+
+.listaChequeo td:nth-child(2) {
+    width: 40%; /* Documento */
+    text-align: left;
+    padding-left: 10px;
+}
+
+.listaChequeo td:nth-child(3),
+.listaChequeo td:nth-child(4),
+.listaChequeo td:nth-child(5) {
+    width: 10%; /* Anexo - No Anexo - No Aplica */
+}
+
+/* 📌 Ajuste del tamaño de la columna de observaciones */
+.listaChequeo td:nth-child(6) {
+    width: 25%;
+}
+
+/* 📌 Estilos para los inputs checkbox */
+.input-check {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* 📌 Estilo responsivo */
+@media (max-width: 768px) {
+    .tabla-chequeo {
+        font-size: 12px;
+    }
+
+    .titulo-seccion-chequeo {
+        font-size: 14px;
+    }
+
+    .titulo-sub-chequeo {
+        font-size: 13px;
+    }
+
+    .input-check {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+/* --------------------- */
+/*  ESTILO SECCIÓN BOTONES */
+/* --------------------- */
+
+/* Contenedor de los botones */
+.botonera {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Estilos base para todos los botones */
+.botonera button {
+    background-color: #4a76a8; /* Azul oscuro */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto hover (pasar el cursor) */
+.botonera button:hover {
+    background-color: #002b5c; /* Azul más oscuro */
+    transform: scale(1.05);
+}
+
+/* Efecto activo (al hacer clic) */
+.botonera button:active {
+    background-color: #333;
+    transform: scale(0.95);
+}
+
+/* Estilos responsivos */
+@media screen and (max-width: 768px) {
+    .botonera button {
+        font-size: 14px;
+        padding: 10px 16px;
+        margin: 5px;
+    }
+}
+
+
+
+
+
+
+
+
+
+

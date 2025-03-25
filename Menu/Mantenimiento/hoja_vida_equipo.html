@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Hoja de vida Equipo Hospitalario</title>
+        <link rel="stylesheet" href="hoja_vida_equipo.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>     
+    </head>
+
+    <body>
+
+        
+         <!-- Botón para volver a mantenimiento-->
+    <div class="contenedor-boton-mantenimiento">
+        <a href="cambios_mantenimiento.html" class="boton-volver"><i class="fas fa-arrow-left"></i></a>
+    </div>
+        
+    <header>
+            <h1>Gestión Hoja de vida Equipos Médicos</h1>
+        </header>
+   
+            <!--hoja de vida-->
+            <!-- Contenedor Principal -->
+<section class="hoja-vida-container">
+    <table class="hoja-vida">
+        <!-- 📌 Encabezado de la Hoja de Vida -->
+        <thead>
+            <tr>
+                <th colspan="6" class="titulo-seccion">HOJA DE VIDA EQUIPO HOSPITALARIO</th>
+            </tr>
+        </thead>
+
+        <!-- 📌 Sección 1: Identificación -->
+        <tbody id="identificacion">
+            <tr>
+                <th colspan="6" class="titulo-seccion">1. IDENTIFICACIÓN</th>
+            </tr>
+            <tr>
+                <td rowspan="4" class="imagen-columna">
+                    <label for="imagenEquipo" id="labelImagenEquipo">
+                        <i class="fas fa-camera"></i>
+                        <p>Subir foto</p>
+                        <input type="file" id="imagenEquipo" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                    </label>
+                    <img id="preview" src="" alt="Imagen del Equipo" style="display: none;">
+                </td>
+                <td>Nombre del Equipo:</td>
+                <td><input type="text" id="nombreEquipo"></td>
+                <td>Marca:</td>
+                <td><input type="text" id="hojaVidaMarca"></td>
+            </tr>
+            <tr>
+                <td>Modelo:</td>
+                <td><input type="text" id="hojaVidaModelo"></td>
+                <td>Número de Serie:</td>
+                <td><input type="text" id="hojaVidaNumeroSerie"></td>
+            </tr>
+            <tr>
+                <td>Servicio:</td>
+                <td><input type="text" id="hojaVidaServicio"></td>
+                <td>Ubicación:</td>
+                <td><input type="text" id="ubicacion"></td>
+            </tr>
+            <tr>
+                <td>Equipo:</td>
+                <td>
+                    <select id="tipoHojaVida">
+                        <option value="Fijo">Fijo</option>
+                        <option value="Móvil">Móvil</option>
+                    </select>
+                </td>
+                <td>Registro Sanitario:</td>
+                <td><input type="text" id="invima"></td>
+            </tr>
+        </tbody>
+
+        <!-- 📌 Sección 2: Registro Histórico -->
+        <tbody id="registroHistorico">
+            <tr>
+                <th colspan="6" class="titulo-seccion">2. REGISTRO HISTÓRICO</th>
+            </tr>
+            <tr>
+                <td>Forma de adquisición:</td>
+                <td colspan="4">
+                    <select id="formaAdquisicion" onchange="actualizarCamposAdquisicion()">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Compra">Compra</option>
+                        <option value="Donación">Donación</option>
+                        <option value="Arrendamiento">Arrendamiento</option>
+                        <option value="Comodato">Comodato</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div id="camposDinamicos"></div>
+                </td>
+            </tr>
+        </tbody>
+
+        <!-- 📌 Sección 3: Registro de Apoyo Técnico -->
+        <table class="tabla-registro">
+            <thead>
+                <tr>
+                    <th colspan="7" class="titulo-seccion">3. REGISTRO</th>
+                </tr>
+                
+                <tr>
+                    <th colspan="3" class="titulo-sub">3.1 Manuales</th>
+                    <th colspan="2" class="titulo-sub">3.2 Clasificación</th>
+                    <th colspan="3" class="titulo-sub">3.3 Tecnología</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="3" class="categoria">Manual Usuario</td>
+                    <td>Físico:</td> <td><input type="checkbox"></td>
+                    <td>Diagnóstico:</td> <td><input type="checkbox"></td>
+                    <td>Neumática:</td> <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>Digital:</td> <td><input type="checkbox"></td>
+                    <td>Tratamiento:</td> <td><input type="checkbox"></td>
+                    <td>Mecánica:</td> <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>No Disp.:</td> <td><input type="checkbox"></td>
+                    <td>Prevención:</td> <td><input type="checkbox"></td>
+                    <td>Eléctrica:</td> <td><input type="checkbox"></td>
+                </tr>
+        
+                <tr>
+                    <td rowspan="3" class="categoria">Manual Técnico</td>
+                    <td>Físico:</td> <td><input type="checkbox"></td>
+                    <td>Rehabilitación:</td> <td><input type="checkbox"></td>
+                    <td>Electrónica:</td> <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>Digital:</td> <td><input type="checkbox"></td>
+                    <td>Análisis:</td> <td><input type="checkbox"></td>
+                    <td>Hidráulica:</td> <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>No Disp.:</td> <td><input type="checkbox"></td>
+                    <td>Info. Hospitalaria:</td> <td><input type="checkbox"></td>
+                    <td>Electromagnética:</td> <td><input type="checkbox"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 📌 Sección 4: Características Técnicas -->
+        <table class="tabla-caracteristicas">
+            <thead>
+                <tr> 
+                    <th colspan="6" class="titulo-seccion">4. CARACTERÍSTICAS TÉCNICAS</th>
+                </tr>
+            </thead>
+            <tbody id="caracteristicasTecnicas">
+                <tr>
+                    <td class="col-1">Tipo de Corriente:</td>
+                    <td><input type="text" id="alimentacion"></td>
+                    <td class="col-1">Tec. predominante:</td>
+                    <td><input type="text" id="predominante"></td>
+                </tr>
+        
+                <tr>
+                    <td class="col-1">Diámetro Distal:</td>
+                    <td><input type="text" id="diametro"></td>
+                    <td class="col-1">Diámetro del canal:</td>
+                    <td><input type="text" id="canalTrabajo"></td>
+                </tr>
+        
+                <tr>
+                    <td class="col-1">Temperatura:</td>
+                    <td><input type="text" id="temperatura"></td>
+                    <td class="col-1">Frecuencia:</td>
+                    <td><input type="text" id="frecuencia"></td>
+                </tr>
+                
+                <tr>
+                    <td class="col-1">Profundidad sistema óptico:</td>
+                    <td><input type="text" id="profundidad"></td>
+                    <td class="col-1">Longitud total:</td>
+                    <td><input type="text" id="longitud"></td>
+                </tr>
+        
+                <tr>
+                    <td class="col-1">Tubo de inserción:</td>
+                    <td><input type="text" id="tuboInsercion"></td>
+                    <td class="col-1">Otros:</td>
+                    <td><input type="text" id="otros"></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+<!-- 📌 Sección 5: Registro Histórico de Instalación -->
+<table class="tabla-instalacion">
+    <thead>
+        <tr>
+            <th colspan="6" class="titulo-seccion">5. REGISTRO HISTÓRICO DE INSTALACIÓN</th>
+        </tr>
+    </thead>
+    <tbody id="registroHistoricoInstalacion">
+        <tr>
+            <td class="col-1">Fuente de alimentación:</td>
+            <td><input type="text" id="alimentacion"></td>
+            <td class="col-1">Tec. predominante:</td>
+            <td><input type="text" id="predominante"></td>        
+        </tr>
+
+        <tr>
+            <td class="col-1">Voltaje Máximo:</td>
+            <td><input type="text" id="voltajeMax"></td>
+            <td class="col-1">Voltaje Mínimo:</td>
+            <td><input type="text" id="voltajeMin"></td>
+        </tr> 
+        
+        <tr>   
+            <td class="col-1">Corriente Máxima:</td>
+            <td><input type="text" id="corrienteMax"></td>
+            <td class="col-1">Corriente Mínima:</td>
+            <td><input type="text" id="corrienteMin"></td>
+        </tr>
+
+        <tr>
+            <td class="col-1">Potencia:</td>
+            <td><input type="text" id="potencia"></td>
+            <td class="col-1">Presión:</td>
+            <td><input type="text" id="presion"></td>
+        </tr>
+
+        <tr>
+            <td class="col-1">Velocidad:</td>
+            <td><input type="text" id="velocidad"></td>
+            <td class="col-1">Peso:</td>
+            <td><input type="text" id="peso"></td>
+        </tr>
+
+        <tr>
+            <td class="col-1">Temperatura:</td>
+            <td><input type="text" id="temperatura"></td>
+            <td class="col-1">Frecuencia:</td>
+            <td><input type="text" id="frecuencia"></td>
+        </tr>
+
+        <tr>
+            <td class="col-1">Otros:</td>
+            <td colspan="3"><input type="text" id="otros"></td>
+        </tr>
+    </tbody>
+</table>
+
+
+    <!--****************************************************************************-->
+<!-- 📌 Sección 6: Registro Técnico de Funcionamiento -->
+<table class="tabla-funcionamiento">
+    <thead>
+        <tr>
+            <th colspan="8" class="titulo-seccion">6. REGISTRO TÉCNICO DE FUNCIONAMIENTO</th>
+        </tr>
+    </thead>
+    <tbody id="registroTecnicoFuncionamiento">
+        <tr>
+            <td class="col-1">Rango de voltaje:</td>
+            <td><input type="text" id="voltaje"></td>
+            <td class="col-1">Rango de corriente:</td>
+            <td><input type="text" id="corriente"></td>
+            <td class="col-1">Rango de potencia:</td>
+            <td><input type="text" id="potencia"></td>
+        </tr>
+
+        <tr>
+            <td class="col-1">Frecuencia:</td>
+            <td><input type="text" id="frecuencia"></td>
+            <td class="col-1">Rango de presión:</td>
+            <td><input type="text" id="presion"></td>
+            <td class="col-1">Rango de velocidad:</td>
+            <td><input type="text" id="rangoVelocidad"></td>
+        </tr>
+
+        <tr>
+            <td class="col-1">Rango de temperatura:</td>
+            <td><input type="text" id="rangoTemperatura"></td>
+            <td class="col-1">Peso:</td>
+            <td><input type="text" id="peso1"></td>
+            <td class="col-1">Rango de humedad:</td>
+            <td><input type="text" id="rangoHumedad"></td>
+        </tr>
+
+        <tr>
+            <td class="col-1">Otras recomendaciones del fabricante:</td>
+            <td colspan="5"><input type="text" id="otrasRecomendaciones"></td>
+        </tr>
+    </tbody>
+</table>
+
+    <!--*************************************************************************-->
+    
+    <!-- 📌 Sección 6: Registro de Apoyo Técnico -->
+<table class="tabla-registro">
+    <thead>
+        <tr>
+            <th colspan="6" class="titulo-seccion">6. REGISTRO DE APOYO TÉCNICO</th>
+        </tr>
+    </thead>
+    <tbody id="registroApoyoTecnico">
+        <tr>
+            <td class="titulo-campo">Clasificación Biomédica:</td>
+            <td colspan="2"><input type="text" id="clasificacionBiomedica"></td>
+
+            <td class="titulo-campo">Clasificación por Riesgo:</td>
+            <td colspan="2"><input type="text" id="clasificacionPorRiesgo"></td>
+        </tr>
+    </tbody>
+</table>
+
+
+    <!--***********************************************************************-->
+    <!-- 📌 Sección 7: Mantenimiento -->
+<table class="tabla-registro">
+    <thead>
+        <tr>
+            <th colspan="7" class="titulo-seccion">7. MANTENIMIENTO</th>
+        </tr>
+    </thead>
+    <tbody id="mantenimiento">
+        <tr>
+            <td class="titulo-campo">Periodicidad del Mantenimiento:</td>
+            <td colspan="2"><input type="text" name="periocidadMantenimiento"></td>
+
+            <td class="titulo-campo">Requiere Calibración:</td>
+            <td><input type="text" name="Requiere"></td>
+
+            <td class="titulo-campo">Periodicidad de Calibración:</td>
+            <td><input type="text" name="periocidadCalibracion"></td>
+        </tr>
+    </tbody>
+</table>
+
+
+    <!--****************************************************************-->
+    <!-- 📌 Sección 8: Componentes -->
+    <table class="tabla-componentes">
+        <thead>
+            <tr>
+                <th colspan="7" class="titulo-seccion">8. COMPONENTES</th>
+            </tr>
+            <tr>
+                <th colspan="3" class="titulo-sub-componentes">Nombre del Componente</th>
+                <th class="titulo-sub-componentes">Marca</th>
+                <th class="titulo-sub-componentes">Modelo</th>
+                <th class="titulo-sub-componentes">Número de Serie</th>
+            </tr>
+        </thead>
+        <tbody id="listaComponentes">
+            <tr>
+                <td colspan="3"><input type="text" class="input-componente"></td>
+                <td><input type="text" class="input-fabricante"></td>
+                <td><input type="text" class="input-referencia"></td>
+                <td><input type="text" class="input-numero-serie"></td>     
+            </tr>
+            <tr>
+                <td colspan="3"><input type="text" class="input-componente"></td>
+                <td><input type="text" class="input-fabricante"></td>
+                <td><input type="text" class="input-referencia"></td>
+                <td><input type="text" class="input-numero-serie"></td>     
+            </tr>
+            <tr>
+                <td colspan="3"><input type="text" class="input-componente"></td>
+                <td><input type="text" class="input-fabricante"></td>
+                <td><input type="text" class="input-referencia"></td>
+                <td><input type="text" class="input-numero-serie"></td>     
+            </tr>
+            <tr>
+                <td colspan="3"><input type="text" class="input-componente"></td>
+                <td><input type="text" class="input-fabricante"></td>
+                <td><input type="text" class="input-referencia"></td>
+                <td><input type="text" class="input-numero-serie"></td>     
+            </tr>
+            <tr>
+                <td colspan="3"><input type="text" class="input-componente"></td>
+                <td><input type="text" class="input-fabricante"></td>
+                <td><input type="text" class="input-referencia"></td>
+                <td><input type="text" class="input-numero-serie"></td>     
+            </tr>
+        </tbody>
+    </table>
+    
+
+
+    <table class="tabla-chequeo">
+        <thead>
+            <tr>
+                <th colspan="7" class="titulo-seccion">9. LISTA DE CHEQUEO DE DOCUMENTOS SOPORTES ANEXOS A LA HOJA DE VIDA</th>
+            </tr>
+            <tr>
+                <th class="titulo-sub-chequeo">No.</th>
+                <th class="titulo-sub-chequeo">Documento</th>
+                <th class="titulo-sub-chequeo">Anexo</th>
+                <th class="titulo-sub-chequeo">No Anexo</th>
+                <th class="titulo-sub-chequeo">No Aplica</th>
+                <th class="titulo-sub-chequeo">Observaciones</th>
+            </tr>
+        </thead>
+        <tbody class="listaChequeo">
+            <tr>
+                <td>1</td>
+                <td>Copia de Registro Sanitario</td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Copia de Registro de Importación</td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Copia de Factura</td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Copia de Acta de Recibo a Satisfacción por el Cliente</td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Protocolo de Mantenimiento Preventivo del Fabricante</td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Guía Rápida de Operación</td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Recomendaciones del Fabricante para la Calibración (si requiere)</td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Hoja de Vida del Personal Biomédico</td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="checkbox" class="input-check"></td>
+                <td><input type="text"></td>
+            </tr>
+        </tbody>
+    </table>
+    
+ </table>           
+</section>
+
+                <!--******************************************************************************************-->
+                
+                <div class="botonera">
+                    <button id="downloadBtn"><i class="fas fa-download"></i> Descargar</button>
+                    <button id="printBtn"><i class="fas fa-print"></i> Imprimir</button>
+                    <button id="guardarHojaVida"><i class="fas fa-save"></i> Guardar Hoja de Vida</button>
+                </div>
+                
+ 
+       <script>
+
+        //******************************************************
+        //CARGA DE LA IMAGEN EN LA HOJA DE VIDA
+            function previewImage(event) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    const output = document.getElementById('preview');
+                    const label = document.getElementById('labelImagenEquipo');
+
+                    // Mostrar la imagen cargada
+                    output.src = reader.result;
+                    output.style.display = 'block';
+        
+                    // Ocultar el ícono y texto de subir foto
+                    label.style.display = 'none';
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+
+
+        //************************************************************
+        //SINCRONIZACION DE LOS DATOS DESDE EL LOCALSTORAGE
+
+        document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const equipoEncoded = params.get('equipo');
+
+    if (!equipoEncoded) {
+        // Si no hay datos en la URL, no mostrar alerta
+        console.warn("No se encontraron datos del equipo en la URL.");
+        return;
+    }
+
+    try {
+        // Intentar decodificar y parsear los datos del equipo
+        const equipo = JSON.parse(decodeURIComponent(equipoEncoded));
+
+        console.log("Datos del equipo recibidos:", equipo);
+
+        // Llenar los campos de identificación
+        document.getElementById('nombreEquipo').value = equipo.nombre || '';
+        document.getElementById('hojaVidaModelo').value = equipo.modelo || '';
+        document.getElementById('hojaVidaNumeroSerie').value = equipo.numeroSerie || '';
+        document.getElementById('hojaVidaMarca').value = equipo.marca || '';
+        document.getElementById('hojaVidaServicio').value = equipo.servicio || '';
+        document.getElementById('ubicacion').value = equipo.ubicacion || '';
+    } catch (error) {
+        // Si ocurre un error al procesar los datos, mostrar advertencia en consola
+        console.error("Error al procesar los datos del equipo:", error);
+        console.warn("Los datos del equipo no son válidos.");
+    }
+});
+
+
+        //******************************************************************
+        //ESTABLECE CLASE DE EQUIPO FIJO/MOVIL
+
+            document.addEventListener("DOMContentLoaded", () => {
+    
+                // Configura un valor predeterminado (opcional)
+                const tipoEquipo = document.getElementById("tipoHojaVida");
+                tipoEquipo.value = "Fijo"; // Establece "Fijo" como predeterminado, si es necesario.
+
+                // Escucha cambios en la selección
+                tipoEquipo.addEventListener("change", () => {
+                    console.log("Tipo de equipo seleccionado:", tipoEquipo.value); 
+                });
+            });
+
+        //*************************************************************************
+        //FORMA DE ADQUISICION
+
+            function actualizarCamposAdquisicion() {
+                const formaAdquisicion = document.getElementById("formaAdquisicion").value;
+                const camposDinamicos = document.getElementById("camposDinamicos");
+                let contenido = "";
+
+                // Limpiar campos previos
+                camposDinamicos.innerHTML = "";
+    
+                if (formaAdquisicion === "Compra") {
+        contenido = `   
+        <div class="fila">
+            <div class="campo">
+                <label for="fechaAdquisicion">Fecha de Adquisición:</label>
+                <input type="date" id="fechaAdquisicion">
+            </div>
+            <div class="campo">
+                <label for="numeroFactura">Número de Factura:</label>
+                <input type="text" id="numeroFactura">
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="garantia">Garantía:</label>
+                <input type="text" id="garantia">
+            </div>
+            <div class="campo">
+                <label for="costoCompra">Costo:</label>
+                <select id="monedaCompra">
+                    <option value="USD">$ USD</option>
+                    <option value="COP">$ COP</option>
+                    <option value="EUR">€ EUR</option>
+                </select>
+                <input type="number" id="costoCompra" placeholder="Ingrese el monto">
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="proveedor">Proveedor:</label>
+                <input type="text" id="proveedor">
+            </div>
+            <div class="campo">
+                <label for="telefonoCompra">Número de Teléfono:</label>
+                <select id="codigoPaisCompra">
+                    <option value="" disabled selected>Seleccione país</option>
+                    <option value="+57">+57 (Colombia)</option>
+                    <option value="+1">+1 (EE.UU.)</option>
+                </select>
+                <input type="text" id="telefonoCompra" placeholder="Ingrese el número">
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="correoProveedor">Correo Electrónico:</label>
+                <input type="email" id="correoProveedor">
+            </div>
+            <div class="campo">
+                <label for="fabricante">Fabricante:</label>
+                <input type="text" id="fabricante">
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="correoFabricante">Correo del Fabricante:</label>
+                <input type="email" id="correoFabricante">
+            </div>
+            <div class="campo">
+                <label for="vidaUtil">Vida Útil:</label>
+                <input type="text" id="vidaUtil">
+            </div>
+        </div>
+        `;
+    
+    
+     } else if (formaAdquisicion === "Donación") {
+        contenido = `
+        <div class="fila">
+            <div class="campo">
+                <label for="nombreDonante">Nombre del Donante:</label>
+                <input type="text" id="nombreDonante">
+            </div>
+            <div class="campo">
+                <label for="telefonoDonante">Número de Teléfono:</label>
+                <select id="codigoPaisDonacion">
+                    <option value="" disabled selected>Seleccione país</option>
+                    <option value="+1">+1 (EE.UU., Canadá)</option>
+                    <option value="+34">+34 (España)</option>
+                    <option value="+57">+57 (Colombia)</option>
+                    <option value="+44">+44 (Reino Unido)</option>
+                </select>
+                <input type="text" id="telefonoDonante" placeholder="Ingrese el número">
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="fechaDonacion">Fecha de la Donación:</label>
+                <input type="date" id="fechaDonacion">
+            </div>
+            <div class="campo">
+                <label for="actaCertificado">Acta o Certificado:</label>
+                <input type="file" id="actaCertificado">
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="vidaUtilDonacion">Vida Útil:</label>
+                <input type="text" id="vidaUtilDonacion">
+            </div>
+        </div>
+        `;
+    } else if (formaAdquisicion === "Arrendamiento") {
+        contenido = `
+        <div class="fila">
+            <div class="campo">
+                <label for="nombreEmpresa">Nombre de la Empresa:</label>
+                <input type="text" id="nombreEmpresa">
+            </div>
+            <div class="campo">
+                <label for="telefonoEmpresa">Número de Teléfono:</label>
+                <select id="codigoPaisArrendamiento">
+                    <option value="" disabled selected>Seleccione país</option>
+                    <option value="+1">+1 (EE.UU., Canadá)</option>
+                    <option value="+34">+34 (España)</option>
+                    <option value="+57">+57 (Colombia)</option>
+                    <option value="+44">+44 (Reino Unido)</option>
+                </select>
+                <input type="text" id="telefonoEmpresa" placeholder="Ingrese el número">
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="inicioContrato">Inicio del Contrato:</label>
+                <input type="date" id="inicioContrato">
+            </div>
+            <div class="campo">
+                <label for="finContrato">Fin del Contrato:</label>
+                <input type="date" id="finContrato">
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="costoArrendamiento">Costo del Arrendamiento:</label>
+                <select id="monedaArrendamiento">
+                    <option value="USD">$ USD</option>
+                    <option value="COP">$ COP</option>
+                    <option value="EUR">€ EUR</option>
+                    <option value="MXN">$ MXN</option>
+                </select>
+                <input type="number" id="costoArrendamiento" placeholder="Ingrese el monto">
+            </div>
+            <div class="campo">
+                <label for="responsableMantenimiento">Responsable del Mantenimiento:</label>
+                <select id="responsableMantenimiento">
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    <option value="Arrendatario">Arrendatario</option>
+                    <option value="Hospital/Clínica">Hospital/Clínica</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="vidaUtilArrendamiento">Vida Útil:</label>
+                <input type="text" id="vidaUtilArrendamiento">
+            </div>
+        </div>
+        `;
+    
+    } else if (formaAdquisicion === "Comodato") {
+    contenido = `
+    <div class="fila">
+        <div class="campo">
+            <label for="nombrePrestador">Nombre del Prestador:</label>
+            <input type="text" id="nombrePrestador">
+        </div>
+        <div class="campo">
+            <label for="telefonoPrestador">Número de Teléfono:</label>
+            <select id="codigoPaisComodato">
+                <option value="" disabled selected>Seleccione país</option>
+                <option value="+1">+1 (EE.UU., Canadá)</option>
+                <option value="+34">+34 (España)</option>
+                <option value="+57">+57 (Colombia)</option>
+                <option value="+44">+44 (Reino Unido)</option>
+            </select>
+            <input type="text" id="telefonoPrestador" placeholder="Ingrese el número">
+        </div>
+    </div>
+
+    <div class="fila">
+        <div class="campo">
+            <label for="inicioPrestamo">Inicio del Préstamo:</label>
+            <input type="date" id="inicioPrestamo">
+        </div>
+        <div class="campo">
+            <label for="duracionPrestamo">Duración del Préstamo:</label>
+            <input type="text" id="duracionPrestamo">
+        </div>
+    </div>
+
+    <div class="fila">
+        <div class="campo">
+            <label for="documentoPrestamo">Documento del Préstamo:</label>
+            <input type="file" id="documentoPrestamo">
+        </div>
+        <div class="campo">
+            <label for="responsableMantenimientoPrestamo">Responsable del Mantenimiento:</label>
+            <select id="responsableMantenimientoPrestamo">
+                <option value="" disabled selected>Seleccione una opción</option>
+                <option value="Prestador">Prestador</option>
+                <option value="Hospital/Clínica">Hospital/Clínica</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="fila">
+        <div class="campo">
+            <label for="vidaUtilPrestamo">Vida Útil:</label>
+            <input type="text" id="vidaUtilPrestamo">
+        </div>
+    </div>
+    `;
+    }
+
+    // Insertar contenido dinámico
+    camposDinamicos.innerHTML = contenido;
+}
+
+function validarCosto(tipo) {
+    const moneda = document.getElementById(`moneda${tipo}`).value;
+    const costo = document.getElementById(`costo${tipo}`).value.trim();
+    const errorSpan = document.getElementById(`errorCosto${tipo}`);
+    let esValido = true;
+
+    // No mostrar error si el campo está vacío
+    if (!costo) {
+        errorSpan.textContent = "";
+        return;
+    }
+
+    // Convertir el valor a número para validaciones de rango
+    const costoNumerico = parseFloat(costo.replace(",", "."));
+
+    // Validar según la moneda seleccionada
+    switch (moneda) {
+        case "USD": // Dólares: enteros o decimales con máximo dos decimales
+            esValido = /^[0-9]+(\.[0-9]{1,2})?$/.test(costo) && costoNumerico >= 0.01 && costoNumerico <= 1000000;
+            break;
+
+        case "COP": // Pesos colombianos: enteros grandes
+            esValido = /^[0-9]+$/.test(costo) && costoNumerico >= 1000 && costoNumerico <= 1000000000;
+            break;
+
+        case "EUR": // Euros: enteros o decimales separados por coma
+            esValido = /^[0-9]+(,[0-9]{1,2})?$/.test(costo) && costoNumerico >= 0.01 && costoNumerico <= 1000000;
+            break;
+
+        case "MXN": // Pesos mexicanos: enteros grandes
+            esValido = /^[0-9]+$/.test(costo) && costoNumerico >= 10 && costoNumerico <= 1000000000;
+            break;
+
+        default:
+            esValido = false;
+    }
+
+    // Mostrar error si el valor no es válido
+    if (!esValido) {
+        errorSpan.textContent = `El valor ingresado no es válido para la moneda seleccionada (${moneda}).`;
+    } else {
+        errorSpan.textContent = ""; // Limpiar el mensaje si es válido
+    }
+}
+
+function validarTelefono(tipo) {
+    const codigoPais = document.getElementById(`codigoPais${tipo}`).value;
+    const telefono = document.getElementById(`telefono${tipo}`).value.trim();
+    const errorSpan = document.getElementById(`errorTelefono${tipo}`);
+    let esValido = false;
+
+    // No mostrar error si el campo está vacío
+    if (!telefono) {
+        errorSpan.textContent = "";
+        return;
+    }
+
+    // Validar el número de teléfono según el prefijo del país seleccionado
+    switch (codigoPais) {
+        case "+1": // EE.UU., Canadá
+            // Debe comenzar con un dígito entre 2 y 9, seguido de 9 dígitos adicionales
+            esValido = /^[2-9][0-9]{9}$/.test(telefono);
+            break;
+
+        case "+34": // España
+            // Debe comenzar con 6 o 7, seguido de 8 dígitos adicionales
+            esValido = /^[6-7][0-9]{8}$/.test(telefono);
+            break;
+
+        case "+57": // Colombia
+            // Debe comenzar con 3, seguido de un segundo dígito entre 0-5 y 8 dígitos adicionales
+            esValido = /^3[0-5][0-9]{8}$/.test(telefono);
+            break;
+
+        case "+44": // Reino Unido
+            // Debe comenzar con 7, seguido de 9 dígitos adicionales
+            esValido = /^7[0-9]{9}$/.test(telefono);
+            break;
+
+        default:
+            esValido = false; // País no reconocido
+    }
+
+    // Mostrar mensaje de error si el número no es válido
+    if (!esValido) {
+        errorSpan.textContent = `El número ingresado no es válido para el país seleccionado (${codigoPais}).`;
+    } else {
+        errorSpan.textContent = ""; // Limpiar el mensaje si es válido
+    }
+}
+
+
+//********************************************************************************
+//BOTONES PARA GUARDAR / DESCARGAR E IMPRIMIR
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Descargar el contenido como archivo HTML
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+        const contenido = document.documentElement.outerHTML; // Obtener el HTML completo
+        const blob = new Blob([contenido], { type: "text/html;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "HojaDeVida.html";
+        link.click();
+    });
+
+    // Imprimir la página actual
+    document.getElementById("printBtn").addEventListener("click", () => {
+        window.print();
+    });
+
+    // Guardar como PDF
+    document.getElementById("savePdfBtn").addEventListener("click", () => {
+        const element = document.querySelector("table"); // Cambia esto al elemento que deseas convertir
+        const pdf = new jsPDF("p", "mm", "a4");
+
+        // Usar html2canvas para renderizar el contenido como imagen
+        html2canvas(element).then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+            const imgWidth = 190; // Ajustar al tamaño de la página
+            const pageHeight = 297;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let position = 10; // Espacio inicial
+
+            pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+            pdf.save("HojaDeVida.pdf");
+        });
+    });
+});
+
+//*************************************************************************************
+//CLASIFICACION POR HOJA DE VIDA ELECTRONICO / ENDOSCOPIO
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Obtener el tipo de equipo desde los parámetros de la URL
+    const params = new URLSearchParams(window.location.search);
+    const equipos = JSON.parse(decodeURIComponent(params.get("equipos")));
+
+    if (equipos && equipos.length > 0) {
+        const equipo = equipos[0];
+        const tipo = equipo.tipo; // Este campo debe contener "endoscopio" o "electrónico"
+
+        ajustarSeccionesPorTipo(tipo);
+    } else {
+        alert("No se encontraron datos del equipo.");
+    }
+});
+
+// Función para mostrar/ocultar secciones según el tipo
+function ajustarSeccionesPorTipo(tipo) {
+    // Secciones específicas para endoscopios
+    const seccionesParaEndoscopio = [
+        "identificacion",
+        "registroHistorico",
+        "registroApoyoTecnico",
+        "caracteristicasTecnicas",
+        "mantenimiento",
+        "componentes",
+        "listaChequeoDocumentos",
+    ];
+
+    // Secciones específicas para electrónicos
+    const seccionesParaElectronico = [
+        "identificacion",
+        "registroHistorico",
+        "registroApoyoTecnico",
+        "registroHistoricoInstalacion",
+        "registroTecnicoFuncionamiento",
+        "mantenimiento",
+        "componentes",
+        "listaChequeoDocumentos",
+    ];
+
+    // Todas las secciones del documento
+    const todasLasSecciones = [
+        "identificacion",
+        "registroHistorico",
+        "registroApoyoTecnico",
+        "caracteristicasTecnicas",
+        "registroHistoricoInstalacion",
+        "registroTecnicoFuncionamiento",
+        "mantenimiento",
+        "componentes",
+        "listaChequeoDocumentos",
+    ];
+
+    // Mostrar/Ocultar secciones según el tipo de equipo
+    todasLasSecciones.forEach((id) => {
+        const elemento = document.getElementById(id);
+        if (tipo === "endoscopio" && seccionesParaEndoscopio.includes(id)) {
+            elemento.style.display = "table-row-group"; // Mostrar
+        } else if (tipo === "electronico" && seccionesParaElectronico.includes(id)) {
+            elemento.style.display = "table-row-group"; // Mostrar
+        } else {
+            elemento.style.display = "none"; // Ocultar
+        }
+    });
+}
+
+//*********************************************************************************************
+//GUARDAR HOJA DE VIDA
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btnGuardarHojaVida = document.getElementById("guardarHojaVida");
+    const numeroSerieInput = document.getElementById("hojaVidaNumeroSerie");
+
+    // Función para guardar la hoja de vida en localStorage
+    btnGuardarHojaVida.addEventListener("click", () => {
+        const numeroSerie = numeroSerieInput.value.trim();
+        if (!numeroSerie) {
+            alert("Por favor, ingrese el Número de Serie del equipo.");
+            return;
+        }
+
+        // Obtener la información actual en localStorage
+        let hojasVidaEquipos = JSON.parse(localStorage.getItem("hojasVidaEquipos")) || [];
+
+        // Buscar si ya existe la hoja de vida de este equipo
+        const index = hojasVidaEquipos.findIndex(doc => doc.numeroSerie === numeroSerie);
+        if (index !== -1) {
+            hojasVidaEquipos[index].cumplida = true;
+        } else {
+            hojasVidaEquipos.push({ numeroSerie, cumplida: true });
+        }
+
+        // Guardar en localStorage
+        localStorage.setItem("hojasVidaEquipos", JSON.stringify(hojasVidaEquipos));
+
+        alert("Hoja de Vida guardada exitosamente.");
+    });
+});
+
+
+
+
+
+
+
+       </script>
+    
+    </body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio de Sesión</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <!-- Google Platform Library -->
+     <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+      <div class="contenedor" id="contenedor">
+        <!-- Sección de Registro -->
+         <div class="registro">
+          <form id="registerForm">
+            <h1 id="registerTitle">Crear Cuenta</h1>
+            <span id="registerSubtitle">Rellena los campos para registrarte</span>
+            <input type="text" id="fullName" placeholder="Nombre completo" maxlength="50" required />
+            <input type="text" id="documentID" placeholder="Documento de identidad" required />
+            <input type="email" id="email" placeholder="Correo Electrónico" required />
+            <input type="tel" id="numeroTelefono" placeholder="Número de teléfono" required />
+            
+            <div class="password-field">
+              <input type="password" id="password" placeholder="Contraseña" required />
+              <i class="fas fa-eye-slash" id="togglePassword" style="color: #666; cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+            </div>
+            
+            <a href="#" id="sugerirContrasena" class="sugerencia-contrasena">Sugerir contraseña segura</a>
+            <small id="passwordHelp">La contraseña debe tener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.</small>
+            
+            <div class="password-field">
+              <input type="password" id="confirmPassword" placeholder="Confirmar contraseña" required />
+              <i class="fas fa-eye-slash" id="toggleConfirmPasswordIcon" style="color: #666; cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+            </div>
+            
+            <small id="passwordMatchMessage" style="color: red; display: none;">Las contraseñas no coinciden.</small>
+            <small id="securityMessage" style="color: red; display: none;">Contraseña no segura. Debe contener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial.</small>
+            <div id="successMessage" style="display:none; color: green; margin-top: 10px;">Usuario registrado correctamente.</div>
+            
+            <!-- Checkbox para aceptar los términos -->
+            <label class="terms">
+              <input type="checkbox" id="acceptTermsCheckbox" disabled required />
+            </label>
+            
+            <!-- Enlace para abrir el modal -->
+             <small id="termsText">Acepto los <a href="#" id="openTermsModal">Términos y Condiciones</a></small>
+             
+             <!-- Modal de Términos y Condiciones -->
+             <div id="termsModal" class="modal">
+              <div class="modal-content">
+        
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Términos y Condiciones</h2>
+        
+                <div class="terms-container">
+   
+                  <h3>1. Introducción</h3>
+                  <p>Este documento tiene como finalidad establecer los términos y condiciones bajo los cuales se permite el uso de la plataforma “Gestión de equipos Médicos”. Al acceder y utilizar la plataforma, usted (el “Usuario”) acepta cumplir con estos términos y condiciones. Si no está de acuerdo con estos términos, no debe utilizar la plataforma.</p>
+          
+                  <h3>2. Definiciones</h3>
+                  <ul>
+                    <li><strong>Usuario:</strong> cualquier persona que acceda o utilice la plataforma.</li>
+                    <li><strong>Datos personales:</strong> información que identifique o permita identificar a una persona, como nombre, dirección de correo electrónico, teléfono, u otra información personal.</li>
+                    <li><strong>Plataforma:</strong> el aplicativo web utilizado para gestionar los equipos médicos, incluida la recopilación, almacenamiento, procesamiento y visualización de datos relacionados con los equipos.</li>
+                    <li><strong>Endocol SAS:</strong> la empresa propietaria y administradora de la plataforma.</li> 
+                  </ul>
+          
+                  <h3>3. Uso de la Plataforma</h3>  
+                  <ul>
+                    <li>El acceso a la plataforma requiere registro. El usuario se compromete a proporcionar información precisa y actualizada.</li>
+                    <li>El usuario es responsable de mantener la confidencialidad de su cuenta y contraseña.</li>
+                    <li>El uso está limitado a mayores de 18 años o menores con supervisión y consentimiento explícito de un tutor legal.</li>
+                  </ul>
+          
+                  <h3>4. Tratamiento de Datos Personales</h3>
+                  <ul>
+                    <li><strong>Responsable:</strong> Endocol SAS es el responsable del tratamiento de los datos personales proporcionados por el Usuario.</li>
+                    <li><strong>Finalidad:</strong> Gestión de equipos médicos, mejora del servicio, atención al usuario y cumplimiento de obligaciones legales.</li> 
+                    <li><strong>Consentimiento:</strong> El usuario otorga su consentimiento explícito para el tratamiento de sus datos personales.</li>
+                  </ul>
+          
+                  <h3>5. Seguridad de los Datos</h3>
+                  <p>Se implementan medidas técnicas y administrativas para proteger los datos personales. Sin embargo, el usuario reconoce que ningún sistema es completamente seguro.</p>
+          
+                  <h3>6. Propiedad Intelectual</h3>  
+                  <p>Los derechos de propiedad intelectual sobre el contenido y funcionalidades de la plataforma pertenecen a Endocol SAS.</p>
+          
+                  <h3>7. Uso Prohibido</h3>
+                  <ul>
+                    <li>Realizar actividades ilegales o fraudulentas.</li>      
+                    <li>Transmitir virus u otros elementos dañinos.</li>
+                    <li>Interferir con el funcionamiento del servicio.</li>
+                  </ul>
+          
+                  <h3>8. Modificaciones a los Términos y Condiciones</h3>
+                  <p>Nos reservamos el derecho de modificar estos términos. El uso continuado después de los cambios implica aceptación.</p>
+          
+                  <h3>9. Exoneración de Responsabilidad</h3>
+                  <ul>
+                    <li>Uso incorrecto de la plataforma por parte del usuario.</li>
+                    <li>Falta de disponibilidad o errores en la plataforma.</li>
+                    <li>Pérdida o alteración de datos debido a fallos técnicos.</li>
+                  </ul>
+          
+                  <h3>10. Ley Aplicable y Jurisdicción</h3>
+                  <p>Estos términos se rigen por las leyes de Colombia. Las disputas serán resueltas por los tribunales competentes.</p>
+          
+                  <h3>11. Soporte y Reclamos</h3>
+                  <p>Para problemas técnicos, dudas o reclamos, contacte al equipo de soporte a través del correo <a href="mailto:desorroIA@endocol.com">desorroIA@endocol.com</a> o al teléfono +57 3002781361.</p>
+          
+                  <h3>12. Terminación de la Cuenta</h3>
+                  <p>Endocol SAS se reserva el derecho de suspender o cancelar cuentas por incumplimiento de términos, uso indebido o falta de pago.</p>
+        
+                </div>
+                <button id="acceptTermsModal">Aceptar</button>
+              </div>
+            </div>
+              
+              <button type="submit" id="registerButton" disabled>Registrar</button>
+            </form>
+          </div>
+          
+          <!-- Sección de Inicio de Sesión -->
+           <div class="inicio-sesion">
+            <form id="loginForm">
+              <img src="logo.png" alt="Logo" style="width: 100px; margin-bottom: 20px;" />
+              <h1>Iniciar Sesión</h1>
+              <input type="text" id="loginDocumentID" placeholder="Documento de identidad" required />
+              <div class="password-field">
+                <input type="password" id="loginPassword" placeholder="Contraseña" required />
+                <i class="fas fa-eye-slash" id="toggleLoginPassword" style="color: #666; cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+              </div>
+              <button type="submit">Iniciar Sesión</button>
+              
+              <!-- Contenedor para el botón de Google -->
+               <div class="google-signin-container">
+                <div id="g_id_onload"
+                data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                data-context="signin"
+                data-ux_mode="popup"
+                data-callback="handleCredentialResponse"
+                data-auto_prompt="false">
+              </div>
+              <div class="g_id_signin" data-type="standard"></div>
+            </div>
+            
+            <small id="loginErrorMessage" style="color: red; display: none;">Documento de identidad o contraseña incorrecta.</small>
+            <a href="#" id="forgotPassword">¿Olvidaste tu contraseña?</a>
+          </form>
+        </div>
+        
+        <!-- Sección de Recuperación de Contraseña -->
+         <div class="recuperacion" id="recoverFormContainer">
+          <form id="recoverForm">
+            <img src="logo.png" alt="Logo" style="width: 100px; margin-bottom: 20px;" />
+            <h1>Recuperación de Contraseña</h1>
+            <input type="email" id="recoveryEmail" placeholder="Ingresa tu correo electrónico" required />
+            <button type="submit">Enviar enlace de recuperación</button>
+            <small id="recoveryMessage" style="display: none; color: green;">Enlace de recuperación enviado a tu correo electrónico.</small>
+            <a href="#" id="backToLogin">Volver a Iniciar Sesión</a>
+          </form>
+        </div>
+        
+        <!-- Contenedor de alternancia entre Registro e Inicio de Sesión -->
+         <div class="contenedor-alternar">
+          <div class="alternar">
+            <div class="panel-alternar panel-izquierda">
+              <h1>¡Bienvenido!</h1>
+              <p>Si ya tienes una cuenta</p>
+              <button class="oculto" id="iniciarSesion">Iniciar Sesión</button>
+            </div>
+            <div class="panel-alternar panel-derecha">
+              <h1>¡Hola!</h1>
+              <p>Si no tienes una cuenta</p>
+              <button class="oculto" id="registrarse">Regístrate</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    <script>
+      const contenedor = document.getElementById("contenedor");
+      const botonRegistro = document.getElementById("registrarse");
+      const botonInicioSesion = document.getElementById("iniciarSesion");
+      const forgotPasswordLink = document.getElementById("forgotPassword");
+      const loginForm = document.querySelector(".inicio-sesion");
+      const recoverForm = document.querySelector(".recuperacion");
+      const backToLoginLink = document.getElementById("backToLogin");
+      const registerTitle = document.getElementById("registerTitle");
+      const registerSubtitle = document.getElementById("registerSubtitle");
+      const termsText = document.getElementById("termsText");
+      
+      document.getElementById("documentID").addEventListener("input", function (event) {
+        // Permitir solo números
+        this.value = this.value.replace(/\D/g, '');
+      });
+      
+      document.getElementById("loginDocumentID").addEventListener("input", function (event) {
+        // Permitir solo números
+        this.value = this.value.replace(/\D/g, '');
+      });
+      
+      document.getElementById("fullName").addEventListener("input", function (event) {
+        // Permitir solo letras y espacios
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+      });
+      
+      botonRegistro.addEventListener("click", () => {
+        contenedor.classList.add("active");
+      });
+      
+      botonInicioSesion.addEventListener("click", () => {
+        contenedor.classList.remove("active");
+      });
+      
+      forgotPasswordLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        loginForm.style.display = "none";
+        recoverForm.style.display = "block";
+      });
+      
+      backToLoginLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        recoverForm.style.display = "none";
+        loginForm.style.display = "flex";
+      });
+      
+      function handleCredentialResponse(response) {
+        console.log("Google ID Token: " + response.credential);
+        alert("Inicio de sesión con Google exitoso");
+      }
+      
+      document.addEventListener("DOMContentLoaded", function() {
+        const modal = document.getElementById("termsModal");
+        const openModalBtn = document.getElementById("openTermsModal");
+        const closeModalBtn = document.getElementById("closeModal");
+        const acceptTermsModalBtn = document.getElementById("acceptTermsModal");
+        const acceptTermsCheckbox = document.getElementById("acceptTermsCheckbox");
+        const registerButton = document.getElementById("registerButton");
+        const registerForm = document.getElementById("registerForm");
+        const successMessage = document.getElementById("successMessage");
+        const passwordMatchMessage = document.getElementById("passwordMatchMessage");
+        const loginForm = document.getElementById("loginForm");
+        
+        // Campos del formulario
+        const fullNameField = document.getElementById("fullName");
+        const documentIDField = document.getElementById("documentID");
+        const emailField = document.getElementById("email");
+        const numeroTelefonoField = document.getElementById("numeroTelefono");
+        const passwordField = document.getElementById("password");
+        const confirmPasswordField = document.getElementById("confirmPassword");
+        
+        // Mostrar el modal cuando se hace clic en el enlace "Términos y Condiciones"
+        openModalBtn.onclick = function() {
+          modal.style.display = "block";
+        };
+        
+        // Cerrar el modal cuando el usuario hace clic en la "X"
+        closeModalBtn.onclick = function() {
+          modal.style.display = "none";
+        };
+        
+        // Cerrar el modal y habilitar el checkbox cuando el usuario hace clic en "Aceptar"
+        acceptTermsModalBtn.onclick = function() {
+          acceptTermsCheckbox.checked = true; // Marcar la casilla de aceptación
+          modal.style.display = "none"; // Cerrar el modal
+          acceptTermsCheckbox.disabled = false; // Habilitar el checkbox
+          validateFields(); // Verificar los campos nuevamente
+          };
+          
+          // Función para verificar si todos los campos están completos
+          function validateFields() {
+            const allFieldsFilled = fullNameField.value && documentIDField.value && emailField.value && numeroTelefonoField.value && passwordField.value && confirmPasswordField.value;
+            const termsAccepted = acceptTermsCheckbox.checked;
+            
+            // Habilitar el botón de registro solo si todos los campos están llenos y los términos aceptados
+            registerButton.disabled = !(allFieldsFilled && termsAccepted);
+          }
+          
+          // Agregar eventos en cada campo para validar en tiempo real
+          [fullNameField, documentIDField, emailField, numeroTelefonoField, passwordField, confirmPasswordField].forEach(field => {
+            field.addEventListener('input', validateFields);
+          });
+          
+          // Habilitar o deshabilitar el botón de registro cuando se cambie el estado del checkbox
+          acceptTermsCheckbox.addEventListener("change", validateFields);
+          
+          // Manejar el evento de envío del formulario solo al hacer clic en el botón de registro
+          registerButton.addEventListener("click", function(event) {
+            event.preventDefault(); // Prevenir el envío automático del formulario
+            
+            const documentID = documentIDField.value;
+            const fullName = fullNameField.value;
+            const password = passwordField.value;
+            const confirmPassword = confirmPasswordField.value;
+            
+            // Verificar que todos los campos están llenos
+            if (!documentID || !fullName || !password || !confirmPassword) {
+              alert("Por favor, rellena todos los campos.");
+              return;
+            }
+            
+            // Validar que las contraseñas coinciden
+            if (password !== confirmPassword) {
+              passwordMatchMessage.style.display = "block";
+              return;
+            } else {
+              passwordMatchMessage.style.display = "none";
+            }
+            
+            // Aquí puedes añadir tu lógica de registro (por ejemplo, enviar los datos al servidor)
+            console.log("Usuario registrado:", documentID, fullName);
+            
+            successMessage.style.display = "block";
+            
+            // Limpiar el formulario después de un tiempo
+            setTimeout(() => {
+              successMessage.style.display = "none";
+              registerForm.reset();
+              acceptTermsCheckbox.checked = false; // Desmarcar los términos
+              registerButton.disabled = true; // Deshabilitar el botón de registro nuevamente
+              }, 3000);
+            });
+          });
+          
+          // Lógica para el manejo del teléfono con el plugin intlTelInput
+          document.addEventListener("DOMContentLoaded", function() {
+            const phoneInputField = document.querySelector("#numeroTelefono");
+            const phoneInput = window.intlTelInput(phoneInputField, {
+              preferredCountries: ["co", "us", "es", "mx", "ar", "br"],
+              separateDialCode: true,
+              utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+            });
+            
+            const passwordField = document.getElementById("password");
+            const confirmPasswordField = document.getElementById("confirmPassword");
+            
+            // Validar contraseñas seguras
+            document.getElementById("registerForm").addEventListener("submit", function(event) {
+              event.preventDefault();
+              
+              const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+              
+              if (!passwordRegex.test(passwordField.value)) {
+                alert("La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.");
+                return;
+              }
+              
+              if (!phoneInput.isValidNumber()) {
+                alert("Por favor, ingresa un número de teléfono válido.");
+                return;
+              }
+            });
+            
+            // Manejar la visibilidad de las contraseñas
+            document.getElementById("togglePassword").addEventListener("click", function() {
+              const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+              passwordField.setAttribute("type", type);
+              this.classList.toggle("fa-eye");
+              this.classList.toggle("fa-eye-slash");
+            });
+            
+            document.getElementById("toggleConfirmPasswordIcon").addEventListener("click", function() {
+              const type = confirmPasswordField.getAttribute("type") === "password" ? "text" : "password";
+              confirmPasswordField.setAttribute("type", type);
+              this.classList.toggle("fa-eye");
+              this.classList.toggle("fa-eye-slash");
+            });
+            
+            // Sugerir una contraseña aleatoria
+            document.getElementById("sugerirContrasena").addEventListener("click", async function(event) {
+              event.preventDefault();
+              const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@$!%*?&";
+              let password = "";
+              
+              for (let i = 0; i < 12; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+              }
+              passwordField.value = password;
+              confirmPasswordField.value = password;
+            });
+            
+            async function hashPassword(password) {
+              const encoder = new TextEncoder();
+              const data = encoder.encode(password);
+              const hash = await crypto.subtle.digest('SHA-256', data);
+              return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+            
+           /******************************************************************************/
+            // Redirigir al dashboard
+            function redirectToDashboard() {
+              const path = "../pagina_principal/admin-dashboard.html";
+              fetch(path)
+              .then((response) => {
+                if (response.ok) {
+                  window.location.href = path;
+                } else {
+                  alert("El archivo dashboard.html no existe o no es accesible.");
+                }
+              })
+              .catch(() => alert("Error al intentar redirigir."));
+            }
+
+            // Validar inicio de sesión
+            document.getElementById("loginForm").addEventListener("submit", function (e) {
+              e.preventDefault();
+
+              const loginDocumentID = document.getElementById("loginDocumentID").value.trim();
+              const loginPassword = document.getElementById("loginPassword").value.trim();
+
+              const users = JSON.parse(localStorage.getItem("users")) || [];
+              const user = users.find(
+              (u) => u.documentID === loginDocumentID && u.password === loginPassword
+            );
+
+            if (user) {
+              // Guarda el nombre del usuario en localStorage
+              localStorage.setItem("nombreUsuario", user.fullName);
+
+              // Muestra el mensaje de bienvenida
+              alert(`Bienvenido, ${user.fullName}`);
+    
+              // Redirige al dashboard
+              redirectToDashboard();
+  
+            } else {
+              const errorMessage = document.getElementById("loginErrorMessage");
+              errorMessage.style.display = "block";
+              setTimeout(() => (errorMessage.style.display = "none"), 3000); // Ocultar error después de 3 segundos
+            }
+          });
+
+          // Manejar el formulario de recuperación de contraseña
+          document.getElementById("recoverForm").addEventListener("submit", function (e) {
+  
+            e.preventDefault();
+            const recoveryMessage = document.getElementById("recoveryMessage");
+            recoveryMessage.style.display = "block";
+
+            setTimeout(() => {
+              recoveryMessage.style.display = "none";
+              document.querySelector(".recuperacion").style.display = "none";
+              document.querySelector(".inicio-sesion").style.display = "flex";
+            }, 3000);
+          });
+
+          // Guardar usuario en localStorage
+          document.getElementById("registerForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById("fullName").value;
+            const documentID = document.getElementById("documentID").value;
+            const email = document.getElementById("email").value;
+            const numeroTelefono = document.getElementById("numeroTelefono").value;
+            const password = document.getElementById("password").value;
+
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+
+            if (users.some((user) => user.documentID === documentID)) {
+              alert("Este usuario ya está registrado.");
+              return;
+            }
+
+            users.push({
+              fullName,
+              documentID,
+              email,
+              numeroTelefono, 
+              password,
+            });
+
+            localStorage.setItem("users", JSON.stringify(users));
+            alert("Usuario registrado exitosamente.");
+            document.getElementById("registerForm").reset();
+            document.getElementById("acceptTermsCheckbox").checked = false;
+            document.getElementById("registerButton").disabled = true;
+          });
+        });
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

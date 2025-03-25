@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Asistencia Tecnica</title>
+      <link rel="stylesheet" href="asistencia_tecnica.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    </head>
+
+    <body>
+        <header class="navbar">
+            <!-- Botón para volver con solo el icono -->
+            <a href="../../pagina_principal/admin-dashboard.html" class="boton-volver" title="Volver">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        
+            <h1>Asistencia Técnica</h1>
+        </header>
+    
+        <main class="contenedor-principal">
+            <!-- Registrar Nueva Empresa -->
+            <section id="crear-empresa">
+                <h2>Registrar Nueva Empresa</h2>
+                <form id="empresa-form">
+                    <div class="form-group">
+                        <label for="nombre-empresa">📌 Nombre de la Empresa:</label>
+                        <input type="text" id="nombre-empresa" name="nombre-empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="direccion-empresa">📍 Dirección:</label>
+                        <input type="text" id="direccion-empresa" name="direccion-empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono-empresa">📞 Teléfono de Contacto:</label>
+                        <input type="tel" id="telefono-empresa" name="telefono-empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="correo-empresa">📧 Correo Electrónico:</label>
+                        <input type="email" id="correo-empresa" name="correo-empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nit-empresa">🆔 NIT o Identificación:</label>
+                        <input type="text" id="nit-empresa" name="nit-empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pagina-web">🌍 Página Web (opcional):</label>
+                        <input type="url" id="pagina-web" name="pagina-web">
+                    </div>
+                    <div class="form-group">
+                        <label for="representante-empresa">👤 Representante Legal:</label>
+                        <input type="text" id="representante-empresa" name="representante-empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="servicios-empresa">📌 Servicios Ofrecidos:</label>
+                        <textarea id="servicios-empresa" name="servicios-empresa" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="upload-title">
+                            <i class="fas fa-folder"></i> Subir Documento de Registro:
+                        </div>
+                    
+                        <!-- 📂 Botón Personalizado -->
+                        <label for="registro-empresa" class="file-upload">
+                            <i class="fas fa-folder-open"></i> <!-- Ícono de archivo -->
+                            <span id="file-label">Subir Archivo</span> 
+                        </label>
+                    
+                        <!-- 📂 Input File Oculto -->
+                        <input type="file" id="registro-empresa" name="registro-empresa" accept=".pdf, .jpg, .png">
+                    </div>
+
+                    <button type="submit">Registrar Empresa</button>
+                </form>
+            </section>
+    
+            <div class="contenedor-secundario">
+                <!-- Subir Hojas de Vida -->
+                <section id="subir-hojas-vida" class="contenedor">
+                    <h2><i class="fas fa-file-upload"></i> Subir Hoja de Vida - Personal Biomédico</h2>
+                
+                    <form id="hojas-vida-form">
+                        <div class="form-group">
+                            <label for="empresa">🏢 Seleccionar Empresa:</label>
+                            <select id="empresa" name="empresa" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombre-personal">👤 Nombre del Personal:</label>
+                            <input type="text" id="nombre-personal" name="nombre-personal" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hoja-vida">📂 Subir Hoja de Vida:</label>
+                            <div class="file-upload-container">
+                                <label for="hoja-vida"><i class="fas fa-upload"></i> <span id="file-text">Seleccionar Archivo</span></label>
+                                <input type="file" id="hoja-vida" name="hoja-vida" accept=".pdf" hidden>
+                            </div>
+                            
+                        </div>
+                        <button type="submit">Subir</button>
+                    </form>
+                </section>
+                
+                <!-- Empresas Registradas -->
+                <section id="empresas-registradas">
+                    <h3>📋 Empresas Registradas</h3>
+                    <ul id="lista-empresas">
+                        <!-- Empresas registradas dinámicamente aquí -->
+                    </ul>
+                </section>
+
+                
+<!-- 📌 Modal de Edición de Empresa -->
+<div id="modal-editar" class="modal">
+    <div class="modal-content">
+        <h2>Editar Empresa</h2>
+        <form id="editar-empresa-form">
+            <input type="hidden" id="edit-index">
+            
+            <div class="form-group">
+                <label>Nombre:</label>
+                <input type="text" id="edit-nombre">
+            </div>
+            <div class="form-group">
+                <label>Dirección:</label>
+                <input type="text" id="edit-direccion">
+            </div>
+            <div class="form-group">
+                <label>Teléfono:</label>
+                <input type="tel" id="edit-telefono">
+            </div>
+            <div class="form-group">
+                <label>Correo:</label>
+                <input type="email" id="edit-correo">
+            </div>
+            <div class="form-group">
+                <label>NIT:</label>
+                <input type="text" id="edit-nit">
+            </div>
+
+            <!-- 📌 Nueva sección: Hojas de Vida -->
+            <h3>📂 Hojas de Vida Registradas</h3>
+            <ul id="editar-lista-hojas-vida"></ul>
+
+            <button type="submit">Guardar Cambios</button>
+            <button type="button" id="cerrar-modal">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+
+            <!-- 📌 Modal de Detalles de Empresa -->
+<div id="modal-detalles" class="modal">
+    <div class="modal-content">
+        <h2>Detalles de la Empresa</h2>
+        <p><strong>📌 Nombre:</strong> <span id="detalles-nombre"></span></p>
+        <p><strong>📍 Dirección:</strong> <span id="detalles-direccion"></span></p>
+        <p><strong>📞 Teléfono:</strong> <span id="detalles-telefono"></span></p>
+        <p><strong>📧 Correo:</strong> <span id="detalles-correo"></span></p>
+        <p><strong>🆔 NIT:</strong> <span id="detalles-nit"></span></p>
+        <p><strong>🌍 Página Web:</strong> <a id="detalles-web" href="#" target="_blank"></a></p>
+        <p><strong>👤 Representante:</strong> <span id="detalles-representante"></span></p>
+        <p><strong>📌 Servicios:</strong> <span id="detalles-servicios"></span></p>
+        
+        <!-- 📂 Lista de Hojas de Vida -->
+        <h3>📂 Hojas de Vida Registradas</h3>
+        <ul id="lista-hojas-vida"></ul>
+
+        <button id="cerrar-modal-detalles">Cerrar</button>
+    </div>
+</div>
+
+            
+        </main>
+        
+        
+
+        <script>
+         
+         document.addEventListener('DOMContentLoaded', () => {
+    const empresaSelect = document.getElementById('empresa');
+    const listaEmpresas = document.getElementById('lista-empresas');
+    const empresaForm = document.getElementById('empresa-form');
+    const hojasVidaForm = document.getElementById('hojas-vida-form');
+    const editarEmpresaForm = document.getElementById('editar-empresa-form');
+    
+    const modalEditar = document.getElementById('modal-editar');
+    const modalDetalles = document.getElementById('modal-detalles');
+    
+    const cerrarModalEditar = document.getElementById('cerrar-modal');
+    const cerrarModalDetalles = document.getElementById('cerrar-modal-detalles');
+
+    // 📌 Cargar empresas desde localStorage
+    const empresas = JSON.parse(localStorage.getItem('empresas')) || [];
+
+    const sincronizarEmpresas = () => {  
+        empresaSelect.innerHTML = ''; 
+        listaEmpresas.innerHTML = ''; 
+
+        empresas.forEach((empresa, index) => {  
+            // 📌 Agregar empresa al selector
+            const option = document.createElement('option');
+            option.value = empresa.nombre;
+            option.textContent = empresa.nombre;
+            empresaSelect.appendChild(option);
+
+            // 📌 Crear contenedor de empresa con opciones
+            const empresaItem = document.createElement('li');
+            empresaItem.classList.add('empresa-item');
+
+            empresaItem.innerHTML = `
+                <span>${empresa.nombre}</span>
+                <div class="opciones-empresa">
+                    <button class="detalles" data-index="${index}">📂 Detalles</button>
+                    <button class="editar" data-index="${index}">✏️ Editar</button>
+                    <button class="eliminar" data-index="${index}">🗑️ Eliminar</button>
+                </div>
+            `;
+
+            listaEmpresas.appendChild(empresaItem);
+        });
+    };
+
+    sincronizarEmpresas();
+
+    // 📌 Registrar nuevas empresas
+    empresaForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const nuevaEmpresa = {
+            nombre: document.getElementById('nombre-empresa').value.trim(),
+            direccion: document.getElementById('direccion-empresa').value.trim(),
+            telefono: document.getElementById('telefono-empresa').value.trim(),
+            correo: document.getElementById('correo-empresa').value.trim(),
+            nit: document.getElementById('nit-empresa').value.trim(),
+            paginaWeb: document.getElementById('pagina-web').value.trim(),
+            representante: document.getElementById('representante-empresa').value.trim(),
+            servicios: document.getElementById('servicios-empresa').value.trim(),
+            hojasVida: [] // 📌 Almacenar hojas de vida
+        };
+
+        empresas.push(nuevaEmpresa);
+        localStorage.setItem('empresas', JSON.stringify(empresas));
+        sincronizarEmpresas();
+        empresaForm.reset();
+        alert('Empresa registrada exitosamente.');
+    });
+
+    // 📌 Subir hojas de vida asociadas a una empresa
+    hojasVidaForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const empresaSeleccionada = empresaSelect.value;
+                const nombrePersonal = document.getElementById('nombre-personal').value.trim();
+                const hojaVidaFile = document.getElementById('hoja-vida').files[0];
+
+                if (!hojaVidaFile) {
+                    alert('Por favor, selecciona un archivo.');
+                    return;
+                }
+
+                const empresaIndex = empresas.findIndex(emp => emp.nombre === empresaSeleccionada);
+                if (empresaIndex !== -1) {
+                    const fileUrl = URL.createObjectURL(hojaVidaFile);
+
+                    empresas[empresaIndex].hojasVida.push({
+                        nombre: nombrePersonal,
+                        archivo: fileUrl
+                    });
+
+                    localStorage.setItem('empresas', JSON.stringify(empresas));
+                    alert(`Hoja de vida de ${nombrePersonal} para ${empresaSeleccionada} ha sido subida exitosamente.`);
+                    hojasVidaForm.reset();
+                } else {
+                    alert("Error: La empresa no fue encontrada.");
+                }
+            });
+
+    // 📌 Ver detalles de empresa en modal
+    listaEmpresas.addEventListener('click', (event) => {
+        if (event.target.classList.contains('detalles')) {
+            const index = event.target.dataset.index;
+            const empresa = empresas[index];
+
+            document.getElementById('detalles-nombre').textContent = empresa.nombre;
+            document.getElementById('detalles-direccion').textContent = empresa.direccion;
+            document.getElementById('detalles-telefono').textContent = empresa.telefono;
+            document.getElementById('detalles-correo').textContent = empresa.correo;
+            document.getElementById('detalles-nit').textContent = empresa.nit;
+            document.getElementById('detalles-web').textContent = empresa.paginaWeb;
+            document.getElementById('detalles-web').href = empresa.paginaWeb;
+            document.getElementById('detalles-representante').textContent = empresa.representante;
+            document.getElementById('detalles-servicios').textContent = empresa.servicios;
+
+            // 📂 Cargar la lista de hojas de vida en el modal
+        const listaHojasVida = document.getElementById('lista-hojas-vida');
+        listaHojasVida.innerHTML = ''; // Limpiar contenido previo
+
+        if (empresa.hojasVida.length > 0) {
+                        empresa.hojasVida.forEach((hv, i) => {
+                            const li = document.createElement('li');
+                            li.innerHTML = `
+                                <a href="${hv.archivo}" target="_blank">${hv.nombre} - 📂 Ver Documento</a>
+                            `;
+                            listaHojasVida.appendChild(li);
+                        });
+                    } else {
+                        listaHojasVida.innerHTML = '<li>No hay hojas de vida registradas.</li>';
+                    }
+
+                    modalDetalles.classList.add('show');
+        }
+    });
+
+    // 📌 Cerrar modal de detalles
+    cerrarModalDetalles.addEventListener('click', () => {
+        modalDetalles.classList.remove('show');
+    });
+
+    // 📌 Cerrar modal de detalles al hacer clic fuera de él
+    window.addEventListener('click', (event) => {
+        if (event.target === modalDetalles) {
+            modalDetalles.classList.remove('show');
+        }
+    });
+
+    // 📌 Editar empresa
+listaEmpresas.addEventListener('click', (event) => {
+    if (event.target.classList.contains('editar')) {
+        const index = event.target.dataset.index;
+        abrirModalEdicion(index); // Llamamos a una función para evitar duplicación de código
+    }
+});
+
+// 📌 Función para abrir el modal de edición y cargar datos
+function abrirModalEdicion(index) {
+    const empresa = empresas[index];
+
+    // Cargar los datos actuales en los campos del formulario
+    document.getElementById('edit-index').value = index;
+    document.getElementById('edit-nombre').value = empresa.nombre;
+    document.getElementById('edit-direccion').value = empresa.direccion;
+    document.getElementById('edit-telefono').value = empresa.telefono;
+    document.getElementById('edit-correo').value = empresa.correo;
+    document.getElementById('edit-nit').value = empresa.nit;
+
+    // 📌 Cargar la lista de hojas de vida con opción de eliminar
+    const listaHojasVida = document.getElementById('editar-lista-hojas-vida');
+    listaHojasVida.innerHTML = ''; // Limpiar contenido previo
+
+    if (empresa.hojasVida.length > 0) {
+        empresa.hojasVida.forEach((hv, hvIndex) => {
+            const li = document.createElement('li');
+            li.classList.add('hoja-item');
+            li.innerHTML = `
+                <span><strong>${hv.nombre}</strong> - 📂 ${hv.archivo}</span>
+                <i class="fas fa-trash eliminar-hoja" data-index="${index}" data-hoja="${hvIndex}" title="Eliminar"></i>
+            `;
+            listaHojasVida.appendChild(li);
+        });
+    } else {
+        listaHojasVida.innerHTML = '<li>No hay hojas de vida registradas.</li>';
+    }
+
+    modalEditar.classList.add('show');
+}
+
+// 📌 Evento para eliminar hojas de vida dentro del modal de edición
+document.getElementById('editar-lista-hojas-vida').addEventListener('click', (event) => {
+    if (event.target.classList.contains('eliminar-hoja')) {
+        const empresaIndex = event.target.dataset.index;
+        const hojaIndex = event.target.dataset.hoja;
+
+        // Eliminar la hoja de vida del array
+        empresas[empresaIndex].hojasVida.splice(hojaIndex, 1);
+        localStorage.setItem('empresas', JSON.stringify(empresas));
+
+        // 📌 Volver a abrir el modal con los datos actualizados
+        abrirModalEdicion(empresaIndex);
+    }
+});
+
+// 📌 Guardar cambios en la empresa editada
+editarEmpresaForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const index = document.getElementById('edit-index').value;
+
+    empresas[index].nombre = document.getElementById('edit-nombre').value.trim();
+    empresas[index].direccion = document.getElementById('edit-direccion').value.trim();
+    empresas[index].telefono = document.getElementById('edit-telefono').value.trim();
+    empresas[index].correo = document.getElementById('edit-correo').value.trim();
+    empresas[index].nit = document.getElementById('edit-nit').value.trim();
+
+    localStorage.setItem('empresas', JSON.stringify(empresas));
+    sincronizarEmpresas();
+    modalEditar.classList.remove('show');
+});
+
+
+    // 📌 Cerrar modal de edición
+    cerrarModalEditar.addEventListener('click', () => {
+        modalEditar.classList.remove('show');
+    });
+
+    // 📌 Cerrar modal de edición al hacer clic fuera de él
+    window.addEventListener('click', (event) => {
+        if (event.target === modalEditar) {
+            modalEditar.classList.remove('show');
+        }
+    });
+
+    // 📌 Eliminar empresa
+    listaEmpresas.addEventListener('click', (event) => {
+        if (event.target.classList.contains('eliminar')) {
+            const index = event.target.dataset.index;
+            empresas.splice(index, 1);
+            localStorage.setItem('empresas', JSON.stringify(empresas));
+            sincronizarEmpresas();
+        }
+    });
+});
+
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Formato de Mantenimiento</title>
+        <link rel="stylesheet" href="formato_mantenimiento.css">     
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+        <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
+    </head>
+
+    <body>
+
+         <!-- Botón para volver a mantenimiento-->
+    <div class="contenedor-boton-mantenimiento">
+        <a href="cambios_mantenimiento.html" class="boton-volver"><i class="fas fa-arrow-left"></i> Volver</a>
+    </div>
+
+        <!-- Formulario para Equipos Electrónicos -->
+        <div class="container form-section" id="formMantenimientoElectronico">     
+            <h2><i class="fas fa-tools"></i>Formato de Inspeción para Equipos Electrónicos</h2>
+            <form id="formElectronico">
+
+                <div class="section-title"><i class="fas fa-user"></i>Datos Generales del Cliente</div>
+                
+                <!--fila 1: documento No-->
+                <div class="grid-full">
+                    <label for="documentoNoElectronico"><i class="fas fa-file-alt label-icon"></i>Documento No.</label>
+                    <input type="text" id="documentoNoElectronico" name="documentoNo" class="small-input" readonly>
+                </div>
+
+                <!--fila 2: clientes y ciudad-->
+                <div class="grid-2col">    
+                    <div>
+                        <label for="cliente"><i class="fas fa-user label-icon"></i>Cliente</label>
+                        <input type="text" id="cliente" name="cliente" required>
+                    </div>
+
+                    <div>
+                        <label for="ciudad"><i class="fas fa-city label-icon"></i>Ciudad</label>
+                        <input type="text" id="ciudad" name="ciudad" required>
+                    </div>
+                </div>
+
+                <!--fila 3: fecha documento e inspeccionado por -->
+                <div class="grid-2col">
+                    <div>
+                        <label for="fechaDocumento"><i class="fas fa-calendar-alt label-icon"></i>Fecha Documento</label>
+                        <input type="date" id="fechaDocumento" name="fechaDocumento" required>
+                    </div>
+
+                    <div>
+                        <label for="inspeccionadoPor"><i class="fas fa-user label-icon"></i>Inspeccionado Por</label>
+                        <input type="text" id="inspeccionadoPor" name="inspeccionadoPor" required>
+                    </div>
+                </div>
+                
+                <!--Identificacion del Equipo-->
+                <div class="section-title"><i class="fas fa-tools"></i>Identificación del Equipo</div>
+                <div class="grid-2col">
+                    <div>
+                        <label for="nombreEquipo">Nombre del Equipo</label>
+                        <input type="text" id="nombreEquipo" name="nombreEquipo" required>
+                    </div>
+
+                    <div>
+                        <label for="modelo">Modelo</label>
+                        <input type="text" id="modelo" name="modelo" required>
+                    </div>
+
+                    <div>
+                        <label for="marca">Marca</label>
+                        <input type="text" id="marca" name="marca" required>
+                    </div>
+
+                    <div>
+                        <label for="serial">Número de Serie</label>
+                        <input type="text" id="serial" name="serial" required>
+                    </div>
+                </div>
+
+                <!--estado a la inspeccion-->
+        <!--<div class="form-section" id="tipoMantenimientoInspeccion">-->
+            <div class="inline-flex">
+                <!--tipo de mantenimiento-->
+                <div>
+                    <div class="section-title"><i class="fas fa-tools"></i> Tipo de Mantenimiento</div>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="mantenimiento1" name="tipoMantenimiento" value="Preventivo">
+                            <label for="mantenimiento1" class="inline-radio-label"><span>1. </span> Preventivo</label>
+                        </div>
+                        
+                        <div class="radio-option">
+                            <input type="radio" id="mantenimiento2" name="tipoMantenimiento" value="Correctivo">
+                            <label for="mantenimiento2" class="inline-radio-label"><span>2. </span> Correctivo</label>
+                        </div>
+                        
+                        <div class="radio-option">
+                            <input type="radio" id="mantenimiento3" name="tipoMantenimiento" value="Diagnóstico">
+                            <label for="mantenimiento3" class="inline-radio-label"><span>3. </span> Diagnóstico</label>
+                        </div>
+                        
+                        <div class="radio-option">
+                            <input type="radio" id="mantenimiento4" name="tipoMantenimiento" value="Contrato">
+                            <label for="mantenimiento4" class="inline-radio-label"><span>4. </span> Contrato</label>
+                        </div>
+                        
+                        <div class="radio-option">
+                            <input type="radio" id="mantenimiento5" name="tipoMantenimiento" value="Solicitado">
+                            <label for="mantenimiento5" class="inline-radio-label"><span>5. </span> Solicitado</label>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Estado a la Inspección -->
+                 <div>
+                    <div class="section-title"><i class="fas fa-exclamation-circle label-icon"></i> Estado a la Inspección</div>
+                    <div class="estado-inspeccion">
+                        <div class="radio-option">
+                            <input type="radio" id="estado1" name="estadoInspeccion" value="Bueno">
+                            <label for="estado1">1. Bueno</label>
+                        </div>
+                        
+                        <div class="radio-option">
+                            <input type="radio" id="estado2" name="estadoInspeccion" value="Regular">
+                            <label for="estado2">2. Regular</label>
+                        </div>
+            
+                        <div class="radio-option">
+                            <input type="radio" id="estado3" name="estadoInspeccion" value="Fuera de Servicio">
+                            <label for="estado3">3. Fuera de Servicio</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Descripción General del Equipo (Check List con Opciones) -->
+        <div class="section-title"><i class="fas fa-check-circle"></i>Descripción General del Equipo (Inspección)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>1. INSTALACIÓN ELECTRICA</th>
+                    <th><i class="fas fa-check-circle"></i>RC</th>
+                    <th><i class="fas fa-times-circle"></i>NC</th>
+                    <th><i class="fas fa-times-circle"></i>CR</th>
+                    <th><i class="fas fa-times-circle"></i>NA</th>
+                    <th><i class="fas fa-times-circle"></i>RxC</th>
+                    <th>Detalles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1.1. voltaje AC de suministro</td>
+                    <td><input type="radio" name="item1" value="RC"></td>
+                    <td><input type="radio" name="item1" value="NC"></td>
+                    <td><input type="radio" name="item1" value="CR"></td>
+                    <td><input type="radio" name="item1" value="NA"></td>
+                    <td><input type="radio" name="item1" value="RxC"></td>
+                    <td><textarea name="detalleItem1" class="resize-textarea"></textarea></td>      
+                </tr>
+                
+                <tr>
+                    <td>1.2. Polo a tierra</td>
+                    <td><input type="radio" name="item2" value="RC"></td>
+                    <td><input type="radio" name="item2" value="NC"></td>
+                    <td><input type="radio" name="item2" value="CR"></td>
+                    <td><input type="radio" name="item2" value="NA"></td>
+                    <td><input type="radio" name="item2" value="RxC"></td>
+                    <td><textarea name="detalleItem2" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>1.3. Inspeccion de Cable AC</td>
+                    <td><input type="radio" name="item3" value="RC"></td>
+                    <td><input type="radio" name="item3" value="NC"></td>
+                    <td><input type="radio" name="item3" value="CR"></td>
+                    <td><input type="radio" name="item3" value="NA"></td>
+                    <td><input type="radio" name="item3" value="RxC"></td>
+                    <td><textarea name="detalleItem3" class="resize-textarea"></textarea></td>      
+                </tr>
+                
+                <tr>
+                    <td>1.4. Sistema de proteccion AC</td>
+                    <td><input type="radio" name="item4" value="RC"></td>
+                    <td><input type="radio" name="item4" value="NC"></td>
+                    <td><input type="radio" name="item4" value="CR"></td>
+                    <td><input type="radio" name="item4" value="NA"></td>
+                    <td><input type="radio" name="item4" value="RxC"></td>
+                    <td><textarea name="detalleItem4" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>1.5. Toma de corriente</td>
+                    <td><input type="radio" name="item5" value="RC"></td>
+                    <td><input type="radio" name="item5" value="NC"></td>
+                    <td><input type="radio" name="item5" value="CR"></td>
+                    <td><input type="radio" name="item5" value="NA"></td>
+                    <td><input type="radio" name="item5" value="RxC"></td>
+                    <td><textarea name="detalleItem5" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <th>2. PRUEBAS CUALITATIVAS</th>
+                </tr>
+
+                <tr>
+                    <td>2.1. Switch ON/OFF</td>
+                    <td><input type="radio" name="item6" value="RC"></td>
+                    <td><input type="radio" name="item6" value="NC"></td>
+                    <td><input type="radio" name="item6" value="CR"></td>
+                    <td><input type="radio" name="item6" value="NA"></td>
+                    <td><input type="radio" name="item6" value="RxC"></td>
+                    <td><textarea name="detalleItem6" class="resize-textarea"></textarea></td>      
+                </tr>
+                
+                <tr>
+                    <td>2.2. Panel frontal</td>
+                    <td><input type="radio" name="item7" value="RC"></td>
+                    <td><input type="radio" name="item7" value="NC"></td>
+                    <td><input type="radio" name="item7" value="CR"></td>
+                    <td><input type="radio" name="item7" value="NA"></td>
+                    <td><input type="radio" name="item7" value="RxC"></td>
+                    <td><textarea name="detalleItem7" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>2.3. Tapas externas</td>
+                    <td><input type="radio" name="item8" value="RC"></td>
+                    <td><input type="radio" name="item8" value="NC"></td>
+                    <td><input type="radio" name="item8" value="CR"></td>
+                    <td><input type="radio" name="item8" value="NA"></td>
+                    <td><input type="radio" name="item8" value="RxC"></td>
+                    <td><textarea name="detalleItem8" class="resize-textarea"></textarea></td>      
+                </tr>
+                
+                <tr>
+                    <td>2.4. Señalización de panel frontal</td>
+                    <td><input type="radio" name="item9" value="RC"></td>
+                    <td><input type="radio" name="item9" value="NC"></td>
+                    <td><input type="radio" name="item9" value="CR"></td>
+                    <td><input type="radio" name="item9" value="NA"></td>
+                    <td><input type="radio" name="item9" value="RxC"></td>
+                    <td><textarea name="detalleItem9" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>2.5. Manometro de presión</td>
+                    <td><input type="radio" name="item10" value="RC"></td>
+                    <td><input type="radio" name="item10" value="NC"></td>
+                    <td><input type="radio" name="item10" value="CR"></td>
+                    <td><input type="radio" name="item10" value="NA"></td>
+                    <td><input type="radio" name="item10" value="RxC"></td>
+                    <td><textarea name="detalleItem10" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>2.6. Rejillas de ventilación</td>
+                    <td><input type="radio" name="item11" value="RC"></td>
+                    <td><input type="radio" name="item11" value="NC"></td>
+                    <td><input type="radio" name="item11" value="CR"></td>
+                    <td><input type="radio" name="item11" value="NA"></td>
+                    <td><input type="radio" name="item11" value="RxC"></td>
+                    <td><textarea name="detalleItem11" class="resize-textarea"></textarea></td>      
+                </tr>
+                
+                <tr>
+                    <td>2.7. Botella de almacenamiento</td>
+                    <td><input type="radio" name="item12" value="RC"></td>
+                    <td><input type="radio" name="item12" value="NC"></td>
+                    <td><input type="radio" name="item12" value="CR"></td>
+                    <td><input type="radio" name="item12" value="NA"></td>
+                    <td><input type="radio" name="item12" value="RxC"></td>
+                    <td><textarea name="detalleItem12" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>2.8. Mangueras de silicona</td>
+                    <td><input type="radio" name="item13" value="RC"></td>
+                    <td><input type="radio" name="item13" value="NC"></td>
+                    <td><input type="radio" name="item13" value="CR"></td>
+                    <td><input type="radio" name="item13" value="NA"></td>
+                    <td><input type="radio" name="item13" value="RxC"></td>
+                    <td><textarea name="detalleItem13" class="resize-textarea"></textarea></td>      
+                </tr>
+                
+                <tr>
+                    <td>2.9. Imagen</td>
+                    <td><input type="radio" name="item14" value="RC"></td>
+                    <td><input type="radio" name="item14" value="NC"></td>
+                    <td><input type="radio" name="item14" value="CR"></td>
+                    <td><input type="radio" name="item14" value="NA"></td>
+                    <td><input type="radio" name="item14" value="RxC"></td>
+                    <td><textarea name="detalleItem14" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>3.0. Funcionamiento y seleccion de Po</td>
+                    <td><input type="radio" name="item15" value="RC"></td>
+                    <td><input type="radio" name="item15" value="NC"></td>
+                    <td><input type="radio" name="item15" value="CR"></td>
+                    <td><input type="radio" name="item15" value="NA"></td>
+                    <td><input type="radio" name="item15" value="RxC"></td>
+                    <td><textarea name="detalleItem15" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <th>3. PRUEBAS CUANTITATIVAS</th>
+                </tr>
+
+                <tr>
+                    <td>3.1. Corriente de fuga de carcasa</td>
+                    <td><input type="radio" name="item16" value="RC"></td>
+                    <td><input type="radio" name="item16" value="NC"></td>
+                    <td><input type="radio" name="item16" value="CR"></td>
+                    <td><input type="radio" name="item16" value="NA"></td>
+                    <td><input type="radio" name="item16" value="RxC"></td>
+                    <td><textarea name="detalleItem16" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>3.2. Resistencia cable AC</td>
+                    <td><input type="radio" name="item17" value="RC"></td>
+                    <td><input type="radio" name="item17" value="NC"></td>
+                    <td><input type="radio" name="item17" value="CR"></td>
+                    <td><input type="radio" name="item17" value="NA"></td>
+                    <td><input type="radio" name="item17" value="RxC"></td>
+                    <td><textarea name="detalleItem17" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <th>4. MANTENIMIENTO PREVENTIVO</th>
+                </tr>
+
+                <tr>
+                    <th>4.1. Limpieza</th>
+                </tr>
+
+                <tr>
+                    <td>4.1.1. Contactos Eléctricos</td>
+                    <td><input type="radio" name="item18" value="RC"></td>
+                    <td><input type="radio" name="item18" value="NC"></td>
+                    <td><input type="radio" name="item18" value="CR"></td>
+                    <td><input type="radio" name="item18" value="NA"></td>
+                    <td><input type="radio" name="item18" value="RxC"></td>
+                    <td><textarea name="detalleItem18" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>4.1.2. Soldaduras</td>
+                    <td><input type="radio" name="item19" value="RC"></td>
+                    <td><input type="radio" name="item19" value="NC"></td>
+                    <td><input type="radio" name="item19" value="CR"></td>
+                    <td><input type="radio" name="item19" value="NA"></td>
+                    <td><input type="radio" name="item19" value="RxC"></td>
+                    <td><textarea name="detalleItem19" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>4.1.3. Tarjetas Electrónicas</td>
+                    <td><input type="radio" name="item20" value="RC"></td>
+                    <td><input type="radio" name="item20" value="NC"></td>
+                    <td><input type="radio" name="item20" value="CR"></td>
+                    <td><input type="radio" name="item20" value="NA"></td>
+                    <td><input type="radio" name="item20" value="RxC"></td>
+                    <td><textarea name="detalleItem20" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <td>4.1.4. Limpieza Externa</td>
+                    <td><input type="radio" name="item21" value="RC"></td>
+                    <td><input type="radio" name="item21" value="NC"></td>
+                    <td><input type="radio" name="item21" value="CR"></td>
+                    <td><input type="radio" name="item21" value="NA"></td>
+                    <td><input type="radio" name="item21" value="RxC"></td>
+                    <td><textarea name="detalleItem21" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <th>4.2. Lubricación</th>
+                </tr>
+
+                <tr>
+                    <td>4.2.1. Ventiladores</td>
+                    <td><input type="radio" name="item22" value="RC"></td>
+                    <td><input type="radio" name="item22" value="NC"></td>
+                    <td><input type="radio" name="item22" value="CR"></td>
+                    <td><input type="radio" name="item22" value="NA"></td>
+                    <td><input type="radio" name="item22" value="RxC"></td>
+                    <td><textarea name="detalleItem22" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <th>4.3. Calibración y/o verificación</th>
+                </tr>
+
+                <tr>
+                    <td>4.3.1. _______________________</td>
+                    <td><input type="radio" name="item23" value="RC"></td>
+                    <td><input type="radio" name="item23" value="NC"></td>
+                    <td><input type="radio" name="item23" value="CR"></td>
+                    <td><input type="radio" name="item23" value="NA"></td>
+                    <td><input type="radio" name="item23" value="RxC"></td>
+                    <td><textarea name="detalleItem23" class="resize-textarea"></textarea></td>
+                </tr>
+
+                <tr>
+                    <th>5. VERIFICACIÓN FINAL</th>
+                </tr>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </tbody>
+        </table>
+
+        <!-- Observaciones Generales -->
+<div class="section-title"><i class="fas fa-comments"></i>Observaciones Generales</div>
+<textarea id="observacionesGenerales" name="observacionesGenerales" class="observation-box" required></textarea>
+
+<!--seccion de firmas y fecha-->
+<div class="firma-section">
+    <div class="firma-grid">
+        <!-- Firma de quien recibe -->
+        <div class="firma-item">
+            <div class="firma-container">
+                <img id="firmaRecibePreview" class="firma-preview" alt="Firma de quien recibe" onclick="document.getElementById('firmaRecibeUpload').click();" />
+                <input type="file" id="firmaRecibeUpload" accept="image/*" style="display:none;" onchange="cargarFirma('firmaRecibePreview')">
+            </div>
+            <label for="firmaRecibe">Firma De Quién Recibe</label>
+        </div>
+
+        <!-- Firma del servicio técnico -->
+        <div class="firma-item">
+            <div class="firma-container">
+                <img id="firmaTecnicoPreview" class="firma-preview" alt="Firma del servicio técnico" onclick="document.getElementById('firmaTecnicoUpload').click();" />
+                <input type="file" id="firmaTecnicoUpload" accept="image/*" style="display:none;" onchange="cargarFirma('firmaTecnicoPreview')">
+            </div>
+            <label for="firmaTecnico">Firma Servicio Técnico</label>
+        </div>
+
+        <!-- Fecha de recibido -->
+        <div class="fecha-recibido">
+            <label for="fechaRecibido">Fecha Recibido</label>
+            <input type="text" id="fechaRecibido" placeholder="dd/mm/aaaa">
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+               
+                
+               
+                
+                <div class="section-header">Verificación Final</div>
+                <div class="grid">
+                    <div>
+                        <label for="repuestosVerificados">Repuestos Verificados</label>
+                        <select id="repuestosVerificados" name="repuestosVerificados" required>
+                            <!-- Opciones se llenarán dinámicamente desde el inventario -->
+                        </select>
+                    </div>
+                        
+                    <div>
+                        <label for="cantidadUtilizada">Cantidad Utilizada</label>
+                        <input type="number" id="cantidadUtilizada" name="cantidadUtilizada" min="1" required>
+                    </div>
+                </div>
+                    
+                    <button type="submit">Registrar Mantenimiento</button>
+                </form>
+            </div>
+            
+
+
+
+            <div class="button-container no-print">
+                <!-- Botón para guardar en PDF -->
+                <button id="savePdfButton" class="action-button"><i class="fas fa-file-pdf"></i> Guardar como PDF</button>
+            
+                <!-- Botón para guardar como borrador -->
+                <button id="saveDraftButton" class="action-button"><i class="fas fa-save"></i> Guardar como Borrador</button>
+            
+                <!-- Botón para imprimir -->
+                <button id="printButton" class="action-button"><i class="fas fa-print"></i> Imprimir</button>
+            
+                <!-- Botón para descargar -->
+                <button id="downloadButton" class="action-button"><i class="fas fa-download"></i> Descargar</button>
+            </div>
+        
+        </form>
+
+       <!-- <div id="mensaje"></div>-->
+    </div>
+
+
+        <!--*******************************************************************************-->  
+    <script>         
+        
+        //funcion para agregar consecutivo
+        function generarConsecutivo(){
+            let consecutivo = localStorage.getItem('ultimoConsecutivo') || 1000; //empieza en 1000
+            consecutivo = parseInt(consecutivo) + 1;
+            localStorage.setItem('ultimoConsecutivo', consecutivo);
+            return consecutivo;
+        }
+        
+        // Event listener para el formulario electrónico
+        document.getElementById('formElectronico').addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            // Generar consecutivo y asignarlo
+            const consecutivo = generarConsecutivo();
+            document.getElementById('documentoNoElectronico').value = consecutivo;
+            
+            const mensaje = "Mantenimiento registrado con éxito. El equipo fue registrado correctamente.";
+            document.getElementById('mensaje').textContent = mensaje;
+            
+            // Limpiar el formulario después del envío
+            this.reset();
+            
+            // Generar un nuevo consecutivo para el próximo mantenimiento
+            document.getElementById('documentoNoElectronico').value = generarConsecutivo();
+        });
+        
+        // Event listener para el formulario de endoscopia
+        document.getElementById('formEndoscopia').addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            // Generar consecutivo y asignarlo
+            const consecutivo = generarConsecutivo();
+            document.getElementById('documentoNoEndoscopia').value = consecutivo;
+
+            const mensaje = "Inspección registrada con éxito. El equipo fue inspeccionado correctamente.";
+            document.getElementById('mensaje').textContent = mensaje;
+
+            // Limpiar el formulario después del envío
+            this.reset();
+
+            // Generar un nuevo consecutivo para la próxima inspección
+            document.getElementById('documentoNoEndoscopia').value = generarConsecutivo();
+        });
+
+            //obtiene los repuestos del inventario desde el localSorage
+            let repuestos = JSON.parse(localStorage.getItem('repuestos')) || [];
+            
+        // Función para cargar los repuestos en el select del formulario
+        function cargarRepuestos(selectId) {
+            const repuestosSelect = document.getElementById(selectId);
+            repuestosSelect.innerHTML = ''; // Limpiar el select antes de agregar opciones
+            
+            repuestos.forEach(repuesto => {
+                if (repuesto.cantidad > 0) {  // Solo mostrar los repuestos con stock
+                    const option = document.createElement('option');
+                    option.value = repuesto.id;
+                    option.textContent = `${repuesto.nombre} (Stock: ${repuesto.cantidad})`;
+                    repuestosSelect.appendChild(option);
+                }
+            });
+        }
+        
+        // Función para registrar mantenimiento
+        function registrarMantenimiento(e, formType) {
+            e.preventDefault();
+            
+            const repuestoId = parseInt(document.getElementById(`repuestos${formType}`).value);
+            const cantidadUtilizada = parseInt(document.getElementById(`cantidad${formType}`).value);
+            const repuesto = repuestos.find(r => r.id === repuestoId);
+            
+            if (repuesto && repuesto.cantidad >= cantidadUtilizada) {
+                repuesto.cantidad -= cantidadUtilizada;
+                localStorage.setItem('repuestos', JSON.stringify(repuestos));
+                document.getElementById('mensaje').textContent = `Mantenimiento registrado. Se utilizaron ${cantidadUtilizada} unidades de ${repuesto.nombre}.`;
+                cargarRepuestos(`repuestos${formType}`);
+            } else {
+                document.getElementById('mensaje').textContent = `Error: Stock insuficiente para ${repuesto.nombre}.`;
+            }
+            
+            document.getElementById(`formMantenimiento${formType}`).reset();
+        }
+        
+        // Mostrar el formulario adecuado basado en el tipo de formato seleccionado
+        document.getElementById('tipoFormato').addEventListener('change', function () {
+            const tipoFormato = this.value;
+            document.querySelectorAll('.form-section').forEach(form => form.style.display = 'none');
+            
+            if (tipoFormato === 'electronico') {
+                document.getElementById('formMantenimientoElectronico').style.display = 'block';
+            } else if (tipoFormato === 'endoscopio') {
+                document.getElementById('formMantenimientoEndoscopia').style.display = 'block';
+                
+                // Asegurarse de que las secciones de "Tipo de Mantenimiento" y "Estado a la Inspección" estén visibles
+                const tipoMantenimientoSection = document.querySelector('#formMantenimientoEndoscopia .inline-flex');
+                
+                if (tipoMantenimientoSection) {
+                    tipoMantenimientoSection.style.display = 'flex'; // Mostrar esta sección
+                    }
+                }
+            });
+        
+        
+        // Función para cargar la firma digital desde una imagen
+        function cargarFirma(previewId) {
+                const input = document.getElementById(previewId + 'Upload');
+                const preview = document.getElementById(previewId);
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                        preview.classList.add('loaded');
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        
+        // Guardar el formato como PDF
+        document.getElementById('savePdfButton').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Captura la información del formulario o del área que desees
+            doc.text("Formato de Mantenimiento", 10, 10);
+            doc.text("Cliente: " + document.getElementById('cliente').value, 10, 20);
+            doc.save("formato_mantenimiento.pdf");
+        });
+        
+        // Guardar como borrador
+        document.getElementById('saveDraftButton').addEventListener('click', function () {
+            const formData = {
+                cliente: document.getElementById('cliente').value,
+                fecha: document.getElementById('fechaDocumento').value,
+            };
+            
+            localStorage.setItem('formDraft', JSON.stringify(formData)); // Guardar en localStorage
+            alert('Formato guardado como borrador.');
+        });
+        
+        // Cargar borrador si existe
+        window.addEventListener('DOMContentLoaded', function () {
+            const savedDraft = localStorage.getItem('formDraft');
+            if (savedDraft) {
+                const formData = JSON.parse(savedDraft);
+                document.getElementById('cliente').value = formData.cliente;
+                document.getElementById('fechaDocumento').value = formData.fecha;
+            }
+        });
+        
+        // Imprimir el formato
+        document.getElementById('printButton').addEventListener('click', function () {
+            window.print();
+        });
+        
+        // Descargar el formato en un archivo
+        document.getElementById('downloadButton').addEventListener('click', function () {
+            const formData = {
+                cliente: document.getElementById('cliente').value,
+                fecha: document.getElementById('fechaDocumento').value,
+            };
+            const blob = new Blob([JSON.stringify(formData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = "formato_mantenimiento.json";
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+
+        //**************************************************************************
+
+        function guardarFormatoGenerado(numeroSerie) {
+            const mantenimientoGenerado = JSON.parse(localStorage.getItem('formatosGenerados')) || [];
+            
+            // Verificar si ya existe este número de serie
+            if (!mantenimientoGenerado.includes(numeroSerie)) {
+                mantenimientoGenerado.push(numeroSerie);
+            }
+            
+            // Guardar en localStorage
+            localStorage.setItem('formatosGenerados', JSON.stringify(mantenimientoGenerado));
+            alert("Formato generado y registrado correctamente.");
+        }
+        
+        // Llama a esta función al finalizar la generación
+        document.getElementById('btnGenerarFormato').addEventListener('click', () => {
+            const numeroSerie = new URLSearchParams(window.location.search).get('numeroSerie'); // Suponiendo que se pasa el número de serie por URL
+            
+            if (numeroSerie) {
+                guardarFormatoGenerado(numeroSerie);
+            } else {
+                alert("No se encontró un número de serie válido.");
+            }
+        });
+
+        //**************************************************************************
+        
+        </script>
+    </body>
+</html>

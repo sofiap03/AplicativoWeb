@@ -1,0 +1,979 @@
+/* Reseteo de estilos básicos */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Estilo para el fondo de la página */
+body {
+  background-color: #c9d6ff;
+  background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  margin:0;
+  text-align: center;
+  background-color: #f5f5f5
+
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3b5998;
+  color: white;
+  padding: 10px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+.navbar-logo img {
+  width: 80px; /* Aumentar el tamaño del logo */
+  height: auto;
+}
+.logo {
+  width: 50px; /* Tamaño pequeño */
+  height: 50px;
+  margin-right: 10px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.header {
+  background-color: #2f4f2f;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: center;
+  text-align: center;
+}
+.steps {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+.steps-container {
+  display: flex;
+  gap: 20px;
+}
+.step {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #ccc;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+.step.active {
+    background-color: #28a745; /* Verde para el paso activo */
+  }
+.step.completed {   
+  background-color: #007bff; /* Azul para pasos completados */
+  }
+
+.step p {
+  margin: 0 0 0 10px;
+  font-size: 0.9rem;
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+.tab {
+  padding: 10px 20px;
+  background-color: #3b7a3b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.tab.active {
+  background-color: #2f4f2f;
+  font-weight: bold;
+}
+
+.card-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.card-option img {
+  width: 50px;
+}
+
+/* Resumo da compra */
+.purchase-summary {
+  background-color: #3b7a3b;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 30%;
+}
+
+.purchase-summary h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 1.5rem;
+  margin-top: 15px;
+}
+
+/* Estilo del pie de página */
+.footer {
+  text-align: center;
+  margin-top: 30px; /* Espaciado con el cuadro azul */
+ 
+}
+
+.footer a {
+  color: #007bff; /* Color de los enlaces */
+  text-decoration: none; /* Sin subrayado */
+}
+
+.footer a:hover {
+  text-decoration: underline; /* Subrayado al pasar el mouse */
+}
+.footer .button {
+  display: inline-block;
+  background-color: #003366; /* Azul oscuro */
+  color: white; /* Texto blanco */
+  padding: 10px 20px; /* Tamaño del botón */
+  border-radius: 5px; /* Bordes redondeados */
+  text-decoration: none; /* Sin subrayado */
+  font-size: 16px; /* Tamaño de fuente */
+  font-weight: bold; /* Negrita */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+  border: none; /* Sin borde */
+}
+.footer .button:hover {
+  background-color: #002244; /* Azul más oscuro al pasar el mouse */
+  cursor: pointer; /* Cambiar el cursor a mano */
+}
+.back-to-index {
+  font-weight: bold; /* Destacar el enlace de volver al inicio */
+}
+
+.cancel {
+  color: #3b7a3b;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.site-seguro {
+  background-color: white;
+  color: black;
+  padding: 10px 15px;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-logo i {
+  margin-right: 10px;
+  font-size: 1.8rem;
+  color: #fbc02d; /* Color amarillo para el ícono */
+}
+.nav-steps {
+  display: flex;
+  justify-content: space-around;
+  font-size: 0.9rem;
+}
+.logout-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+/* Contenedor principal */
+.cards-container {
+  display: flex;
+  justify-content: center; /* Centra todas las tarjetas horizontalmente */
+  align-items: center; /* Alinea las tarjetas verticalmente */
+  gap: 30px; /* Espaciado entre las tarjetas */
+  padding: 20px;
+}
+
+/* Estilo para las tarjetas */
+.offer-card {
+  flex: 0 1 400px; /* Tamaño fijo de cada tarjeta */
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+  border: 2px solid #16e0eb; /* Bordes amarillos */
+}
+
+/* Botón dentro de la tarjeta */
+.offer-card .offer-btn {
+  margin-top: 20px;
+  padding: 15px 20px;
+  background-color: #FF5722;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.offer-card .offer-btn:hover {
+  background-color: #E64A19; /* Cambia el color al pasar el mouse */
+}
+/* Opcional: Personalización adicional */
+.offer-card:hover {
+  transform: scale(1.05); /* Efecto de agrandar al pasar el mouse */
+  transition: transform 0.3s ease;
+}
+
+.offer-title {
+  color: #ff5722;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.offer-description {
+  color: #555;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.offer-description .highlight {
+  color: #ff5722;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.offer-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.offer-benefits li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Botón */
+.offer-btn {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.offer-btn:hover {
+  background-color: #e64a19;
+  transform: scale(1.05);
+}
+.logout-btn i {
+  margin-right: 8px;
+}
+
+.logout-btn:hover {
+  background-color: #e63939;
+}
+
+/* Contenido principal */
+.content {
+  margin-top: 80px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Contenedor principal */
+.contenedor {
+  background-color: #fff;
+  border-radius: 150px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  width: 900px; /* Aumentado de 768px a 900px */
+  max-width: 100%;
+  min-height: 750px; /* Aumentado de 480px a 550px */
+  transition: all 0.6s ease-in-out;
+}
+
+/* Estilos para textos y botones dentro del contenedor */
+.contenedor p {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  margin: 20px 0;
+}
+
+.contenedor span {
+  font-size: 12px;
+}
+
+.contenedor a {
+  color: #333;
+  font-size: 13px;
+  text-decoration: none;
+  margin: 15px 0 10px;
+}
+
+.contenedor button {
+  background-color: #3a78b7; /* Botón azul */
+  color: #fff;
+  padding: 10px 45px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.contenedor button.oculto {
+  background-color: transparent;
+  border-color: #fff;
+}
+
+/* Estilo para los formularios */
+.contenedor form {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  height: 100%;
+}
+
+.contenedor input {
+  background-color: #f1f4f9;
+  border: none;
+  margin: 8px 0;
+  padding: 10px 15px;
+  font-size: 13px;
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
+}
+
+/* Uniformidad de tamaño para los campos de entrada */
+.registro form input[type="text"],
+.registro form input[type="email"],
+.registro form input[type="tel"],
+.registro form input[type="password"] {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f1f4f9;
+  outline: none;
+}
+
+/* Estilo del contenedor de contraseñas con el ícono de visualización */
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.password-field input[type="password"] {
+  padding-right: 40px; /* Espacio para el ícono dentro del campo */
+}
+
+.password-field i {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+}
+
+/* Estilo del enlace para sugerir contraseña */
+.sugerencia-contrasena {
+  color: #3a78b7; /* Enlace azul */
+  text-decoration: underline;
+  font-size: 14px;
+  margin-top: 5px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* Secciones de Registro e Inicio de Sesión */
+.registro, .inicio-sesion {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+}
+
+.inicio-sesion {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+  cursor: pointer; 
+  position: absolute; 
+  right: 10px; 
+  top: 50%; 
+  transform: translateY(-50%);
+}
+
+.contenedor.active .inicio-sesion {
+  transform: translateX(100%);
+}
+
+.registro {
+  left: 0;
+  width: 50%;
+  z-index: 1;
+  opacity: 0;
+}
+
+.contenedor.active .registro {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: mover 0.6s;
+}
+
+/* Animación */
+@keyframes mover {
+  0%, 49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+  50%, 100% {
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+/* Estilos para los íconos de redes sociales */
+.iconos {
+  margin: 20px 0;
+}
+
+.iconos a {
+  border: 1px solid #ccc;
+  border-radius: 20%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 3px;
+  width: 40px;
+  height: 40px;
+}
+
+/* Contenedor de alternancia entre Registro e Inicio de Sesión */
+.contenedor-alternar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 150px;
+  z-index: 1000;
+  transition: all 0.6s ease-in-out;
+}
+
+.contenedor.active .contenedor-alternar {
+  transform: translateX(-100%);
+  border-radius: 150px;
+}
+
+.alternar {
+  background-color: #1a5b96; /* Fondo azul oscuro */
+  height: 100%;
+  background: linear-gradient(to right, #4a89dc, #1a5b96); /* Gradiente azul */
+  color: #fff;
+  position: relative;
+  left: -100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+}
+
+.contenedor.active .alternar {
+  transform: translateX(50%);
+}
+
+/* Panel de alternancia */
+.panel-alternar {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 30px;
+  text-align: center;
+  top: 0;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+}
+
+.panel-izquierda {
+  transform: translateX(-200%);
+}
+
+.contenedor.active .panel-izquierda {
+  transform: translateX(0);
+}
+
+.panel-derecha {
+  right: 0;
+  transform: translateX(0);
+}
+
+.contenedor.active .panel-derecha {
+  transform: translateX(200%);
+}
+
+/* Estilo para el dropdown de los indicativos de país */
+.iti {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.iti__dropdown {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ddd;
+}
+
+.iti__country-list {
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+.iti__country-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.iti__country-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.iti__country-list::-webkit-scrollbar-thumb {
+  background-color: #1a5b96; /* Azul oscuro */
+  border-radius: 4px;
+}
+
+.iti__country-list::-webkit-scrollbar-thumb:hover {
+  background: #0c3a5e; /* Azul más oscuro */
+}
+
+.recuperacion {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  width: 400px;
+  text-align: center;
+  z-index: 1001;
+}
+.recuperacion h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+.recuperacion input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.recuperacion button {
+  width: 100%;
+  padding: 10px;
+  background-color: #3a78b7;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.recuperacion small {
+  display: block;
+  margin-top: 15px;
+}
+.recuperacion a {
+  color: #3a78b7;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* Estilos para el contenedor del botón de Google */
+.google-signin-container {
+  margin-top: 15px; /* Ajusta el espacio superior del botón */
+  margin-bottom: 10px; /* Ajusta el espacio inferior del botón */
+  display: flex;
+  justify-content: center;
+}
+
+/* Opcional: para el botón Iniciar Sesión, si deseas más espacio */
+.inicio-sesion button[type="submit"] {
+  margin-bottom: 20px; /* Añade más espacio si es necesario */
+}
+
+/*estilo del contenedor del selector del idioma*/
+.language-selector {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+/**/
+.language-selector label{
+  margin-right: 8px;
+}
+
+.language-selector select {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url();
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.language-selector select:hover {
+  border-color: #888;
+}
+
+.language-selector select:focus {
+  outline: none;
+  border-color: #a0c4ff;
+  box-shadow: 0 0 4px rgba(160, 196, 255, 0.5);
+}
+
+/* El modal (oculto por defecto) */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Contenido del modal */
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-height: 400px; /* Limita la altura del modal */
+  overflow-y: auto; /* Barra de desplazamiento */
+}
+
+/* Botón de cerrar */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Contenedor de botones */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Botones interactivos */
+.interactive-btn {
+  background: #ddd;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s;
+
+}
+
+.interactive-btn:hover {
+  background: #3b5998;
+  color: white;
+}
+
+.interactive-btn.active {
+  background: #3b5998;
+  color: white;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenedor del contenido dinámico */
+.content-container h2 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.interactive-btn.active {
+  background: #3b5998;
+  color: white;
+}
+
+.interactive-btn:hover {
+  background: #3b5998;
+  color: white;
+}
+
+/* Tarjeta de Oferta */
+.offer-container {
+  text-align: center;
+}
+
+.offer-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  width: 350px;
+  text-align: center;
+}
+
+.offer-title {
+  color: #ff5722;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.offer-description {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  color: #ff5722;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.offer-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.offer-benefits li {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.offer-btn {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.offer-btn:hover {
+  background-color: #e64a19;
+}
+/* Botones */
+.toggle-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+
+.interactive-btn.active {
+  background: #3b5998;
+  color: white;
+}
+
+.interactive-btn:hover {
+  background: #3b5998;
+  color: white;
+}
+
+/* tarjeta de oferta  */
+.offer-container {
+  text-align: center;
+}
+
+.offer-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  width: 350px;
+}
+
+.offer-title {
+  color: #ff5722;
+  font-size: 2rem;
+}
+
+.offer-description {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  color: #ff5722;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.offer-btn {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.offer-btn:hover {
+  background-color: #e64a19;
+}
+
+/* Barra general */
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Primera barra (azul claro) */
+.light-blue {
+  background-color: #87CEEB; /* Azul claro */
+  height: 60px;
+}
+
+/* Segunda barra (azul puro) */
+.dark-blue {
+  background-color: #00008B; /* Azul puro */
+  height: 50px;
+}
+.top-bar {
+  width: 100%; /* Ocupar todo el ancho de la página */
+  height: 80px; /* Altura de la barra */
+  background-color: #e4e4e4; /* Color de fondo gris claro */
+  display: flex;
+  justify-content: flex-end; /* Alinear el contenido a la derecha */
+  align-items: center; /* Centrar verticalmente el logo */
+  padding-right: 40px; /* Espaciado a la derecha */
+  position: fixed; /* Fija la barra en la parte superior */
+  top: 0;
+  left: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+  z-index: 1000;
+}
+
+.logo-container img {
+  height: 45px; /* Ajusta el tamaño del logo */
+  width: auto; /* Mantiene la proporción */
+}
+/* Texto de progreso */
+.progress-text p {
+  margin: 0 15px;
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #000; /* Texto en negro */
+}
+
+/* Sitio seguro */
+.site-seguro {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+}
+.visible {
+  display: block;
+}
+.hidden {
+  display: none;
+}

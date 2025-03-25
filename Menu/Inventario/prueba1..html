@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="es"> <!-- Define el tipo de documento y el idioma del contenido como español -->
+    <head>
+        <meta charset="UTF-8"> <!-- Establece la codificación de caracteres a UTF-8 -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Hace que el sitio sea compatible con Internet Explorer -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace que el sitio sea adaptable para diferentes tamaños de pantalla -->
+        <title>Inventario de Equipos Médicos</title> <!-- Título de la página -->
+        <link rel="stylesheet" href="prueba.css"> <!-- Enlace al archivo CSS local -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Enlace a la librería de iconos Font Awesome -->
+    </head>
+    
+    <body>
+        
+        <!-- Botón para volver al menú -->
+         <div class="contenedor-boton-volver">
+           <!-- Botón para volver con solo el icono -->
+           <a href="../../pagina_principal/admin-dashboard.html" class="boton-volver" title="Volver">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+    </div>
+        
+        <h1>Inventario de Equipos Médicos</h1> <!-- Título principal de la página -->
+        
+        <!-- Contenedor para las estadísticas de equipos -->
+         <div class="contenedor-estadisticas">
+            <div class="caja-estadistica">
+                <i class="fas fa-clipboard-list"></i> <!-- Icono de lista -->
+                <p>Total de Equipos: <span id="totalEquipos">0</span></p> <!-- Muestra el número total de equipos -->
+            </div>
+            
+            <div class="caja-estadistica">
+                <i class="fas fa-tools"></i> <!-- Icono de herramientas -->
+                <p>Operativos: <span id="equiposOperativos">0</span></p> <!-- Muestra el número de equipos operativos -->
+            </div>
+            
+            <div class="caja-estadistica">
+                <i class="fas fa-wrench"></i> <!-- Icono de llave inglesa -->
+                <p>En Mantenimiento: <span id="equiposMantenimiento">0</span></p> <!-- Muestra el número de equipos en mantenimiento -->
+            </div>
+            
+            <div class="caja-estadistica">
+                <i class="fas fa-exclamation-triangle"></i> <!-- Icono de advertencia -->
+                <p>Fuera de Servicio: <span id="equiposFueraServicio">0</span></p> <!-- Muestra el número de equipos fuera de servicio -->
+            </div>     
+        </div>
+        
+        <!-- Contenedor para los botones de acción -->
+        <div class="contenedor-botones">
+            <!-- Botón para mostrar/ocultar los filtros -->
+            <button onclick="alternarVisibilidad('contenedor-filtros')" class="boton-alternar">
+                <i class="fas fa-filter"></i>Filtrar
+            </button>
+            
+            <!-- Botón para mostrar/ocultar el formulario de registro de nuevos equipos -->
+            <button onclick="alternarVisibilidad('contenedor-formulario')" class="boton-alternar">
+                <i class="fas fa-plus"></i>Añadir
+            </button>
+            
+            <!-- Botón para eliminar equipos seleccionados -->
+            <button onclick="eliminarEquiposSeleccionados()" class="boton-alternar">
+                <i class="fas fa-trash-alt"></i>Eliminar Equipos Seleccionados
+            </button>
+            
+            <!-- Botón para cargar archivo Excel -->
+            <button onclick="document.getElementById('archivoExcel').click()" class="boton-alternar">
+                <i class="fas fa-file-excel"></i>Cargar Excel
+            </button>
+            
+            <input type="file" id="archivoExcel" accept=".xlsx, .xls" onchange="manejarCambioArchivo()" style="display: none;">
+            <button id="botonVerificar" style="display: none;" onclick="cargarExcel()">Verificar y Cargar Datos</button>
+        </div>
+            
+            
+        <!-- Contenedor de filtros para buscar equipos -->    
+        <div class="contenedor-filtros" id="contenedor-filtros">
+                    
+            <!-- Buscador y Filtro -->     
+            <div class="contenedor-buscador-filtro">    
+                <input type="text" id="entradaBusqueda" placeholder="🔍 Buscar equipo..." onkeyup="filtrarListaEquipos()">    
+                <input type="text" id="filtroNumeroSerie" placeholder="Buscar por Número de Serie" onkeyup="filtrarListaEquipos()">
+                        
+                <select id="filtroEstado" onchange="filtrarListaEquipos()">
+                    <option value="">Todos los Estados</option>    
+                    <option value="Operativo">✔️ Operativo</option>    
+                    <option value="Mantenimiento">🔧 Mantenimiento</option>    
+                    <option value="Fuera de Servicio">❌ Fuera de Servicio</option>    
+                </select>
+                    
+                    
+                <!-- Filtro por Empleado Responsable -->     
+                <select id="filtroEmpleado" onchange="aplicarFiltros()">    
+                    <option value="">Empleado Responsable</option>    
+                </select>
+                        
+                <!-- Filtro por Servicio -->     
+                <select id="filtroServicio" onchange="aplicarFiltros()">    
+                    <option value="">Servicio</option>    
+                </select>               
+            </div>    
+        </div>
+                
+        <!-- Contenedor de formulario para registrar un nuevo equipo -->     
+        <div class="contenedor-formulario" id="contenedor-formulario">
+                    
+            <h2>Registrar Nuevo Equipo</h2>    
+            <form id="formularioEquipo">    
+                <label for="codigoUDI">Código UDI:</label>    
+                <input type="text" id="codigoUDI" required><br><br>
+                        
+                <label for="nombre">Nombre del Equipo:</label>    
+                <input type="text" id="nombre" required oninput="soloLetras(this)" title="Solo se permiten letras"><br><br>
+                        
+                <label for="numeroSerie">Número de Serie:</label>    
+                <input type="text" id="numeroSerie" required><br><br>
+                        
+                <label for="modelo">Modelo:</label>    
+                <input type="text" id="modelo"><br><br>
+                        
+                <label for="marca">Marca:</label>    
+                <input type="text" id="marca"><br><br>
+                        
+                <label for="ubicacion">Ubicación:</label>
+                <input type="text" id="ubicacion"><br><br>
+    
+                <label for="servicio">Seleccionar Servicio:</label>
+                <select id="servicioInput">
+                    <option value="">Seleccione un servicio</option>
+                </select>
+      
+                <label for="estado">Estado:</label>    
+                <select id="estado">    
+                    <option value="Operativo">Operativo</option>    
+                    <option value="Mantenimiento">Mantenimiento</option>    
+                    <option value="Fuera de Servicio">Fuera de Servicio</option>    
+                </select><br><br>
+                        
+                <label for="empleado">Empleado Responsable:</label>    
+                <input type="text" id="empleado" oninput="soloLetras(this)" title="Solo se permiten letras"><br><br>
+                        
+                <!-- Sección de Documentación Requerida -->     
+                <h3>Documentación Requerida</h3>
+                          
+                <!-- Contenedor para los documentos requeridos -->    
+                <div class="cuadricula-documentos-requeridos">
+                            
+                    <!-- Tarjeta para el Manual de Usuario -->     
+                    <div class="tarjeta-documento">    
+                        <span class="icono">📘</span>    
+                        <label for="manualUsuario">Manual de Usuario</label>    
+                        <input type="file" id="manualUsuario" accept=".pdf">    
+                        <span id="nombreManualUsuario">No hay archivo seleccionado</span>    
+                    </div>
+                        
+                        <!-- Tarjeta para la Ficha Técnica -->
+                         <div class="tarjeta-documento">
+                            <span class="icono">📄</span>
+                            <label for="fichaTecnica">Ficha Técnica</label>
+                            <input type="file" id="fichaTecnica" accept=".pdf">
+                            <span id="nombreFichaTecnica">No hay archivo seleccionado</span>
+                        </div>
+                        
+                        <!-- Tarjeta para el Registro Sanitario (Invima) -->
+                         <div class="tarjeta-documento">
+                            <span class="icono">📝</span>
+                            <label for="registroSanitario">Registro Sanitario (Invima)</label>
+                            <input type="file" id="registroSanitario" accept=".pdf">
+                            <span id="nombreRegistroSanitario">No hay archivo seleccionado</span>
+                        </div>
+                        
+                        <!-- Tarjeta para la Garantía del Equipo -->
+                         <div class="tarjeta-documento">
+                            <span class="icono">📜</span>
+                            <label for="garantia">Garantía del Equipo</label>
+                            <input type="file" id="garantia" accept=".pdf">
+                            <span id="nombreGarantia">No hay archivo seleccionado</span>
+                        </div>
+                        
+                        <!-- Tarjeta para la Factura de Compra -->
+                         <div class="tarjeta-documento">
+                            <span class="icono">🧾</span>
+                            <label for="facturaCompra">Factura de Compra</label>
+                            <input type="file" id="facturaCompra" accept=".pdf">
+                            <span id="nombreFacturaCompra">No hay archivo seleccionado</span>
+                        </div>
+                        
+                        <!-- Tarjeta para la Guía Rápida (si cuenta con ella) -->
+                         <div class="tarjeta-documento">
+                            <span class="icono">📑</span>
+                            <label for="guiaRapida">Guía Rápida (si cuenta con ella)</label>
+                            <input type="file" id="guiaRapida" accept=".pdf">
+                            <span id="nombreGuiaRapida">No hay archivo seleccionado</span>
+                        </div>
+                        
+                        <!-- Tarjeta para el Certificado de Calibración -->
+                         <div class="tarjeta-documento">
+                            <span class="icono">🛠️</span>
+                            <label for="certificadoCalibracion">Certificado de Calibración (Opcional)</label>
+                            <input type="file" id="certificadoCalibracion" accept=".pdf">
+                            <span id="nombreCertificadoCalibracion">No hay archivo seleccionado</span>
+                        </div>
+                        
+                        <!-- Tarjeta para el Protocolo de Mantenimiento (si se tiene) -->
+                         <div class="tarjeta-documento">
+                            <span class="icono">⚙️</span>
+                            <label for="protocoloMantenimiento">Protocolo de Mantenimiento (si se tiene)</label>
+                            <input type="file" id="protocoloMantenimiento" accept=".pdf">
+                            <span id="nombreProtocoloMantenimiento">No hay archivo seleccionado</span>
+                        </div>
+                        
+                        <!-- Tarjeta para el contrato de mantenimiento -->
+                         <div class="tarjeta-documento">
+                            <span class="icono">📄</span>
+                            <label for="contratoMantenimiento">Contrato de Mantenimiento</label>
+                            <input type="file" id="contratoMantenimiento" accept=".pdf">
+                            <span id="nombreContratoMantenimiento">No hay archivo seleccionado</span>
+                        </div>
+                        
+                        <!-- Tarjeta para el Protocolo de Mantenimiento (si se tiene) -->
+                         <div class="tarjeta-documento">
+                            <span class="icono">📜</span>
+                            <label for="documentoTenencia">Documento de Tenencia (Opcional)</label>
+                            <input type="file" id="documentoTenencia" accept=".pdf">
+                            <span id="nombredocumentoTenencia">No hay archivo seleccionado</span>
+                        </div>
+
+                        <div class="tarjeta-documento">
+                            <label for="registroImportacion">Registro de Importación (Opcional)</label>
+                            <input type="file" id="registroImportacion" accept=".pdf">
+                            <span id="nombreregistroImportacion">No hay archivo seleccionado</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenedor de botones alineados horizontalmente -->
+                     <div class="contenedor-botones">
+                        <button type="button" onclick="añadirEquipo()">Registrar Equipo</button>      
+                    </div>
+                </form>
+            </div>
+            
+            
+            <h2>Equipos Registrados</h2> <!-- Título de la sección de equipos registrados -->
+            <table id="tablaEquipos"> <!-- Tabla que muestra los equipos registrados -->
+                
+                <thead>
+                    <tr>
+                        <!-- Fila de encabezados de la tabla -->
+                         <th><input type="checkbox" id="seleccionarTodos" onclick="alternarSeleccionarTodos(this)"> Seleccionar Todo</th> <!-- Casilla de verificación para seleccionar todos los equipos -->
+                         <th>Código UDI</th> <!-- Columna de nombre del equipo -->
+                         <th>Nombre</th> <!-- Columna de nombre del equipo -->
+                         <th>Número de Serie</th> <!-- Columna de número de serie del equipo -->
+                         <th>Modelo</th> <!-- Columna de modelo del equipo -->
+                         <th>Marca</th> <!-- Columna de marca del equipo -->
+                         <th>Ubicación</th> <!-- Columna de ubicación del equipo -->
+                         <th>Servicio</th>
+                         <th>Estado</th> <!-- Columna de estado del equipo -->
+                         <th>Empleado Responsable</th> <!-- Columna de empleado responsable del equipo -->
+                         <th>Documentos</th> <!-- Columna de documentos asociados con el equipo -->
+                         <th>Acciones</th> <!-- Columna de acciones disponibles (editar, eliminar, detalles) -->
+                    </tr>
+                </thead>        
+                <tbody>
+                    <!-- Aquí se agregarán los equipos registrados dinámicamente mediante JavaScript -->
+                </tbody>
+            </table>   
+            
+            <!-- Control de paginación para navegar entre páginas de equipos registrados -->
+             <div class="contenedor-paginacion">
+                <button class="boton-paginacion" id="botonPaginaAnterior" onclick="paginaAnterior()">Anterior</button> <!-- Botón para ir a la página anterior -->
+                <span class="info-paginacion" id="infoPagina">Página 1 de 1</span> <!-- Muestra la página actual y el número total de páginas -->
+                <button class="boton-paginacion" id="botonPaginaSiguiente" onclick="paginaSiguiente()">Siguiente</button> <!-- Botón para ir a la siguiente página -->
+            </div>
+            
+            <!-- Contenedor principal -->
+             <div class="contenedor-principal">
+                
+                <!-- Historial de movimientos de equipos -->
+                <div class="contenedor-historial" id="contenedorHistorial">
+                    <h2>📜 Historial de Movimientos</h2> <!-- Título de la sección de historial -->
+                    <!-- Aquí se agregarán dinámicamente las tarjetas de movimientos mediante JavaScript -->
+
+                    <!-- Control de paginación para los movimientos -->
+                     <div class="contenedor-paginacion">
+                        <button class="boton-paginacion" id="botonPaginaAnteriorMovimientos" onclick="paginaAnteriorMovimientos()">Anterior</button>
+                        <span class="info-paginacion" id="infoPaginaMovimientos">Página 1 de 1</span>
+                        <button class="boton-paginacion" id="botonPaginaSiguienteMovimientos" onclick="paginaSiguienteMovimientos()">Siguiente</button>
+                    </div>
+                </div>
+                
+                <!-- Detalles del equipo seleccionado -->
+                 <div class="contenedor-detalles" id="contenedorDetalles">
+                    <h2> 🔍 Detalles del Equipo Seleccionado</h2> <!-- Título de la sección de detalles del equipo -->
+                    
+                    <!-- Muestra los detalles específicos del equipo seleccionado -->
+                     <p><strong>Código UDI:</strong> <span id="detalleCodigo">-</span></p>
+                     <p><i class="fas fa-desktop"></i> <strong>Nombre del Equipo:</strong> <span id="detalleNombre">-</span></p>
+                     <p><i class="fas fa-hashtag"></i><strong>Número de Serie</strong><span id="detalleNumeroSerie">-</span></p>
+                     <p><i class="fas fa-cube"></i><strong>Modelo:</strong><span id="detalleModelo">-</span></p>
+                     <p><i class="fas fa-industry"></i><strong>Marca:</strong><span id="detalleMarca">-</span></p>
+                     <p><i class="fas fa-map-marker-alt"></i><strong>Ubicación:</strong><span id="detalleUbicacion">-</span></p>
+                     <p><i class="fas fa-map-marker-alt"></i><strong>Servicio:</strong><span id="detalleServicio">-</span></p>
+                     <p><i class="fas fa-info-circle"></i><strong>Estado:</strong><span id="detalleEstado">-</span></p>
+                     <p><i class="fas fa-user"></i><strong>Empleado Responsable:</strong><span id="detalleEmpleado">-</span></p>
+                     
+                     
+                     <!-- Lista de documentación asociada con el equipo -->
+                     <h3>Documentación</h3>
+                     <ul id="listaDocumentosDetalles">
+                        <!-- Aquí se enlistarán los documentos y los que faltan mediante JavaScript -->
+                     </ul>
+                     
+                     <!-- Sección de Mantenimiento -->
+                     <h3>Mantenimiento Programado</h3>
+                     <div id="contenedorMantenimiento">
+                        <p><i class="fas fa-calendar-alt"></i> Próximo Mantenimiento: <span id="proximoMantenimiento">Pendiente</span></p> <!-- Muestra la fecha del próximo mantenimiento programado -->
+                    </div>
+                     </div>
+                </div>
+                
+                
+                <!--*********************************************************************-->
+
+        <!-- Scripts externos y scripts de funcionalidad interna -->
+        <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script> <!-- Librería para manejar archivos Excel -->
+        <script>
+                
+                let archivoSeleccionado; // Variable para almacenar el archivo Excel seleccionado
+                let filaEdicion = null; // Variable para rastrear la fila en edición
+                
+                // Configuración de la paginación
+                const filasPorPagina = 5; // Número de filas que se mostrarán por página
+                let paginaActual = 1; // Página actual en la que se encuentra el usuario
+                
+                document.addEventListener('DOMContentLoaded', function() { // Evento que se ejecuta cuando el DOM ha sido completamente cargado
+                    // Cargar los servicios en el select cuando se inicie la página
+                    cargarServiciosEnSelect();
+                    actualizarPaginacion(); // Llama a la función para actualizar la paginación
+                    document.getElementById('filtrarEstado').addEventListener('input', aplicarFiltros); // Agrega un evento de filtro al cambiar el estado
+                    
+                    // Configura la visualización temporal del nombre del archivo al seleccionar un archivo
+                    const entradasArchivo = document.querySelectorAll('.tarjeta-documento input[type="file"]');
+                    
+                    entradasArchivo.forEach(entrada => {
+                        entrada.addEventListener('change', function () {
+                            const mostrarNombreArchivo = this.nextElementSibling;
+                            if (this.files.length > 0) {
+                                mostrarNombreArchivo.textContent = this.files[0].name; // Mostrar el nombre del archivo
+                            } else {
+                                mostrarNombreArchivo.textContent = 'No hay archivo seleccionado'; // Mostrar mensaje si no hay archivo seleccionado
+                            }
+                        });
+                    });
+                });
+                
+                function soloLetras(input) {
+                    input.value = input.value.replace(/[^A-Za-z\s]/g, ''); // Reemplaza cualquier carácter que no sea letra o espacio con nada
+                }
+                
+                // Función para actualizar la paginación de la tabla de equipos
+                function actualizarPaginacion() {
+                    const cuerpoTabla = document.getElementById('tablaEquipos').getElementsByTagName('tbody')[0];
+                    const filas = cuerpoTabla.getElementsByTagName('tr');
+                    const totalFilas = filas.length; // Total de filas en la tabla
+                    const totalPaginas = Math.ceil(totalFilas / filasPorPagina); // Calcula el total de páginas necesarias
+                    
+                    document.getElementById('infoPagina').innerText = `Página ${paginaActual} de ${totalPaginas}`; // Muestra el número de página actual
+                    
+                    // Muestra solo las filas que corresponden a la página actual
+                    for (let i = 0; i < filas.length; i++) {
+                        filas[i].style.display = (i >= (paginaActual - 1) * filasPorPagina && i < paginaActual * filasPorPagina) ? '' : 'none';
+                    }
+                    
+                    // Habilita o deshabilita los botones de paginación
+                    document.getElementById('botonPaginaAnterior').disabled = paginaActual === 1;
+                    document.getElementById('botonPaginaSiguiente').disabled = paginaActual === totalPaginas;
+                }
+                
+                // Función para ir a la siguiente página
+                function paginaSiguiente() {
+                    paginaActual++;
+                    actualizarPaginacion(); // Actualiza la paginación después de cambiar de página
+                }
+                
+                // Función para ir a la página anterior
+                function paginaAnterior() {
+                    paginaActual--;
+                    actualizarPaginacion(); // Actualiza la paginación después de cambiar de página
+                }
+                
+                // Función para alternar la visibilidad de un elemento por ID
+                function alternarVisibilidad(id) {
+                    const elemento = document.getElementById(id);
+                    
+                    if (elemento.style.display === 'none' || elemento.style.display === '') {
+                        elemento.style.display = 'block'; // Muestra el elemento si está oculto
+                    } else {
+                        elemento.style.display = 'none'; // Oculta el elemento si está visible
+                    }
+                }
+                
+            //************************************************************************************
+            
+            // Llamar a la función al cargar la página y después de agregar o editar un equipo
+            document.addEventListener('DOMContentLoaded', function() {
+                actualizarPaginacion(); // Llenar paginación al cargar la página
+                llenarFiltrosDinamicos(); // Llenar filtros al cargar la página
+                
+                // Listeners para filtros adicionales
+                document.getElementById('filtroEstado').addEventListener('input', filtrarListaEquipos);
+                document.getElementById('entradaBusqueda').addEventListener('input', filtrarListaEquipos);
+                document.getElementById('filtroEmpleado').addEventListener('input', filtrarListaEquipos);
+                document.getElementById('filtroNumeroSerie').addEventListener('input', filtrarListaEquipos);
+                document.getElementById('filtroServicio').addEventListener('input', filtrarListaEquipos);
+            });
+            
+            // Función para llenar los filtros de Empleado Responsable y Servicios dinámicamente
+            function llenarFiltrosDinamicos() {
+                const filtroEmpleado = document.getElementById('filtroEmpleado');
+                const filtroServicio = document.getElementById('filtroServicio');
+                
+                const empleados = new Set();
+                const servicios = new Set();
+                
+                const filas = document.querySelectorAll('#tablaEquipos tbody tr');
+                filas.forEach(fila => {
+                    empleados.add(fila.cells[9].innerText.trim()); // Evitar espacios en blanco
+                    servicios.add(fila.cells[7].innerText.trim()); // Evitar espacios en blanco
+                });
+
+                // Limpiar los filtros antes de volver a llenarlos
+                filtroEmpleado.innerHTML = '<option value="">Empleado Responsable</option>';
+                filtroServicio.innerHTML = '<option value="">Servicios</option>';
+                
+                // Agregar opciones de empleados dinámicamente
+                empleados.forEach(empleado => {
+                    const option = document.createElement('option');
+                    option.value = empleado;
+                    option.textContent = empleado;
+                    filtroEmpleado.appendChild(option);
+                });
+                
+                // Agregar opciones de servicios dinámicamente
+                servicios.forEach(servicio => {
+                    const option = document.createElement('option');
+                    option.value = servicio;
+                    option.textContent = servicio;
+                    filtroServicio.appendChild(option);
+                });
+            }
+            
+            // Función para filtrar la lista de equipos
+            function filtrarListaEquipos() {
+                const filtroEstado = document.getElementById('filtroEstado').value.toLowerCase();
+                const terminoBusqueda = document.getElementById('entradaBusqueda').value.toLowerCase();
+                const filtroEmpleado = document.getElementById('filtroEmpleado').value.toLowerCase();
+                const filtroServicio = document.getElementById('filtroServicio').value.toLowerCase();
+                const filtroNumeroSerie = document.getElementById('filtroNumeroSerie').value.toLowerCase();
+                const filas = document.querySelectorAll('#tablaEquipos tbody tr');
+                
+                filas.forEach(fila => {
+                    const estado = fila.cells[8].innerText.toLowerCase();
+                    const nombre = fila.cells[2].innerText.toLowerCase();
+                    const empleado = fila.cells[9].innerText.toLowerCase();
+                    const servicio = fila.cells[7].innerText.toLowerCase();
+                    const numeroSerie = fila.cells[3].innerText.toLowerCase();
+                    
+                    const coincideEstado = !filtroEstado || estado.includes(filtroEstado);
+                    const coincideBusqueda = nombre.includes(terminoBusqueda);
+                    const coincideEmpleado = !filtroEmpleado || empleado.includes(filtroEmpleado);
+                    const coincideServicio = !filtroServicio || servicio.includes(filtroServicio);
+                    const coincideNumeroSerie = !filtroNumeroSerie || numeroSerie.includes(filtroNumeroSerie);
+                    
+                    // Mostrar u ocultar filas según los filtros
+                    fila.style.display = (coincideEstado && coincideBusqueda && coincideEmpleado && coincideServicio && coincideNumeroSerie) ? '' : 'none';
+                });
+            }
+            
+            //**********************************************************************************
+
+            // Función para añadir un nuevo equipo a la tabla
+            function añadirEquipo() {
+                // Obtener los valores del formulario y convertirlos a mayúsculas
+                const nombre = document.getElementById('nombre').value.toUpperCase();
+                const numeroSerie = document.getElementById('numeroSerie').value.toUpperCase();
+                const modelo = document.getElementById('modelo').value.toUpperCase();
+                const marca = document.getElementById('marca').value.toUpperCase();
+                const ubicacion = document.getElementById('ubicacion').value.toUpperCase();
+                const servicioSelect = document.getElementById('servicioInput');
+                const servicio = servicioSelect.options[servicioSelect.selectedIndex].value.toUpperCase();
+                const estado = document.getElementById('estado').value.toUpperCase();
+                const empleado = document.getElementById('empleado').value.toUpperCase(); // Aquí obtienes correctamente el valor del campo Empleado Responsable
+                const codigoUDI = document.getElementById('codigoUDI').value.toUpperCase();
+                
+                const verificarVigenciaDocumento = (documento) => {
+                    const nombreArchivo = documento.name;
+                    const fechaRegex = /(\d{4})/; // busca el año en el nombre del archivo
+                    const anio = nombreArchivo.match(fechaRegex) ? parseInt(nombreArchivo.match(fechaRegex)[0]) : null;
+                    const anioActual = new Date().getFullYear();
+                    
+                    if (anio && anio < anioActual) {
+                        alert(`${nombreArchivo} está vencido. Por favor, actualice el documento.`);
+                    }
+                };
+                
+                // Verificar si hay datos básicos
+                if (!nombre || !numeroSerie || !servicio) {
+                    console.log('Faltan campos obligatorios');
+                    alert('Por favor, complete todos los campos obligatorios.');
+                    return; // Salir si faltan campos obligatorios
+                }
+                
+                // Definir los nombres correspondientes a cada uno de los archivos
+                const nombresDocumentos = {
+                    'manualUsuario': 'Manual de Usuario.pdf',
+                    'fichaTecnica': 'Ficha Técnica.pdf',
+                    'registroSanitario': 'Registro Sanitario.pdf',
+                    'garantia': 'Garantía del Equipo.pdf',
+                    'facturaCompra': 'Factura de Compra.pdf',
+                    'guiaRapida': 'Guía Rápida.pdf',
+                    'certificadoCalibracion': 'Certificado de Calibración.pdf', 
+                    'protocoloMantenimiento': 'Protocolo de Mantenimiento.pdf',
+                    'contratoMantenimiento': 'Contrato de Mantenimiento.pdf',
+                    'documentoTenencia': 'Documento de Tenencia.pdf',
+                    'registroImportacion': 'Registro de Importación.pdf'
+                };
+                
+                // Obtener los archivos de cada input tipo file
+                const arrayArchivos = [
+                    { id: 'manualUsuario', archivos: document.getElementById('manualUsuario').files },
+                    { id: 'fichaTecnica', archivos: document.getElementById('fichaTecnica').files },
+                    { id: 'registroSanitario', archivos: document.getElementById('registroSanitario').files },
+                    { id: 'garantia', archivos: document.getElementById('garantia').files },
+                    { id: 'guiaRapida', archivos: document.getElementById('guiaRapida').files },
+                    { id: 'certificadoCalibracion', archivos: document.getElementById('certificadoCalibracion').files },
+                    { id: 'facturaCompra', archivos: document.getElementById('facturaCompra').files },
+                    { id: 'protocoloMantenimiento', archivos: document.getElementById('protocoloMantenimiento').files },
+                    { id: 'contratoMantenimiento', archivos: document.getElementById('contratoMantenimiento').files },
+                    { id: 'documentoTenencia', archivos: document.getElementById('documentoTenencia').files }
+                ];
+                
+                // Fusión de archivos nuevos y existentes
+                let documentosActualizados = [];
+                
+                if (filaEdicion) {
+                    // Obtener documentos existentes de la fila en edición
+                    documentosActualizados = JSON.parse(filaEdicion.getAttribute('data-documentos') || '[]');
+                }
+                
+                // Validar que los documentos sean PDF y agregar o reemplazar los archivos
+                arrayArchivos.forEach(objArchivo => {
+                    const { id, archivos } = objArchivo;
+                    
+                    if (archivos.length > 0) {
+                        const doc = archivos[0]; // Considerar solo el primer archivo
+                        
+                        if (doc.type !== 'application/pdf') { // Verifica que el archivo sea PDF
+                            alert(`Solo se permiten archivos PDF para ${nombresDocumentos[id]}`);
+                            return;
+                        }
+                        
+                        // Asigna el nombre del documento basado en el contenedor
+                        const nombreDocumento = nombresDocumentos[id];
+                        const url = URL.createObjectURL(doc); // Crea una URL para mostrar el PDF
+                        
+                        // Reemplazar el documento si ya existe uno con el mismo id
+                        const indiceExistente = documentosActualizados.findIndex(d => d.id === id);
+                        if (indiceExistente !== -1) {
+                            documentosActualizados[indiceExistente] = { nombre: nombreDocumento, url: url, id: id }; // Reemplazar documento existente
+                        } else {
+                            documentosActualizados.push({ nombre: nombreDocumento, url: url, id: id }); // Agregar nuevo documento
+                        }
+                        
+                        // Actualiza el nombre del archivo en la interfaz de usuario
+                        const mostrarNombreArchivo = document.querySelector(`#${id}`).nextElementSibling;
+                        if (mostrarNombreArchivo) {
+                            mostrarNombreArchivo.textContent = doc.name;
+                        }
+                    }
+                });
+                
+                // Verificación del contenido de documentosActualizados
+                console.log('Documentos Actualizados:', documentosActualizados);
+                
+                // Generar los enlaces de los documentos actualizados
+                let enlacesDocumentos = '';
+                documentosActualizados.forEach(doc => {
+                    enlacesDocumentos += `<a href="${doc.url}" target="_blank">${doc.nombre}</a><br>`;
+                });
+                
+                // Verificar si hay documentos para mostrar
+                console.log('Enlaces de Documentos Generados:', enlacesDocumentos);
+                
+                // Actualización o adición del equipo en la tabla
+                if (filaEdicion) {
+                    
+                    // Actualizar la fila existente
+                    filaEdicion.cells[1].innerText = codigoUDI;
+                    filaEdicion.cells[2].innerText = nombre;
+                    filaEdicion.cells[3].innerText = numeroSerie;
+                    filaEdicion.cells[4].innerText = modelo;
+                    filaEdicion.cells[5].innerText = marca;
+                    filaEdicion.cells[6].innerText = ubicacion;
+                    filaEdicion.cells[7].innerText = servicio;
+                    filaEdicion.cells[8].innerText = estado;
+                    filaEdicion.cells[9].innerText = empleado;
+                    
+                    // Actualiza los enlaces de documentos
+                    filaEdicion.cells[10].innerHTML = enlacesDocumentos || 'No hay documentos';
+                    filaEdicion.setAttribute('data-documentos', JSON.stringify(documentosActualizados));
+                    
+                    // Añadir movimiento al historial con todos los detalles del equipo
+                    añadirMovimientoHistorial(nombre, 'Editado', ubicacion, ubicacion, empleado, numeroSerie, modelo, estado);
+                    
+                    llenarFiltrosDinamicos(); // Llama a esta función después de editar un equipo para actualizar los filtros
+  
+                    filaEdicion = null; // Restablecer el modo de edición
+                    sincronizarInventario(); // Actualizar localStorage después de editar
+                    
+                    // Normaliza el estado
+                    const estadoNormalizado = normalizarEstado(estado);
+                
+                } else {
+                    
+                    const documentos = [];
+            Object.keys(nombresDocumentos).forEach(id => {
+                const archivo = document.getElementById(id).files[0];
+                if (archivo) {
+                    documentos.push({ nombre: nombresDocumentos[id], url: URL.createObjectURL(archivo) });
+                }
+            });
+
+            const enlacesDocumentos = documentos.length > 0 
+                ? documentos.map(doc => `<a href="${doc.url}" target="_blank">${doc.nombre}</a>`).join('<br>') 
+                : 'No hay documentos';
+
+
+                    // Agregar una nueva fila si no está en modo de edición
+                    const tabla = document.getElementById('tablaEquipos').getElementsByTagName('tbody')[0];
+                    const nuevaFila = tabla.insertRow();
+                    
+                    nuevaFila.innerHTML = `
+                    <td><input type="checkbox" class="seleccionar-equipo"></td>
+                    <td>${codigoUDI}</td>
+                    <td>${nombre}</td>
+                    <td>${numeroSerie}</td>
+                    <td>${modelo}</td>
+                    <td>${marca}</td>
+                    <td>${ubicacion}</td>
+                    <td>${servicio}</td>
+                    <td>${estado}</td>
+                    <td>${empleado}</td>
+                    <td>${enlacesDocumentos || 'No hay documentos'}</td>
+                    <td>
+                        <button onclick="editarEquipo(this)">Editar</button>
+                        <button onclick="eliminarEquipo(this)">Eliminar</button>
+                        <button onclick="mostrarDetallesEquipo(this)">Detalles</button>                   
+                    </td>
+                    `;
+                    
+                    // Llamar a la función para actualizar los filtros dinámicos después de añadir el equipo
+                    llenarFiltrosDinamicos();
+                    
+                    // Guardar documentos en el atributo data-documentos
+                    nuevaFila.setAttribute('data-documentos', JSON.stringify(documentosActualizados));
+                    sincronizarInventario(); // Actualizar localStorage después de agregar un nuevo equipo
+                    
+                    // Añadir el movimiento al historial cuando se crea un nuevo equipo
+                    añadirMovimientoHistorial(nombre, 'Registro Inicial', '', ubicacion, empleado, numeroSerie, modelo, estado);
+                }
+                
+                // Oculta el formulario después de agregar un equipo
+                alternarVisibilidad('contenedor-formulario');
+                
+                // Reinicia el formulario y cierra el modal si se está utilizando
+                document.getElementById('formularioEquipo').reset();
+                restablecerVisualizacionEntradasArchivo(); // Nueva función para restablecer los textos de los archivos
+                actualizarEstadisticas(); // Actualizar las estadísticas
+                actualizarPaginacion(); // Actualiza la paginación si es necesario
+            }
+
+            // Función para cargar los servicios guardados en el select al iniciar la página
+function cargarServiciosEnSelect() {
+    const servicioSelect = document.getElementById('servicioInput');
+
+    if (!servicioSelect) {
+        console.error("Error: No se encontró el campo de selección de servicios.");
+        return;
+    }
+
+    const services = JSON.parse(localStorage.getItem('services')) || [];
+    
+    // Limpiar opciones previas
+    servicioSelect.innerHTML = '<option value="">Seleccione un servicio</option>';
+
+    // Agregar cada servicio guardado en localStorage
+    services.forEach(service => {
+        const option = document.createElement('option');
+        option.value = service.name;
+        option.textContent = service.name;
+        servicioSelect.appendChild(option);
+    });
+
+    console.log("Servicios cargados en el select:", services);
+}
+
+    
+            
+            
+            // Función para editar un equipo existente
+            function editarEquipo(boton) {
+                
+                // Referencia a la fila que se está editando
+                filaEdicion = boton.parentElement.parentElement;
+
+                 // Almacenar el estado actual antes de que el usuario haga cambios
+                 const estadoActual = filaEdicion.cells[8].innerText.trim();
+                
+                // Rellena los campos del formulario con los datos de la fila seleccionada
+                document.getElementById('codigoUDI').value = filaEdicion.cells[1].innerText;
+                document.getElementById('nombre').value = filaEdicion.cells[2].innerText;
+                document.getElementById('numeroSerie').value = filaEdicion.cells[3].innerText;
+                document.getElementById('modelo').value = filaEdicion.cells[4].innerText;
+                document.getElementById('marca').value = filaEdicion.cells[5].innerText;
+                document.getElementById('ubicacion').value = filaEdicion.cells[6].innerText;
+                document.getElementById('servicioInput').value = filaEdicion.cells[7].innerText;
+                document.getElementById('estado').value = filaEdicion.cells[8].innerText;
+                document.getElementById('empleado').value = filaEdicion.cells[9].innerText; // Aquí actualizas correctamente el campo Empleado Responsable
+                
+                // Obtener el select de estado y asignar el valor actual
+                const selectEstado = document.getElementById('estado');
+                
+                // Establecer el valor del select, asegurando que se mantenga si el usuario no lo cambia
+                if (Array.from(selectEstado.options).some(option => option.value === estadoActual)) {
+                    selectEstado.value = estadoActual; // Asignar el estado actual si coincide con una de las opciones
+                } else {
+                    selectEstado.selectedIndex = 0; // Si no coincide, asigna el primer valor del select
+                }
+                
+                // Manejo de archivos cargados anteriormente
+                const documentosAnteriores = JSON.parse(filaEdicion.getAttribute('data-documentos') || '[]');
+                
+                documentosAnteriores.forEach(doc => {
+                    const inputFile = document.getElementById(doc.id); // Asegúrate de que el ID del input coincida con el nombre del archivo cargado
+                    if (inputFile) {
+                        inputFile.setAttribute('data-archivo-anterior', JSON.stringify(doc)); // Guardar referencia al archivo anterior
+                        const mostrarNombreArchivo = inputFile.nextElementSibling;
+                        mostrarNombreArchivo.textContent = doc.nombre; // Mostrar el nombre del archivo anterior
+                    }
+                });
+                
+                // Muestra el formulario de edición del equipo
+                alternarVisibilidad('contenedor-formulario'); // Asegúrate de que el ID coincida con el ID del contenedor del formulario
+
+                llenarFiltrosDinamicos(); // Llama a esta función después de editar un equipo para actualizar los filtros
+            }
+            
+            // Función para eliminar un equipo seleccionado
+            function eliminarEquipo(boton) {
+                // Obtener la fila del equipo que se desea eliminar 
+                const fila = boton.parentElement.parentElement;
+                const nombreEquipo = fila.cells[2].innerText;
+                const numeroSerie = fila.cells[3].innerText;
+                const modelo = fila.cells[4].innerText;
+                const ubicacion = fila.cells[6].innerText;
+                const estado = fila.cells[8].innerText;
+                const empleadoResponsable = fila.cells[9].innerText;
+                
+                // Verificar si la casilla de verificación de la fila está seleccionada
+                const casilla = fila.querySelector('.seleccionar-equipo');
+                if (!casilla.checked) {
+                    alert('Debe seleccionar la fila del equipo antes de eliminarlo.');
+                    return; // Sale de la función si no está seleccionada
+                }
+                
+                // Confirmar antes de eliminar
+                if (confirm(`¿Está seguro de que desea eliminar el equipo ${nombreEquipo}?`)) {
+                    // Elimina la fila seleccionada
+                    fila.remove();
+                    
+                    // Añadir el movimiento de eliminación al historial con todos los detalles
+                    añadirMovimientoHistorial(nombreEquipo, 'Eliminación', ubicacion, '', empleadoResponsable, numeroSerie, modelo, estado);
+                    
+                    // Actualiza las estadísticas y la paginación después de eliminar 
+                    actualizarEstadisticas();
+                    actualizarPaginacion();
+                    llenarFiltrosDinamicos(); // Actualiza los filtros dinámicos
+                }
+            }
+            
+            // Función para manejar la carga del archivo Excel
+            function manejarCambioArchivo() {
+                archivoSeleccionado = document.getElementById('archivoExcel').files[0];
+                if (archivoSeleccionado) {
+                    console.log("Archivo seleccionado:", archivoSeleccionado.name); // Depuración
+                    document.getElementById('botonVerificar').style.display = 'inline-block';
+                } else {
+                    document.getElementById('botonVerificar').style.display = 'none';
+                }
+            }
+
+            // Asocia la función cargarExcel() y actualizarEstadisticas() al botón Verificar y Cargar
+            document.getElementById('botonVerificar').addEventListener('click', function() {
+                cargarExcel(); // Carga los datos desde el archivo Excel
+                setTimeout(actualizarEstadisticas, 50); // Actualiza estadísticas después de cargar
+            });
+            
+            // Función para cargar los datos del archivo Excel
+            function cargarExcel() {
+                if (!archivoSeleccionado) {
+                    alert('Por favor, seleccione un archivo primero.');
+                    return;
+                }
+                
+                const lector = new FileReader();
+                
+                lector.onload = function(e) {
+                    const datos = new Uint8Array(e.target.result);
+                    const libro = XLSX.read(datos, { type: 'array' });
+                    const primeraHoja = libro.Sheets[libro.SheetNames[0]];
+                    const datosJson = XLSX.utils.sheet_to_json(primeraHoja, { header: 1 });
+                    
+                    console.log("Datos JSON:", datosJson); // Muestra los datos para depuración
+                    
+                    const cuerpoTabla = document.getElementById('tablaEquipos').getElementsByTagName('tbody')[0];
+                    cuerpoTabla.innerHTML = ""; // Limpiar tabla antes de agregar nuevos datos
+                    
+                   // Obtener encabezados del Excel y mapear sus posiciones
+                   const encabezadosExcel = datosJson[0].map(encabezado => encabezado.toLowerCase().trim());
+                   const indiceColumnas = {
+                    codigoUDI: encabezadosExcel.indexOf("codigo udi"),
+                    nombre: encabezadosExcel.indexOf("nombre"),
+                    numeroSerie: encabezadosExcel.indexOf("numero de serie"),
+                    modelo: encabezadosExcel.indexOf("modelo"),
+                    marca: encabezadosExcel.indexOf("marca"),
+                    ubicacion: encabezadosExcel.indexOf("ubicación"),
+                    servicio: encabezadosExcel.indexOf("servicio"),
+                    estado: encabezadosExcel.indexOf("estado"),
+                    empleado: encabezadosExcel.indexOf("empleado responsable")
+                };
+                
+                // Recorrer las filas de datos del archivo Excel (saltando los encabezados)
+                datosJson.slice(1).forEach(fila => {
+                    const codigoUDI = (fila[indiceColumnas.codigoUDI] || '').toUpperCase();
+                    const nombre = (fila[indiceColumnas.nombre] || '').toUpperCase();
+                    const numeroSerie = (fila[indiceColumnas.numeroSerie] || '');
+                    const modelo = (fila[indiceColumnas.modelo] || '').toUpperCase();
+                    const marca = (fila[indiceColumnas.marca] || '').toUpperCase();
+                    const ubicacion = (fila[indiceColumnas.ubicacion] || '').toUpperCase();
+                    const servicio = (fila[indiceColumnas.servicio] || '').toUpperCase();
+                    const estado = (fila[indiceColumnas.estado] || '').toUpperCase();
+                    const empleado = (fila[indiceColumnas.empleado] || '').toUpperCase();
+                    
+                    // Verificar que los datos básicos estén presentes
+                    if (nombre) { // Evitar filas vacías
+                        const nuevaFila = cuerpoTabla.insertRow();
+                        nuevaFila.innerHTML = `
+                        <td><input type="checkbox" class="seleccionar-equipo"></td>
+                        <td>${codigoUDI}</td>
+                        <td>${nombre}</td>
+                        <td>${numeroSerie}</td>
+                        <td>${modelo}</td>
+                        <td>${marca}</td>
+                        <td>${ubicacion}</td>
+                        <td>${servicio}</td>
+                        <td>${estado}</td>
+                        <td>${empleado}</td>
+                        <td>No hay documentos</td>
+                        <td>
+                            <button onclick="editarEquipo(this)">Editar</button>
+                            <button onclick="eliminarEquipo(this)">Eliminar</button>
+                            <button onclick="mostrarDetallesEquipo(this)">Detalles</button>                   
+                        </td>
+                        `;
+                        
+                        // Añadir el movimiento al historial cuando se carga desde Excel
+                        añadirMovimientoHistorial(nombre, 'Cargado desde Excel', ubicacion, '', empleado, numeroSerie, modelo, estado);
+                    }
+                });
+                
+                actualizarEstadisticas(); // Llamar a actualizarEstadisticas aquí también
+                
+                // Ocultar el botón de verificación después de cargar los datos
+                document.getElementById('botonVerificar').style.display = 'none';
+                document.getElementById('archivoExcel').value = ''; // Limpiar selección del archivo
+                archivoSeleccionado = null;
+
+                llenarFiltrosDinamicos(); // Actualiza los filtros dinámicos después de cargar los datos
+                };
+                
+                lector.readAsArrayBuffer(archivoSeleccionado);
+            }
+ 
+            // Función para normalizar el estado de los equipos leídos desde Excel
+            function normalizarEstado(estado) {
+                if (!estado) return '';
+                const estadoMinuscula = estado.trim().toLowerCase(); // Convertir a minúsculas y eliminar espacios extra
+                
+                // Expresiones regulares para coincidir con posibles variaciones
+                if (/^operativo/.test(estadoMinuscula)) return 'OPERATIVO';
+                if (/^mantenimiento/.test(estadoMinuscula)) return 'MANTENIMIENTO';
+                if (/fuera.*servicio/.test(estadoMinuscula) || /^servicio/.test(estadoMinuscula)) return 'FUERA DE SERVICIO';
+    
+                return ''; // Si el estado no coincide con ninguno de los casos, devolver vacío
+            }
+            
+            
+// Función para mostrar los detalles del equipo seleccionado
+function mostrarDetallesEquipo(boton) {
+    const fila = boton.parentElement.parentElement; // Selecciona la fila de la tabla
+    const codigoUDI = fila.cells[1].innerText; // Código UDI
+    const nombre = fila.cells[2].innerText; // Nombre del equipo
+    const numeroSerie = fila.cells[3].innerText; // Número de serie
+    const modelo = fila.cells[4].innerText; // Modelo
+    const marca = fila.cells[5].innerText; // Marca
+    const ubicacion = fila.cells[6].innerText; // Ubicación
+    const servicio = fila.cells[7].innerText; // Servicio
+    const estado = fila.cells[8].innerText; // Estado
+    const empleado = fila.cells[9].innerText; // Empleado responsable
+
+    // Obtener documentos del atributo de datos
+    const datosDocumentos = fila.getAttribute('data-documentos');
+    const documentos = datosDocumentos ? JSON.parse(datosDocumentos) : [];
+
+    const contenedorDetalles = document.getElementById('contenedorDetalles');
+    contenedorDetalles.style.display = 'block'; // Mostrar detalles
+
+    // Obtener la fecha del mantenimiento desde localStorage
+    const datosMantenimiento = JSON.parse(localStorage.getItem('mantenimientos')) || [];
+    const mantenimientoEquipo = datosMantenimiento.find(m => m.numeroSerie === numeroSerie);
+
+    // Obtener la empresa de asistencia técnica del mantenimiento programado
+    let empresaAsistencia = mantenimientoEquipo ? mantenimientoEquipo.empresa : null;
+
+    // Obtener la lista de empresas registradas
+    const empresas = JSON.parse(localStorage.getItem('empresas')) || [];
+    const empresaSeleccionada = empresas.find(emp => emp.nombre === empresaAsistencia);
+
+    // Actualiza los detalles del equipo
+    document.getElementById('detalleCodigo').innerText = codigoUDI;
+    document.getElementById('detalleNombre').innerText = nombre;
+    document.getElementById('detalleNumeroSerie').innerText = numeroSerie;
+    document.getElementById('detalleModelo').innerText = modelo;
+    document.getElementById('detalleMarca').innerText = marca;
+    document.getElementById('detalleUbicacion').innerText = ubicacion;
+    document.getElementById('detalleServicio').innerText = servicio;
+    document.getElementById('detalleEstado').innerText = estado;
+    document.getElementById('detalleEmpleado').innerText = empleado || 'No asignado';
+
+    // Lista de documentos requeridos
+    const documentosRequeridos = [
+        'Manual de Usuario.pdf',
+        'Hoja de Vida Personal Biomédico',
+        'Hoja de Vida del Equipo.pdf',
+        'Ficha Técnica.pdf',
+        'Registro Sanitario.pdf',
+        'Garantía del Equipo.pdf',
+        'Guía Rápida.pdf',
+        'Certificado de Calibración.pdf',
+        'Factura de Compra.pdf',
+        'Protocolo de Mantenimiento.pdf',
+        'Contrato de Mantenimiento.pdf',
+        'Documento de Tenencia.pdf',
+        'Cronograma'
+    ];
+
+    // Limpiar la lista antes de agregar nuevos elementos
+    const listaDocumentos = document.getElementById("listaDocumentosDetalles");
+    listaDocumentos.innerHTML = "";
+
+    // Verificar si la Hoja de Vida del Equipo ha sido guardada en localStorage
+const hojasVidaEquipos = JSON.parse(localStorage.getItem("hojasVidaEquipos")) || [];
+const hojaVidaGuardada = hojasVidaEquipos.some(doc => doc.numeroSerie === numeroSerie && doc.cumplida);
+
+
+    // Verificar el cronograma y otros documentos
+    const datosCronograma = JSON.parse(localStorage.getItem('cronograma')) || [];
+    const cronogramaCumplido = datosCronograma.some(c => c.numeroSerie === numeroSerie);
+
+    documentosRequeridos.forEach(nombreDocRequerido => {
+        const elementoLista = document.createElement('li');
+
+        // Si es "Cronograma", verificar si está cumplido
+        if (nombreDocRequerido === 'Cronograma') {
+            elementoLista.innerHTML = cronogramaCumplido ?
+                `<i class="fas fa-check-circle" style="color: green;"></i> ${nombreDocRequerido} ` :
+                `<i class="fas fa-exclamation-circle" style="color: red;"></i> ${nombreDocRequerido} - Falta`;
+        }
+        else if (nombreDocRequerido === 'Hoja de Vida del Equipo.pdf') {
+        const hojaVidaEquipo = documentos.find(doc => doc.nombre === nombreDocRequerido);
+        if (hojaVidaGuardada || hojaVidaEquipo) {
+            elementoLista.innerHTML = `
+                <i class="fas fa-check-circle" style="color: green;"></i>
+                ${hojaVidaEquipo ? `<a href="${hojaVidaEquipo.url}" target="_blank">${nombreDocRequerido}</a>` : nombreDocRequerido}
+            `;
+        } else {
+            elementoLista.innerHTML = `
+                <i class="fas fa-exclamation-circle" style="color: red;"></i> ${nombreDocRequerido} - Falta
+            `;
+        }
+    }
+    else if (nombreDocRequerido === 'Hoja de Vida Personal Biomédico' && empresaSeleccionada) {
+        if (empresaSeleccionada.hojasVida.length > 0) {
+            let contenido = `<i class="fas fa-check-circle" style="color: green;"></i> `;
+            empresaSeleccionada.hojasVida.forEach(personal => {
+                contenido += `<a href="${personal.archivo}" target="_blank">${nombreDocRequerido} - ${personal.nombre}</a><br>`;
+            });
+            elementoLista.innerHTML = contenido;
+        } else {
+            elementoLista.innerHTML = `
+                <i class="fas fa-exclamation-circle" style="color: red;"></i> ${nombreDocRequerido} - Falta
+            `;
+        }
+    } 
+    else {
+        const documentoEncontrado = documentos.find(doc => doc.nombre === nombreDocRequerido);
+        if (documentoEncontrado) {
+            elementoLista.innerHTML = `
+                <i class="fas fa-check-circle" style="color: green;"></i>
+                <a href="${documentoEncontrado.url}" target="_blank">${documentoEncontrado.nombre}</a>
+            `;
+        } else {
+            elementoLista.innerHTML = `
+                <i class="fas fa-exclamation-circle" style="color: red;"></i> ${nombreDocRequerido} - Falta
+            `;
+        }
+    }
+
+        listaDocumentos.appendChild(elementoLista);
+    });
+
+    // Mostrar fecha del mantenimiento programado
+    const contenedorMantenimiento = document.getElementById('contenedorMantenimiento');
+    contenedorMantenimiento.innerHTML = '';
+
+    if (mantenimientoEquipo && mantenimientoEquipo.fechaInicio) {
+        const fechaInicio = new Date(mantenimientoEquipo.fechaInicio);
+        const fechaFormateada = fechaInicio.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        const elementoMantenimiento = document.createElement('p');
+        elementoMantenimiento.innerHTML = `
+            <i class="fas fa-calendar-alt"></i> 
+            Próximo Mantenimiento: <strong>${fechaFormateada}</strong>
+        `;
+        contenedorMantenimiento.appendChild(elementoMantenimiento);
+    } else {
+        contenedorMantenimiento.innerHTML = `
+            <p><i class="fas fa-exclamation-circle" style="color: red;"></i> No hay mantenimientos programados.</p>
+        `;
+    }
+}
+
+
+            // Función para redirigir a la página de detalles ampliados
+            function redirigirADetallesAmpliados() {
+                // Obtener los detalles del equipo actual del contenedor de detalles
+                const nombre = document.getElementById('detalleNombre').innerText;
+                const numeroSerie = document.getElementById('detalleNumeroSerie').innerText;
+                const modelo = document.getElementById('detalleModelo').innerText;
+                const marca = document.getElementById('detalleMarca').innerText;
+                const ubicacion = document.getElementById('detalleUbicacion').innerText;
+                const servicio = document.getElementById('detalleServicio').innerText;
+                const estado = document.getElementById('detalleEstado').innerText;
+                const empleado = document.getElementById('detalleEmpleado').innerText;
+                
+                // Obtener la lista de documentos
+                const listaDocumentos = document.getElementById('listaDocumentosDetalles');
+                const documentosHtml = listaDocumentos.innerHTML;
+
+                // Guardar los detalles en localStorage para que puedan ser utilizados en otra página
+                localStorage.setItem('detallesEquipo', JSON.stringify({
+                    nombre,
+                    numeroSerie,
+                    modelo,
+                    marca,
+                    ubicacion,
+                    servicio,
+                    estado,
+                    empleado,
+                    documentosHtml
+                }));
+                
+                // Redirigir a la página de detalles ampliados
+                window.location.href = 'detallesEquipo.html';
+            }
+            
+            // Función para actualizar las estadísticas de equipos en el inventario
+            function actualizarEstadisticas() {
+                const cuerpoTabla = document.getElementById('tablaEquipos').getElementsByTagName('tbody')[0];
+                const filas = cuerpoTabla.getElementsByTagName('tr');
+                let total = filas.length; // Total de equipos registrados
+                let operativos = 0; // Contador de equipos operativos
+                let enMantenimiento = 0; // Contador de equipos en mantenimiento
+                let fueraDeServicio = 0; // Contador de equipos fuera de servicio
+                
+                // Contabiliza el número de equipos en cada estado
+                for (let i = 0; i < filas.length; i++) {
+                    const estado = filas[i].cells[8].innerText.trim(); // Obtener el estado del equipo
+                    const estadoNormalizado = normalizarEstado(estado); // Normalizar el estado
+                    
+                    console.log('Estado normalizado del equipo:', estadoNormalizado); // Agregar depuración
+                    
+                    // Contar según el estado normalizado
+                    if (estadoNormalizado === 'OPERATIVO') operativos++;
+                    else if (estadoNormalizado === 'MANTENIMIENTO') enMantenimiento++;
+                    else if (estadoNormalizado === 'FUERA DE SERVICIO') fueraDeServicio++;
+                }
+                
+                // Actualizar los contadores en la interfaz de usuario
+                document.getElementById('totalEquipos').innerText = total;
+                document.getElementById('equiposOperativos').innerText = operativos;
+                document.getElementById('equiposMantenimiento').innerText = enMantenimiento;
+                document.getElementById('equiposFueraServicio').innerText = fueraDeServicio;
+            
+                console.log(`Total: ${total}, Operativos: ${operativos}, Mantenimiento: ${enMantenimiento}, Fuera de servicio: ${fueraDeServicio}`);
+            }
+            
+            // Función para alternar la selección de todas las casillas de verificación de equipos
+            function alternarSeleccionarTodos(casilla) {
+                const casillas = document.querySelectorAll('.seleccionar-equipo');
+                casillas.forEach((cb) => {
+                    cb.checked = casilla.checked; // Selecciona o deselecciona todas las casillas según el estado de la casilla de selección principal
+                });
+            }
+            
+            // Función para obtener los equipos seleccionados en la tabla
+            function obtenerEquiposSeleccionados() {
+                const seleccionados = [];
+                const casillas = document.querySelectorAll('.seleccionar-equipo:checked'); // Selecciona todas las casillas marcadas
+                casillas.forEach((casilla) => {
+                    seleccionados.push(casilla.parentElement.parentElement); // Añade la fila seleccionada al array
+                });
+                return seleccionados; // Devuelve un array con las filas seleccionadas
+            }
+            
+            // Función para eliminar los equipos seleccionados en la tabla
+            function eliminarEquiposSeleccionados() {
+                const equiposSeleccionados = obtenerEquiposSeleccionados(); // Obtiene los equipos seleccionados
+                
+                if (equiposSeleccionados.length === 0) { // Verifica si hay equipos seleccionados
+                    alert('Seleccione al menos un equipo para eliminar.');
+                    return;
+                }
+                
+                if (confirm('¿Está seguro de que desea eliminar los equipos seleccionados?')) { // Confirma la eliminación
+                    equiposSeleccionados.forEach((fila) => { // Recorre cada equipo seleccionado
+                        const nombre = fila.cells[1].innerText; // Obtiene el nombre del equipo
+                        const ubicacion = fila.cells[5].innerText; // Obtiene la ubicación del equipo
+                        
+                        añadirMovimientoHistorial(nombre, 'Eliminación', ubicacion, 'N/A', ''); // Registra el movimiento de eliminación en el historial
+                        fila.remove(); // Elimina la fila del equipo de la tabla
+                    });
+                    
+                    actualizarEstadisticas(); // Actualiza las estadísticas
+                    actualizarPaginacion(); // Actualiza la paginación
+                }
+            }
+            
+            // Función para sincronizar el inventario con el almacenamiento local (Local Storage)
+            function sincronizarInventario() {
+                const equipos = [];
+                const filas = document.querySelectorAll('#tablaEquipos tbody tr'); // Selecciona todas las filas de la tabla de inventario
+                
+                filas.forEach(fila => {
+                    const codigoUDI= fila.cells[1].innerText; 
+                    const nombre = fila.cells[2].innerText;  // Obtiene el nombre del equipo de la columna correspondiente
+                    const numeroSerie = fila.cells[3].innerText;
+                    const modelo = fila.cells[4].innerText;
+                    const marca = fila.cells[5].innerText;
+                    const ubicacion = fila.cells[6].innerText;
+                    const servicio = fila.cells[7].innerText;
+                    const estado = fila.cells[8].innerText;
+                    const empleado = fila.cells[9].innerText;
+                    
+                    equipos.push({
+                        codigoUDI,
+                        nombre,
+                        numeroSerie,
+                        modelo,
+                        marca,
+                        ubicacion,
+                        servicio,
+                        estado,
+                        empleado
+                    });
+                });
+                
+                // Guardar los equipos en Local Storage
+                localStorage.setItem('inventarioEquipos', JSON.stringify(equipos));
+            }
+            
+            // Sincronizar el inventario cada vez que se cargue la página de inventario
+            document.addEventListener('DOMContentLoaded', sincronizarInventario);
+            
+            // Función para abrir el modal para preguntar sobre la hoja de vida del equipo
+            function abrirModalHojaVida() {
+                document.getElementById('modalHojaVida').classList.add('show'); // Muestra el modal
+            }
+            
+            // Función para confirmar que el equipo tiene una hoja de vida
+            function confirmarHojaVida() {
+                alert('Equipo registrado con hoja de vida existente.'); // Muestra un mensaje de confirmación
+                cerrarModal(); // Cierra el modal
+            }
+            
+            // Función para redirigir a la creación de una hoja de vida del equipo
+            function redirigirHojaVida() {
+                window.open('inventario.html', '_blank'); // Abre una nueva ventana para crear la hoja de vida
+            }
+                
+            // Función para cerrar el modal de la hoja de vida
+            function cerrarModal() {
+                // Cierra el modal y restablece el estado para que siempre esté listo para la próxima vez
+                document.getElementById('modalHojaVida').classList.remove('show');
+            }
+            
+            // Función para añadir un movimiento al historial con la información más importante del equip
+            function añadirMovimientoHistorial(nombreEquipo, accion, ubicacionAnterior, ubicacionNueva, empleadoResponsable, numeroSerie, modelo, estado) {
+                const contenedorHistorial = document.getElementById('contenedorHistorial');
+                const tarjeta = document.createElement('div'); // Crea un nuevo contenedor para el historial
+                
+                tarjeta.className = 'tarjeta-historial'; // Asigna una clase de estilo a la tarjeta
+                
+                const fechaActual = new Date().toLocaleString(); // Obtiene la fecha y hora actuales
+                
+                tarjeta.innerHTML = `
+                <div class="titulo"><strong>Equipo:</strong> ${nombreEquipo}</div>
+                <div class="detalle"><strong>Fecha:</strong> ${fechaActual}</div>
+                <div class="detalle"><strong>Acción:</strong> ${accion}</div>
+                <div class="detalle"><strong>Número de Serie:</strong> ${numeroSerie}</div>
+                <div class="detalle"><strong>Modelo:</strong> ${modelo}</div>
+                <div class="detalle"><strong>Estado:</strong> ${estado}</div>
+                <div class="detalle"><strong>Ubicación Anterior:</strong> ${ubicacionAnterior || 'N/A'}</div>
+                <div class="detalle"><strong>Ubicación Nueva:</strong> ${ubicacionNueva || 'N/A'}</div>
+                <div class="detalle"><strong>Empleado Responsable:</strong> ${empleadoResponsable || 'No asignado'}</div>
+                `;
+                
+                contenedorHistorial.appendChild(tarjeta); // Añade la tarjeta al contenedor del historial
+            }
+
+            // Función para actualizar la visualización temporal del nombre del archivo seleccionado
+            function configurarCargaArchivos() {
+                const entradasArchivo = document.querySelectorAll('.tarjeta-documento input[type="file"]');
+                entradasArchivo.forEach(entrada => {
+                    entrada.addEventListener('change', function () {
+                        const mostrarNombreArchivo = this.nextElementSibling;
+                        if (this.files.length > 0) {
+                            mostrarNombreArchivo.textContent = this.files[0].name; // Mostrar el nombre del archivo al seleccionarlo
+                        } else {
+                            mostrarNombreArchivo.textContent = 'No hay archivo seleccionado'; // Mostrar mensaje predeterminado si no hay archivo seleccionado
+                        }
+                    });
+                });
+            }
+            
+            // Función para restablecer los nombres de archivo en la interfaz después de agregar un equipo
+            function restablecerVisualizacionEntradasArchivo() {
+                const entradasArchivo = document.querySelectorAll('.tarjeta-documento input[type="file"]');
+                entradasArchivo.forEach(entrada => {
+                    const mostrarNombreArchivo = entrada.nextElementSibling;
+                    mostrarNombreArchivo.textContent = 'No hay archivo seleccionado'; // Restablecer el texto
+                    entrada.value = ''; // Limpiar el campo de archivo
+                });
+            }
+
+            // Llama a configurarCargaArchivos() cuando la página carga para que funcione desde el primer uso
+            document.addEventListener('DOMContentLoaded', configurarCargaArchivos);
+
+            
+            let movimientosPorPagina = 10;
+            let paginaActualMovimientos = 1;
+            
+            function mostrarMovimientosPaginados() {
+                const contenedorHistorial = document.getElementById('contenedorHistorial');
+                const tarjetasHistorial = contenedorHistorial.getElementsByClassName('tarjeta-historial');
+                const totalMovimientos = tarjetasHistorial.length;
+                const totalPaginas = Math.ceil(totalMovimientos / movimientosPorPagina);
+                
+                // Ocultar todos los movimientos
+                for (let i = 0; i < totalMovimientos; i++) {
+                    tarjetasHistorial[i].style.display = 'none';
+                }
+                
+                // Mostrar los movimientos correspondientes a la página actual
+                const inicio = (paginaActualMovimientos - 1) * movimientosPorPagina;
+                const fin = inicio + movimientosPorPagina;
+                
+                for (let i = inicio; i < fin && i < totalMovimientos; i++) {
+                    tarjetasHistorial[i].style.display = 'block';
+                }
+                
+                // Actualizar la información de la paginación
+                document.getElementById('infoPaginaMovimientos').innerText = `Página ${paginaActualMovimientos} de ${totalPaginas}`;
+                
+                // Controlar la visibilidad de los botones de navegación
+                document.getElementById('botonPaginaAnteriorMovimientos').disabled = paginaActualMovimientos === 1;
+                document.getElementById('botonPaginaSiguienteMovimientos').disabled = paginaActualMovimientos === totalPaginas;
+            }
+            
+            function paginaSiguienteMovimientos() {
+                paginaActualMovimientos++;
+                mostrarMovimientosPaginados();
+            }
+            
+            function paginaAnteriorMovimientos() {
+                paginaActualMovimientos--;
+                mostrarMovimientosPaginados();
+            }
+            
+            document.addEventListener('DOMContentLoaded', mostrarMovimientosPaginados);
+            
+            function archivarOMoverMovimientosAntiguos() {
+                const contenedorHistorial = document.getElementById('contenedorHistorial');
+                const tarjetasHistorial = contenedorHistorial.getElementsByClassName('tarjeta-historial');
+                const fechaActual = new Date();
+                
+                for (let i = 0; i < tarjetasHistorial.length; i++) {
+
+                    const tarjeta = tarjetasHistorial[i];
+                    const fechaMovimientoTexto = tarjeta.querySelector('.detalle').innerText.split('Fecha: ')[1];
+                    const fechaMovimiento = new Date(fechaMovimientoTexto);
+                    
+                    // Si el movimiento tiene más de un mes, lo archiva o elimina
+                    const diferenciaMeses = (fechaActual.getTime() - fechaMovimiento.getTime()) / (1000 * 3600 * 24 * 30);
+                    if (diferenciaMeses > 1) {
+                        // Mover el movimiento a un archivo o eliminarlo
+                        tarjeta.remove(); // O puedes moverlo a otro contenedor
+                    }
+                }
+                
+                // Después de archivar o eliminar, actualiza la paginación
+                mostrarMovimientosPaginados();
+            }
+            
+            // Ejecutar la función al cargar la página para archivar o eliminar movimientos antiguos
+            document.addEventListener('DOMContentLoaded', archivarOMoverMovimientosAntiguos);
+            
+            // Función para añadir documentos al inventario del equipo
+            function añadirDocumentoAlInventario(nombre, numeroSerie, enlaceDocumento) {
+                const filasTabla = document.querySelectorAll('#tablaEquipos tbody tr'); // Selecciona todas las filas de la tabla de inventario
+                filasTabla.forEach(fila => {
+                    if (fila.cells[1].innerText === nombre && fila.cells[2].innerText === numeroSerie) {
+                        fila.cells[9].innerHTML = enlaceDocumento; // Actualiza la celda de documentos con el nuevo enlace
+                    }
+                });
+            }
+            
+            // Función para cargar y mostrar el archivo Excel de inventario y verificar los datos
+            function cargarYVerificarArchivoExcel() {
+                // Mostrar el botón de verificación al seleccionar un archivo
+                const entradaArchivo = document.getElementById('archivoExcel');
+                archivoSeleccionado = entradaArchivo.files[0];
+                if (archivoSeleccionado) {
+                    document.getElementById('botonVerificar').style.display = 'inline-block'; // Muestra el botón de verificación
+                } else {
+                    document.getElementById('botonVerificar').style.display = 'none'; // Oculta el botón de verificación
+                }
+            }
+            
+            // Control de eventos y acciones relacionadas con el DOM y el manejo de archivos
+            document.addEventListener('DOMContentLoaded', function() {
+                sincronizarInventario(); // Sincroniza el inventario con Local Storage
+                document.getElementById('filtrarEstado').addEventListener('input', aplicarFiltros); // Filtra los equipos por estado
+                
+                // Maneja el cambio de archivo para todos los inputs de tipo archivo
+                const entradasArchivo = document.querySelectorAll('.carta-documento input[type="file"]');
+                entradasArchivo.forEach(entrada => {
+                    entrada.addEventListener('change', function() {
+                        const mostrarNombreArchivo = this.nextElementSibling;
+                        if (this.files.length > 0) {
+                            mostrarNombreArchivo.textContent = this.files[0].name; // Muestra el nombre del archivo seleccionado
+                        } else {
+                            mostrarNombreArchivo.textContent = 'No hay archivo seleccionado'; // Restablece el texto si no hay archivo seleccionado
+                        }
+                    });
+                });
+            });
+        </script>       
+    </body>
+</html>

@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimiento de Equipos Médicos</title>
+    <link rel="stylesheet" href="mantenimiento.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>🔧 Mantenimiento de Equipos Médicos 📋</h1>
+    </header>
+
+    <!-- Contenedor principal -->
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <button onclick="toggleListaEquipos()" class="btn-circle" title="Lista de Equipos">
+                <i class="fas fa-list"></i>
+            </button>
+            <button onclick="mostrarCronograma()" class="btn-circle" title="Cronograma">
+                <i class="fas fa-calendar-alt"></i>
+            </button>
+            <button onclick="mostrarHistorial()" class="btn-circle" title="Historial">
+                <i class="fas fa-history"></i>
+            </button>
+            <a href="../../pagina_principal/admin-dashboard.html" class="btn-circle" title="Volver al Menú">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-container">
+            
+            <!-- Mantenimientos Programados -->
+            <div class="table-container" style="display: block;">
+                <h3>Mantenimientos Programados</h3>
+                <div class="buttons">
+                    <button onclick="agregarAlCronograma()">📅 Añadir al Cronograma</button>
+                    <button onclick="mostrarOpcionesHojaVida()"> 📋Gestión de Hoja de Vida</button>
+                    <button onclick="editarMantenimiento()"> ✏️ Editar Mantenimiento</button>
+                    <button onclick="eliminarMantenimiento()"> ❌ Eliminar Mantenimiento</button>
+                </div>
+
+                <table id="tablaMantenimientos">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Equipo</th>
+                            <th>Número Serie</th>
+                            <th>Modelo</th>
+                            <th>Marca</th>
+                            <th>Tipo Mant.</th>
+                            <th>Fecha de Inicio</th>
+                            <th>Fecha Finalización</th>
+                            <th>Intervalo Programado</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTablaMantenimientos"></tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="contenedorPrincipal" style="display: flex; gap: 20px;">
+    <!-- Secciones ocultas (activadas dinámicamente) -->
+    <div id="listaEquipos" style="display: none;">
+        <h3> Lista de Equipos Registrados</h3>
+        <table id="tablaEquipos">  
+            <thead>
+                <tr>    
+                    <th></th> 
+                    <th>Nombre</th>   
+                    <th>Número Serie</th>     
+                    <th>Modelo</th>   
+                    <th>Marca</th>     
+                    <th>Estado</th>   
+                    <th>Ubicacion</th> 
+                </tr>
+            </thead> 
+            <tbody id="cuerpoTablaEquipos"></tbody>
+        </table>
+        <button onclick="mostrarFormularioMantenimiento()">Programar Mantenimiento</button>
+    </div>
+
+    <div id="formularioMantenimiento" class="hidden">
+        <h2>Programar Mantenimiento</h2>
+    
+        <label for="tipoMantenimiento">Tipo de Mantenimiento:</label>
+        <select id="tipoMantenimiento" onchange="verificarTipoMantenimiento()">
+            <option value="preventivo">Preventivo</option>
+            <option value="correctivo">Correctivo</option>
+            <option value="calibracion">Calibración</option>
+        </select>
+    
+        <label for="empresaAsistencia">Empresa de Asistencia Técnica:</label>
+        <select id="empresaAsistencia" onchange="cargarHojasDeVida()">
+            <option value="">Seleccione una empresa</option>
+            <!-- Opciones se llenarán dinámicamente desde el código -->
+        </select>
+    
+        <label for="intervaloMantenimiento">Intervalo (meses):</label>
+        <input type="number" id="intervaloMantenimiento" min="1" placeholder="Ejemplo: 6">
+    
+        <button onclick="guardarMantenimiento()">Guardar</button>
+        <button onclick="cerrarFormularioMantenimiento()">Cancelar</button>
+    </div>
+    </div>
+
+    <div id="cronograma" class="hidden" style="display: none;">
+        <h2 id="tituloCronograma">Cronograma de Mantenimiento - <span id="anioCronograma"></span></h2>
+   
+        <table id="tablaCronograma">
+            <thead>
+                <tr>
+                    <th rowspan="2"></th>
+                    <th rowspan="2">Ubicación</th>
+                    <th rowspan="2">Equipo</th>
+                    <th rowspan="2">Marca</th>
+                    <th rowspan="2">Modelo</th>
+                    <th rowspan="2">Serie</th>
+                    <th rowspan="2">Estado</th>
+                    <!-- Agregamos los encabezados de los meses -->
+                    <th colspan="4">Enero</th>
+                    <th colspan="4">Febrero</th>
+                    <th colspan="4">Marzo</th>
+                    <th colspan="4">Abril</th>
+                    <th colspan="4">Mayo</th>
+                    <th colspan="4">Junio</th>
+                    <th colspan="4">Julio</th>
+                    <th colspan="4">Agosto</th>
+                    <th colspan="4">Septiembre</th>
+                    <th colspan="4">Octubre</th>
+                    <th colspan="4">Noviembre</th>
+                    <th colspan="4">Diciembre</th>
+                </tr>
+                <tr>
+                    <!-- Agregamos las semanas como subencabezados -->
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoCronograma">
+                <!-- Las filas de datos dinámicas se generan aquí -->
+            </tbody>
+        </table>
+        <div>
+            <button onclick="eliminarSeleccionadosCronograma()">Eliminar Seleccionados</button>
+            <button onclick="guardarCronograma()">Guardar Cronograma</button>
+            <button onclick="descargarCronograma()">Descargar Cronograma</button>
+        </div>
+    </div>
+    
+
+    <!-- Modal para elegir la opción -->
+    <div id="modalHojaVida" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
+        <div style="margin: 10% auto; padding: 20px; background: white; width: 300px; text-align: center; border-radius: 8px;">
+            <h3>Gestión de Hoja de Vida</h3>
+            <p>Selecciona una opción:</p>
+            <!-- Opción para subir un archivo PDF -->
+            <div>
+                <label for="archivoPDFHojaVida">Subir Archivo PDF (Hoja de Vida):</label>
+                <input type="file" id="archivoPDFHojaVida" accept="application/pdf">
+                <button id="subirArchivoPDFHojaVida">Subir</button>
+            </div>
+            <hr>
+            
+            <button id="botonAbrirModal">Crear desde la Aplicación</button>
+
+            <hr>
+            <!-- Botón para cancelar -->
+            <button onclick="cerrarModalHojaVida()">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="historial" style="display: none;">  
+          
+        <h2>Historial de Mantenimientos</h2>
+   
+        <table>    
+            <thead>
+                <tr>
+                    <th>Equipo</th>    
+                    <th>Número de Serie</th>      
+                    <th>Modelo</th>     
+                    <th>Tipo de Mantenimiento</th>   
+                    <th>Fecha Finalización</th> 
+                    <th>Estado</th>   
+                    <th>Observaciones</th>  
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoHistorial"></tbody>
+        </table>
+    </div>
+
+    <!-- Modal para detalles del equipo -->
+<div id="modalDetalles" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; display: flex; justify-content: center; align-items: center;">
+    <div style="padding: 20px; background: white; width: 400px; text-align: center; border-radius: 8px; max-height: 80%; overflow-y: auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);">
+        <div id="contenidoModal"></div>
+        <button onclick="cerrarModalDetalles()">Cerrar</button>
+    </div>
+</div>
+
+
+    <!--finalizar mantenimiento-->
+    <div id="modalFinalizar" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
+        <div style="margin: 10% auto; padding: 20px; background: white; width: 300px; text-align: center; border-radius: 8px;">
+            <h3>Finalizar Mantenimiento</h3>
+            <p>Selecciona una opción:</p>
+            <!-- Botón para subir archivo PDF -->
+            <div>
+                <label for="archivoPDFMantenimiento">Subir Archivo PDF (Finalizar Mantenimiento):</label>
+                <input type="file" id="archivoPDFMantenimiento" accept="application/pdf">
+                <button id="subirArchivoPDFMantenimiento">Subir</button>
+            </div>
+            <!-- Botones para generar formato -->
+            <button id="opcionFormatoElectronico">Formato Electrónico</button>
+            <button id="opcionFormatoEndoscopios">Formato de Endoscopios</button>
+            <!-- Botón para cancelar -->
+            <button id="opcionCancelar">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal para elegir formato -->
+    <div id="modalOpcionesFormato" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
+        <div style="margin: 10% auto; padding: 20px; background: white; width: 300px; text-align: center; border-radius: 8px;">
+            <h3>Seleccionar Formato</h3>
+            <button onclick="redirigirFormato('electronico')">Formato Electrónico</button>
+            <button onclick="redirigirFormato('endoscopio')">Formato de Endoscopios</button>  
+            <button onclick="cerrarModalOpcionesFormato()">Cancelar</button>
+        </div>
+    </div>
+
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log("Página cargada correctamente.");
+                cargarListaEquipos();
+                cargarTablaMantenimientos();
+                cargarCronograma();   
+                cargarHistorial();
+                verificarTipoMantenimiento();
+
+                
+
+                // Asigna evento al botón solo cuando el DOM esté cargado
+    const botonAbrirModal = document.getElementById("botonAbrirModal");
+    if (botonAbrirModal) {
+        botonAbrirModal.addEventListener("click", mostrarModalSeleccion);
+    }
+
+                const mantenimientos = JSON.parse(localStorage.getItem('mantenimientos')) || [];
+    let anioCronograma;
+
+    if (mantenimientos.length > 0) {
+        // Obtener el primer año de los mantenimientos
+        const fechas = mantenimientos.map(m => new Date(m.fechaInicio));
+        anioCronograma = fechas[0].getFullYear(); // Suponiendo que todos los mantenimientos son para el mismo año
+    } else {
+        // Por defecto, usar el año actual si no hay mantenimientos programados
+        anioCronograma = new Date().getFullYear();
+    }
+
+    // Establecer el año en el título del cronograma
+    document.getElementById('anioCronograma').textContent = anioCronograma;
+
+            });
+
+        
+            function toggleListaEquipos() {
+    const tablaMantenimientos = document.querySelector('.table-container');
+    const listaEquipos = document.getElementById('listaEquipos');
+
+    // Ocultar tabla de mantenimientos y mostrar lista de equipos
+    if (tablaMantenimientos.style.display !== 'none') {
+        tablaMantenimientos.style.display = 'none';
+        listaEquipos.style.display = 'block';
+    } else {
+        // Mostrar tabla de mantenimientos y ocultar lista de equipos
+        tablaMantenimientos.style.display = 'block';
+        listaEquipos.style.display = 'none';
+    }
+}
+
+
+function toggleMantenimientos() {   
+    const contenedor = document.getElementById('contenedorMantenimientos');  
+
+    // Solo ejecutar si el contenedor ya está presente en el DOM
+    if (!contenedor) return;
+
+    // Validar que no se active al cargar la página
+    console.log("Ejecutando toggleMantenimientos()");
+
+    contenedor.style.display = contenedor.style.display === 'none' ? 'block' : 'none';
+}
+
+
+            function mostrarFormularioMantenimiento() {
+    const listaEquipos = document.getElementById('listaEquipos');
+    const formularioMantenimiento = document.getElementById('formularioMantenimiento');
+
+    // Mostrar el formulario
+    formularioMantenimiento.classList.remove('hidden');
+    formularioMantenimiento.style.display = 'block';
+
+    // Reducir el tamaño de la tabla de lista de equipos
+    listaEquipos.style.flex = '1';
+    listaEquipos.style.transition = 'all 0.3s ease'; // Suaviza la transición
+}
+
+function cerrarFormularioMantenimiento() {
+    const listaEquipos = document.getElementById('listaEquipos');
+    const formularioMantenimiento = document.getElementById('formularioMantenimiento');
+
+    // Ocultar el formulario
+    formularioMantenimiento.classList.add('hidden');
+    formularioMantenimiento.style.display = 'none';
+
+    // Restaurar el tamaño original de la tabla de lista de equipos
+    listaEquipos.style.flex = '2'; // O el valor original definido en CSS
+    listaEquipos.style.transition = 'all 0.3s ease';
+}
+
+// Función para cargar las hojas de vida del personal biomédico cuando se selecciona una empresa
+function cargarHojasDeVida() {
+    let empresaSeleccionada = document.getElementById("empresaAsistencia").value;
+    let listaHojasDeVida = document.getElementById("listaHojasDeVida");
+
+    listaHojasDeVida.innerHTML = ""; // Limpiar lista anterior
+
+    // Obtener las empresas guardadas en localStorage
+    const empresas = JSON.parse(localStorage.getItem('empresas')) || [];
+
+    // Buscar la empresa seleccionada y mostrar sus hojas de vida
+    const empresa = empresas.find(emp => emp.nombre === empresaSeleccionada);
+
+    if (empresa && empresa.hojasVida.length > 0) {
+        empresa.hojasVida.forEach(personal => {
+            let li = document.createElement("li");
+            li.textContent = `${personal.nombre} - 📂 ${personal.archivo}`;
+            listaHojasDeVida.appendChild(li);
+        });
+    } else {
+        listaHojasDeVida.innerHTML = "<li>No hay hojas de vida registradas.</li>";
+    }
+}
+
+
+// Función para cargar empresas registradas desde localStorage en la selección de mantenimiento
+function cargarEmpresasAsistencia() {
+    let selectEmpresa = document.getElementById("empresaAsistencia");
+    selectEmpresa.innerHTML = '<option value="">Seleccione una empresa</option>'; // Limpiar opciones previas
+
+    // Obtener las empresas guardadas en localStorage
+    const empresas = JSON.parse(localStorage.getItem('empresas')) || [];
+
+    empresas.forEach(empresa => {
+        let option = document.createElement("option");
+        option.value = empresa.nombre;
+        option.textContent = empresa.nombre;
+        selectEmpresa.appendChild(option);
+    });
+}
+
+// Llamar a la función para cargar empresas al abrir la página
+window.onload = cargarEmpresasAsistencia;
+
+            function mostrarCronograma() {
+    const tablaMantenimientos = document.querySelector('.table-container');
+    const listaEquipos = document.getElementById('listaEquipos');
+    const cronograma = document.getElementById('cronograma');
+    const historial = document.getElementById('historial');
+
+    if (tablaMantenimientos.style.display !== 'none' || listaEquipos.style.display !== 'none' || historial.style.display !== 'none') {
+        // Ocultar otras secciones y mostrar cronograma
+        tablaMantenimientos.style.display = 'none';
+        listaEquipos.style.display = 'none';
+        historial.style.display = 'none';
+        cronograma.style.display = 'block';
+    } else {
+        // Ocultar cronograma y volver a mostrar tabla de mantenimientos
+        tablaMantenimientos.style.display = 'block';
+        cronograma.style.display = 'none';
+    }
+}
+
+            function mostrarOpcionesHojaVida() {
+                const modal = document.getElementById('modalHojaVida');
+                modal.style.display = 'block';
+            }
+
+            function cerrarModalHojaVida() {
+                const modal = document.getElementById('modalHojaVida');
+                modal.style.display = 'none';
+            }
+
+            function mostrarHistorial() {
+    const tablaMantenimientos = document.querySelector('.table-container');
+    const listaEquipos = document.getElementById('listaEquipos');
+    const cronograma = document.getElementById('cronograma');
+    const historial = document.getElementById('historial');
+
+    if (tablaMantenimientos.style.display !== 'none' || listaEquipos.style.display !== 'none' || cronograma.style.display !== 'none') {
+        // Ocultar otras secciones y mostrar historial
+        tablaMantenimientos.style.display = 'none';
+        listaEquipos.style.display = 'none';
+        cronograma.style.display = 'none';
+        historial.style.display = 'block';
+    } else {
+        // Ocultar historial y volver a mostrar tabla de mantenimientos
+        tablaMantenimientos.style.display = 'block';
+        historial.style.display = 'none';
+    }
+}
+
+            function cerrarModalDetalles() {
+                document.getElementById('modalDetalles').style.display = 'none';
+            }
+
+            function cargarListaEquipos() {
+                const inventario = JSON.parse(localStorage.getItem('inventarioEquipos')) || [];
+                const cuerpoTabla = document.getElementById('cuerpoTablaEquipos');
+                cuerpoTabla.innerHTML = '';
+
+                if (inventario.length === 0) {
+                    cuerpoTabla.innerHTML = '<tr><td colspan="7">No hay equipos registrados.</td></tr>';  
+                    return;  
+                }
+
+            
+                inventario.forEach((equipo, index) => {  
+                    const fila = document.createElement('tr');
+                    fila.innerHTML = `
+                        <td><input type="checkbox" data-index="${index}"></td>
+                        <td>${equipo.nombre}</td>
+                        <td>${equipo.numeroSerie}</td>
+                        <td>${equipo.modelo}</td>
+                        <td>${equipo.marca}</td>
+                        <td>${equipo.estado}</td>
+                        <td>${equipo.ubicacion}</td>
+                        `;
+                
+                        cuerpoTabla.appendChild(fila);
+                    });
+                }
+
+                // Función para habilitar o deshabilitar el intervalo según el tipo de mantenimiento
+                function verificarTipoMantenimiento() {
+                    const tipoMantenimiento = document.getElementById('tipoMantenimiento').value;
+                    const intervaloMantenimiento = document.getElementById('intervaloMantenimiento');
+       
+                    if (tipoMantenimiento === 'correctivo') {
+                        intervaloMantenimiento.disabled = true; // Desactivar el campo
+                        intervaloMantenimiento.value = ''; // Limpiar el valor
+                    } else {
+                        intervaloMantenimiento.disabled = false; // Activar el campo
+                    }
+                }
+
+                function mostrarModalSeleccion() {
+    // Verifica si el modal ya existe y evita duplicarlo
+    if (document.getElementById("modalSeleccionTipo")) {
+        console.log("El modal ya está abierto, evitando duplicación.");
+        return;
+    }
+
+    // Crea el modal dinámicamente
+    const modal = document.createElement("div");
+    modal.id = "modalSeleccionTipo";
+    modal.style = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    `;
+
+    modal.innerHTML = `
+        <div style="background: white; padding: 20px; border-radius: 8px; text-align: center; width: 300px;">
+            <h3>Seleccione el Tipo de Hoja de Vida</h3>
+            <button id="btnElectronico" style="margin: 10px; padding: 10px; width: 100%;">Equipo Electrónico</button>
+            <button id="btnEndoscopio" style="margin: 10px; padding: 10px; width: 100%;">Equipo de Endoscopio</button>
+            <button id="btnCancelar" style="margin: 10px; padding: 10px; width: 100%; background: red; color: white;">Cancelar</button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Asigna eventos a los botones del modal
+    document.getElementById("btnElectronico").addEventListener("click", () => {
+        seleccionarTipoHojaVida("electronico");
+        cerrarModal();
+    });
+
+    document.getElementById("btnEndoscopio").addEventListener("click", () => {
+        seleccionarTipoHojaVida("endoscopio");
+        cerrarModal();
+    });
+
+    document.getElementById("btnCancelar").addEventListener("click", cerrarModal);
+}
+
+// Función para cerrar el modal de manera segura
+function cerrarModal() {
+    const modal = document.getElementById("modalSeleccionTipo");
+    if (modal) {
+        modal.remove();
+    }
+}
+
+                function seleccionarTipoHojaVida(tipo) {
+                    const checkboxes = document.querySelectorAll('.checkboxMantenimiento:checked');
+
+                    if (checkboxes.length === 0) {
+                        alert("Selecciona un equipo para gestionar su hoja de vida.");
+                        return;
+    
+                    } else if (checkboxes.length > 1) {
+                        alert("Selecciona solo un equipo para gestionar su hoja de vida.");
+                        return;
+                    }
+
+                    const numeroSerie = checkboxes[0].closest('tr').cells[2].innerText.trim();
+                    const inventario = JSON.parse(localStorage.getItem('inventarioEquipos')) || [];
+                    const equipoSeleccionado = inventario.find(equipo => equipo.numeroSerie === numeroSerie);
+
+                    if (!equipoSeleccionado) {
+                        alert("El equipo no se encontró en el inventario.");
+                        return;
+                    }
+
+                    equipoSeleccionado.tipo = tipo;
+                    const equipoEnviado = encodeURIComponent(JSON.stringify(equipoSeleccionado));
+                    window.location.href = `hoja_vida_equipo.html?equipo=${equipoEnviado}`;
+                }
+
+                // Subir hoja de vida
+                
+
+
+                function subirHojaDeVida() {
+    const archivoInput = document.getElementById("archivoPDFHojaVida");
+    if (archivoInput.files.length === 0) {
+        alert("⚠️ Selecciona un archivo PDF para la hoja de vida.");
+        return;
+    }
+
+    const archivo = archivoInput.files[0];
+    const numeroSerie = obtenerNumeroSerieSeleccionado();
+
+    if (!numeroSerie) {
+        alert("⚠️ Debes seleccionar un equipo antes de subir la hoja de vida.");
+        return;
+    }
+
+    console.log("📂 Subiendo hoja de vida para el equipo con número de serie:", numeroSerie);
+
+    // Convertir archivo a Base64 para almacenamiento
+    const reader = new FileReader();
+    reader.readAsDataURL(archivo);
+    reader.onload = function () {
+        guardarHojaDeVida(numeroSerie, reader.result);
+    };
+
+    reader.onerror = function (error) {
+        console.error("❌ Error al leer el archivo:", error);
+        alert("Hubo un problema al leer el archivo. Inténtalo de nuevo.");
+    };
+}
+
+
+function obtenerNumeroSerieSeleccionado() {
+    const checkboxes = document.querySelectorAll('#tablaEquipos input[type="checkbox"]:checked');
+
+    if (checkboxes.length === 0) {
+        alert("⚠️ No has seleccionado ningún equipo.");
+        return null;
+    }
+
+    if (checkboxes.length > 1) {
+        alert("⚠️ Solo puedes seleccionar un equipo a la vez.");
+        return null;
+    }
+
+    const fila = checkboxes[0].closest("tr"); // Obtener la fila del checkbox seleccionado
+    const numeroSerie = fila.cells[2]?.innerText.trim(); // Suponiendo que el número de serie está en la 3ra columna
+
+    console.log("✅ Equipo seleccionado - Número de Serie:", numeroSerie);
+    return numeroSerie || null;
+}
+
+
+function guardarHojaDeVida(numeroSerie, archivoBase64) {
+    let inventario = JSON.parse(localStorage.getItem("inventarioEquipos")) || [];
+
+    // Buscar el equipo por número de serie
+    let equipo = inventario.find(e => e.numeroSerie === numeroSerie);
+    if (!equipo) {
+        alert("❌ No se encontró el equipo en el inventario.");
+        return;
+    }
+
+    // Asignar la hoja de vida al equipo
+    equipo.hojaVida = archivoBase64;
+
+    // Guardar en `localStorage`
+    localStorage.setItem("inventarioEquipos", JSON.stringify(inventario));
+
+    console.log("✅ Hoja de vida guardada correctamente para el equipo:", numeroSerie);
+    alert("✅ Hoja de vida subida con éxito.");
+
+    // Refrescar la lista de equipos para reflejar la hoja de vida
+    cargarListaEquipos();
+    cerrarModalHojaVida();
+}
+
+
+                function programarMantenimiento(numeroSerie, tipoMantenimiento) {
+                    let inventarioEquipos = JSON.parse(localStorage.getItem('inventarioEquipos')) || [];
+
+                    const equipoActualizado = inventarioEquipos.map(equipo => {
+                        if (equipo.numeroSerie === numeroSerie) {
+                            equipo.estado = "MANTENIMIENTO"; // Cambiar estado a mantenimiento
+                            equipo.tipoMantenimiento = tipoMantenimiento; // Almacenar el tipo de mantenimiento
+                        }
+                        return equipo;
+                    });
+
+                    localStorage.setItem('inventarioEquipos', JSON.stringify(equipoActualizado));
+                    cargarListaEquipos();
+                    cargarListaMantenimiento(); // Refresca la tabla de Mantenimiento
+                    alert(`El equipo con número de serie ${numeroSerie} ha sido programado para mantenimiento ${tipoMantenimiento}.`);
+                }
+
+                function cargarTablaMantenimientos() {
+                    const mantenimientos = JSON.parse(localStorage.getItem('mantenimientos')) || [];
+                    const cuerpoTabla = document.getElementById('cuerpoTablaMantenimientos');
+    
+                    cuerpoTabla.innerHTML = '';
+
+                    if (mantenimientos.length === 0) {
+                        cuerpoTabla.innerHTML = '<tr><td colspan="11">No hay mantenimientos programados.</td></tr>';
+                        return;
+                    }
+
+    
+                    mantenimientos.forEach((mantenimiento, index) => {
+                        const intervaloProgramado = mantenimiento.tipo === 'correctivo' 
+            
+                        ? 'No Aplica'   
+                        : mantenimiento.intervaloProgramado
+                        ? formatearIntervalo(mantenimiento.intervaloProgramado)
+                        : 'No definido';
+        
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
+                            <td><input type="checkbox" data-index="${index}" class="checkboxMantenimiento"></td>
+                            <td>${mantenimiento.equipo}</td>
+                            <td>${mantenimiento.numeroSerie}</td>
+                            <td>${mantenimiento.modelo}</td>
+                            <td>${mantenimiento.marca}</td>
+                            <td>${mantenimiento.tipo}</td>
+                            <td>${mantenimiento.fechaInicio}</td>
+                            <td>${mantenimiento.fechaFinalizacion || 'Pendiente'}</td>
+                            <td>${formatearIntervalo(mantenimiento.intervaloProgramado)}</td>
+                            <td>${mantenimiento.estado}</td>
+                            <td>
+                                <button onclick="finalizarMantenimiento(${index})">Finalizar</button>    
+                            </td>
+                            `;
+        
+                            cuerpoTabla.appendChild(fila);
+                        });
+                    }
+
+                    function obtenerLunesDeSemana(fechaActual, intervaloMeses) {
+                        const fechaInicio = new Date(fechaActual);
+                        fechaInicio.setMonth(fechaInicio.getMonth() + intervaloMeses); // Sumar el intervalo en meses
+                        const dia = fechaInicio.getDay();
+                        const diferencia = (dia === 0 ? -6 : 1) - dia; // Ajustar para el lunes
+                        fechaInicio.setDate(fechaInicio.getDate() + diferencia);
+                        return fechaInicio;
+                    }
+      
+                    function formatearIntervalo(intervalo) {
+                        const meses = [
+                        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+                        ];
+            
+                        const [inicio, fin] = intervalo.split(' - ').map(fecha => new Date(fecha));
+                        const año = inicio.getFullYear();
+                        const mes = meses[inicio.getMonth()]; // Convierte el número del mes al nombre
+                        const semana = Math.ceil((inicio.getDate() + 6) / 7);
+                        return `${año}, ${mes}, Semana ${semana}`;
+                    }
+
+                    function agregarAlCronograma() {
+                        const checkboxes = document.querySelectorAll('.checkboxMantenimiento:checked');
+                        const mantenimientos = JSON.parse(localStorage.getItem('mantenimientos')) || [];
+                        const cronograma = JSON.parse(localStorage.getItem('cronograma')) || [];
+
+                            if (checkboxes.length === 0) {
+                                alert('Selecciona al menos un mantenimiento para añadir al cronograma.');
+                                return;
+                            }
+
+                            checkboxes.forEach(checkbox => {
+                                const index = checkbox.dataset.index;
+        
+                                const mantenimiento = mantenimientos[index];
+
+                                // Bloquear la adición si el mantenimiento es Correctivo
+                                if (mantenimiento.tipo === 'correctivo') {
+                                    alert(`No puedes agregar el mantenimiento Correctivo del equipo "${mantenimiento.equipo}" al cronograma.`);
+                                    return;
+                                }
+
+                                // Verificar que no esté duplicado en el cronograma
+                                const existeEnCronograma = cronograma.some(
+                                (item) => item.numeroSerie === mantenimiento.numeroSerie
+                            );
+
+                            if (existeEnCronograma) {
+                                alert(`El mantenimiento del equipo "${mantenimiento.equipo}" ya está en el cronograma.`);
+                            } else {
+              
+                                cronograma.push(mantenimiento); // Añade al cronograma
+                            }   
+                        });
+
+                        // Guardar los datos actualizados en localStorage
+                        localStorage.setItem('cronograma', JSON.stringify(cronograma));
+                        cargarCronograma();
+                        alert('Equipos añadidos al cronograma exitosamente.');
+                    }
+
+                    function cargarCronograma() {
+                        const cronograma = JSON.parse(localStorage.getItem('cronograma')) || [];
+                        const historial = JSON.parse(localStorage.getItem('historialMantenimientos')) || [];
+                        const cuerpoCronograma = document.getElementById('cuerpoCronograma');
+                    
+                        cuerpoCronograma.innerHTML = '';
+          
+                        const semanasTotales = 12 * 4;
+    
+                        cronograma.forEach((mantenimiento, index) => { // Añadir index       
+                            const fechaInicio = new Date(mantenimiento.intervaloProgramado.split(' - ')[0]);   
+                            const intervaloMeses = 2;     
+                            const semanasRecurrentes = generarFechasRecurrentes(fechaInicio, intervaloMeses);
+
+                            const historialMantenimiento = historial.find(
+                            (hist) => hist.numeroSerie === mantenimiento.numeroSerie  
+                        );
+
+                    
+                        const semanaEjecutada = historialMantenimiento
+                        ? obtenerSemanaGlobal(new Date(historialMantenimiento.fechaFinalizado))
+                        : null;
+
+                        // Fila Programado
+                        const filaEquipo = document.createElement('tr');
+                        filaEquipo.innerHTML = `
+                        <td rowspan="2"> 
+                            <input type="checkbox" class="seleccionarCronograma" data-index="${index}">
+                        </td>
+                    
+                        <td rowspan="2">${mantenimiento.ubicacion || 'Sin ubicación'}</td>
+                        <td rowspan="2">${mantenimiento.equipo}</td>
+                        <td rowspan="2">${mantenimiento.marca || 'Sin marca'}</td> 
+                        <td rowspan="2">${mantenimiento.modelo || 'Sin modelo'}</td>
+                        <td rowspan="2">${mantenimiento.numeroSerie}</td>
+                        <td style="font-weight: bold;">Programado</td>
+                        `;
+        
+                        agregarCeldasSemanas(filaEquipo, semanasTotales, semanasRecurrentes, 'programado');
+                        cuerpoCronograma.appendChild(filaEquipo);
+
+                        // Fila Ejecutado
+                        const filaEjecutado = document.createElement('tr');
+                        filaEjecutado.innerHTML = `<td style="font-weight: bold;">Ejecutado</td>`;
+        
+                        agregarCeldasSemanas(filaEjecutado, semanasTotales, semanaEjecutada !== null ? [semanaEjecutada] : [], 'ejecutado');
+                        cuerpoCronograma.appendChild(filaEjecutado);
+                    });
+                }
+
+                function eliminarSeleccionadosCronograma() {
+                    const checkboxes = document.querySelectorAll('.seleccionarCronograma:checked');
+                    const cronograma = JSON.parse(localStorage.getItem('cronograma')) || [];
+
+                    if (checkboxes.length === 0) {
+                        alert('Por favor selecciona al menos un equipo para eliminar.');
+                        return;
+                    }
+
+                    if (confirm('¿Estás seguro de que deseas eliminar los equipos seleccionados del cronograma?')) {
+                        const indicesAEliminar = Array.from(checkboxes).map(cb => parseInt(cb.dataset.index));
+
+                        // Filtrar elementos no seleccionados
+                        const nuevoCronograma = cronograma.filter((_, index) => !indicesAEliminar.includes(index));
+
+                        // Actualizar localStorage y recargar la tabla
+                        localStorage.setItem('cronograma', JSON.stringify(nuevoCronograma));
+                        cargarCronograma();
+                        alert('Los equipos seleccionados han sido eliminados del cronograma.');
+                    }
+                }
+
+                function guardarCronograma() {
+                    const cronograma = JSON.parse(localStorage.getItem('cronograma')) || [];
+                    const datosMantenimiento = JSON.parse(localStorage.getItem('datosMantenimiento')) || [];
+
+                    cronograma.forEach(item => {
+                        const mantenimientoExistente = datosMantenimiento.find(  
+                        m => m.numeroSerie === item.numeroSerie
+                    );
+
+                    if (!mantenimientoExistente) {
+                        datosMantenimiento.push({
+                            nombreEquipo: item.equipo,
+                            numeroSerie: item.numeroSerie,
+                            fechaMantenimiento: item.intervaloProgramado.split(' - ')[0],
+                            descripcion: `Mantenimiento Programado (${item.tipo || "N/A"})`,
+                            cronogramaCumplido: true // Identificador para el cronograma
+                        });
+       
+                    } else {
+                        // Actualizar el cronograma si ya existe
+                        mantenimientoExistente.fechaMantenimiento = item.intervaloProgramado.split(' - ')[0];
+                        mantenimientoExistente.cronogramaCumplido = true;
+                    }
+                });
+
+                localStorage.setItem('datosMantenimiento', JSON.stringify(datosMantenimiento));
+                alert('El cronograma ha sido guardado exitosamente y actualizado en los detalles del equipo.');
+            }
+
+            function descargarCronograma() {
+                const cronograma = JSON.parse(localStorage.getItem('cronograma')) || [];
+                if (cronograma.length === 0) {
+                    alert('No hay datos en el cronograma para descargar.');
+                    return;
+                }
+
+                // Encabezados de la tabla
+                let csvContent = "data:text/csv;charset=utf-8,";
+                csvContent += "Ubicación,Equipo,Marca,Modelo,Serie,Intervalo Programado,Estado\n";
+
+                // Recorrer cada elemento del cronograma y agregarlo al CSV
+                cronograma.forEach(item => {
+                    csvContent += [
+                    item.ubicacion || 'Sin ubicación',
+                    item.equipo || 'Sin equipo',
+                    item.marca || 'Sin marca',
+                    item.modelo || 'Sin modelo',
+                    item.numeroSerie || 'Sin serie',
+                    item.intervaloProgramado || 'Sin intervalo',
+                    item.estado || 'Sin estado'
+                    ].join(",") + "\n"; 
+                });
+
+    
+                // Crear y descargar el archivo
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+    
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "cronograma_mantenimiento.csv");
+    
+                document.body.appendChild(link); // Necesario para Firefox
+                link.click();
+    
+                document.body.removeChild(link);
+            }
+
+            function agregarCeldasSemanas(fila, semanasTotales, semanasResaltadas, tipo) {
+                for (let i = 0; i < semanasTotales; i++) {
+                    const celda = document.createElement('td');
+
+                    // Pintar las semanas resaltadas
+                    if (semanasResaltadas.includes(i)) {
+                        celda.style.backgroundColor = tipo === 'programado' ? 'red' : 'gray';
+                        celda.style.color = 'white';
+                    }
+
+                    fila.appendChild(celda);
+                }
+            }
+
+            function generarFechasRecurrentes(fechaInicio, intervaloMeses) {
+                const semanas = [];
+                let fechaActual = new Date(fechaInicio);
+
+                // Generar semanas hasta diciembre del año actual o el futuro
+                const añoLimite = new Date().getFullYear() + 1; // Configurado hasta un año en adelante
+     
+                while (fechaActual.getFullYear() <= añoLimite) {
+                    const semana = obtenerSemanaGlobal(fechaActual);
+                    semanas.push(semana);
+
+                    // Avanzar en el intervalo definido
+                    fechaActual.setMonth(fechaActual.getMonth() + intervaloMeses);
+                }
+
+                return semanas;
+            }
+
+function obtenerSemanaGlobal(fecha) {
+    const mes = fecha.getMonth(); // Mes actual (0-11)
+    const semana = Math.ceil(fecha.getDate() / 7); // Semana dentro del mes (1-4)
+    return mes * 4 + (semana - 1); // Posición exacta de la semana en la tabla global (12 meses)
+}
+
+// Convierte una fecha a la semana correspondiente en el cronograma
+function obtenerSemanaDelMes(fecha) {
+    const mes = fecha.getMonth(); // Mes actual (0-11)
+    const semana = Math.ceil(fecha.getDate() / 7); // Semana dentro del mes (1-4)
+    return mes * 4 + (semana - 1); // Posición exacta de la semana en la tabla
+}
+
+
+
+
+        
+function cargarHistorial() {
+    const historial = JSON.parse(localStorage.getItem('historialMantenimientos')) || [];
+    const cuerpoTabla = document.getElementById('cuerpoHistorial');
+    cuerpoTabla.innerHTML = '';
+
+    if (historial.length === 0) {
+        cuerpoTabla.innerHTML = '<tr><td colspan="8">No hay mantenimientos en el historial.</td></tr>';
+        return;
+    }
+
+    // Agrupar mantenimientos por número de serie
+    const mantenimientosAgrupados = historial.reduce((acumulador, mantenimiento) => {
+        const numeroSerie = mantenimiento.numeroSerie;
+
+        if (!acumulador[numeroSerie]) {
+            acumulador[numeroSerie] = { 
+                ...mantenimiento, 
+                detalles: [mantenimiento] 
+            };
+        } else {
+            acumulador[numeroSerie].fechaFinalizado = mantenimiento.fechaFinalizado;
+            acumulador[numeroSerie].detalles.push(mantenimiento);
+        }
+
+        return acumulador;
+    }, {});
+
+    // Renderizar la tabla con datos agrupados
+    Object.values(mantenimientosAgrupados).forEach((mantenimiento) => {
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+            <td>${mantenimiento.equipo}</td>
+            <td>${mantenimiento.numeroSerie}</td>
+            <td>${mantenimiento.modelo}</td>
+            <td>${mantenimiento.tipo}</td>
+            <td>${mantenimiento.fechaFinalizado || 'Pendiente'}</td>
+            <td>${mantenimiento.estado}</td>
+            <td>${mantenimiento.observaciones || ''}</td>
+            <td><button onclick="mostrarDetalles('${mantenimiento.numeroSerie}')">Detalles</button></td>
+        `;
+        cuerpoTabla.appendChild(fila);
+    });
+}
+
+// Mostrar detalles completos de los mantenimientos realizados
+function mostrarDetalles(numeroSerie) {
+    const historial = JSON.parse(localStorage.getItem('historialMantenimientos')) || [];
+    const mantenimientos = historial.filter(m => m.numeroSerie === numeroSerie);
+
+    if (mantenimientos.length === 0) {
+        alert('No se encontraron detalles para este equipo.');
+        return;
+    }
+
+    // Construir el contenido del modal con todos los mantenimientos
+    const contenidoModal = document.getElementById('contenidoModal');
+    contenidoModal.innerHTML = `<h3>Detalles del Equipo: ${mantenimientos[0].equipo} (${numeroSerie})</h3>`;
+
+    mantenimientos.forEach((mantenimiento, index) => {
+        contenidoModal.innerHTML += `
+            <p><strong>Mantenimiento ${index + 1}:</strong></p>
+            <p><strong>Fecha de Inicio:</strong> ${mantenimiento.fechaInicio}</p>
+            <p><strong>Fecha de Finalización:</strong> ${mantenimiento.fechaFinalizado || 'Pendiente'}</p>
+            <p><strong>Tipo:</strong> ${mantenimiento.tipo}</p>
+            <p><strong>Estado:</strong> ${mantenimiento.estado}</p>
+            <p><strong>Observaciones:</strong> ${mantenimiento.observaciones || 'Ninguna'}</p>
+            <hr>
+        `;
+    });
+
+    // Mostrar el modal
+    document.getElementById('modalDetalles').style.display = 'block';
+}
+
+
+
+
+function guardarMantenimiento() {
+    const tipo = document.getElementById('tipoMantenimiento').value;
+    const intervalo = parseInt(document.getElementById('intervaloMantenimiento').value);
+    const empresaAsistencia = document.getElementById('empresaAsistencia').value; // Obtener empresa
+
+    // Validar tipo, intervalo y empresa
+    if (!tipo || (tipo !== 'correctivo' && (!intervalo || intervalo <= 0)) || !empresaAsistencia) {
+        alert('Completa todos los campos y asegúrate de ingresar un intervalo válido y seleccionar una empresa de asistencia.');
+        return;
+    }
+
+    // Obtener inventario y equipos seleccionados
+    const inventario = JSON.parse(localStorage.getItem('inventarioEquipos')) || [];
+    const seleccionados = Array.from(document.querySelectorAll('#tablaEquipos input[type="checkbox"]:checked'));
+
+    if (seleccionados.length === 0) {
+        alert('Selecciona al menos un equipo para programar mantenimiento.');
+        return;
+    }
+
+    const mantenimientos = JSON.parse(localStorage.getItem('mantenimientos')) || [];
+
+    seleccionados.forEach((checkbox) => {
+        const equipo = inventario[checkbox.dataset.index];
+
+        // Cambiar el estado del equipo a "Mantenimiento" si es un mantenimiento correctivo
+        if (tipo === 'correctivo') {
+            equipo.estado = 'MANTENIMIENTO';
+        }
+
+        // Verificar si existe un correctivo pendiente solo para preventivos
+        const existeCorrectivo = mantenimientos.some(
+            (m) => m.numeroSerie === equipo.numeroSerie && m.tipo === 'correctivo' && m.estado === 'Pendiente'
+        );
+
+        if (tipo === 'preventivo' && existeCorrectivo) {
+            alert(`No puedes programar un mantenimiento Preventivo mientras existe un Correctivo pendiente para "${equipo.nombre}".`);
+            return;
+        }
+
+        // Calcular el lunes de la semana
+        const fechaActual = new Date();
+        const fechaInicio = tipo === 'correctivo' ? fechaActual : obtenerLunesDeSemana(fechaActual, intervalo);
+        const fechaFin = new Date(fechaInicio);
+        fechaFin.setDate(fechaInicio.getDate() + 6); // Intervalo de 7 días
+
+        const intervaloProgramado = tipo === 'correctivo'
+            ? 'No Aplica'
+            : `${fechaInicio.toISOString().split('T')[0]} - ${fechaFin.toISOString().split('T')[0]}`;
+
+        // 📌 Guardar el mantenimiento con la empresa de asistencia
+        mantenimientos.push({
+            equipo: equipo.nombre,
+            numeroSerie: equipo.numeroSerie,
+            modelo: equipo.modelo,
+            marca: equipo.marca,
+            tipo: tipo,
+            fechaInicio: fechaInicio.toISOString().split('T')[0],
+            fechaFinalizacion: '',
+            intervaloProgramado: intervaloProgramado,
+            estado: 'Pendiente',
+            intervalo: intervalo, // Almacena el intervalo proporcionado
+            empresa: empresaAsistencia // 📌 Guardar la empresa de asistencia
+        });
+    });
+
+    // Guardar los cambios en localStorage
+    localStorage.setItem('mantenimientos', JSON.stringify(mantenimientos));
+    localStorage.setItem('inventarioEquipos', JSON.stringify(inventario));
+
+    // Recargar tablas y cerrar formulario
+    cargarTablaMantenimientos();
+    cargarListaEquipos(); // Actualizar tabla de inventario en el HTML
+    cerrarFormularioMantenimiento();
+    alert('Mantenimiento programado con éxito.');
+}
+
+
+
+
+function finalizarMantenimiento(index) {
+    // Obtener datos actuales
+    const mantenimientos = JSON.parse(localStorage.getItem('mantenimientos'));
+    const inventario = JSON.parse(localStorage.getItem('inventarioEquipos')) || [];
+    const historial = JSON.parse(localStorage.getItem('historialMantenimientos')) || [];
+    const mantenimiento = mantenimientos.splice(index, 1)[0];
+
+    // Mostrar el modal de finalización
+    mostrarModalFinalizar(index);
+
+    // Función que maneja la finalización dependiendo de la elección
+    function completarFinalizacion(opcion, archivo = null) {
+        if (opcion === 'subir') {
+            mantenimiento.observaciones = archivo ? `Formato subido: ${archivo.name}` : 'No se subió ningún archivo.';
+        } else if (opcion === 'electronico') {
+            mantenimiento.observaciones = 'Formato generado: Electrónico';
+        } else if (opcion === 'endoscopio') {
+            mantenimiento.observaciones = 'Formato generado: Endoscopios';
+        }
+
+        // Cambiar estado del equipo en inventario
+    const equipoActualizado = inventario.map(equipo => {
+        if (equipo.numeroSerie === mantenimiento.numeroSerie) {
+            equipo.estado = "OPERATIVO"; // Estado después de finalizar el mantenimiento
+        }
+        return equipo;
+    });
+
+        // Actualizar estado y fecha de finalización
+        mantenimiento.estado = 'Finalizado';
+        mantenimiento.fechaFinalizado = new Date().toISOString().split('T')[0];
+        historial.push(mantenimiento);
+
+
+        // Reprogramar siguiente mantenimiento
+        const intervalo = parseInt(document.getElementById('intervaloMantenimiento').value) || 6; // Usa el intervalo proporcionado
+        const fechaProgramadaInicio = obtenerLunesDeSemana(new Date(mantenimiento.intervaloProgramado.split(' - ')[1]), intervalo);
+        const fechaProgramadaFin = new Date(fechaProgramadaInicio);
+        fechaProgramadaFin.setDate(fechaProgramadaInicio.getDate() + 6); // Intervalo de 7 días
+
+
+        mantenimientos.push({
+            ...mantenimiento,
+            fechaInicio: fechaProgramadaInicio.toISOString().split('T')[0],
+            intervaloProgramado: `${fechaProgramadaInicio.toISOString().split('T')[0]} - ${fechaProgramadaFin.toISOString().split('T')[0]}`,
+            estado: 'Pendiente',
+            fechaFinalizado: '',
+        });
+
+        // Guardar los datos actualizados en localStorage
+        localStorage.setItem('mantenimientos', JSON.stringify(mantenimientos));
+        localStorage.setItem('historialMantenimientos', JSON.stringify(historial));
+        localStorage.setItem('inventarioEquipos', JSON.stringify(equipoActualizado));
+
+        // Recargar las tablas y cronogramas
+        cargarListaEquipos();
+        cargarTablaMantenimientos();
+        cargarCronograma();
+        cargarHistorial();
+    }
+
+    // Función para mostrar el modal de finalización
+    function mostrarModalFinalizar() {
+        const modal = document.getElementById('modalFinalizar');
+        modal.style.display = 'block';
+
+        // Configuración de botones del modal
+        document.getElementById('subirArchivoPDFMantenimiento').onclick = () => {
+            const archivoInput = document.getElementById('archivoPDFMantenimiento');
+            if (archivoInput.files.length > 0) {
+                const archivo = archivoInput.files[0];
+                completarFinalizacion('subir', archivo);
+                cerrarModalFinalizar();
+            } else {
+                alert('Por favor selecciona un archivo PDF.');
+            }
+        };
+
+        document.getElementById('opcionFormatoElectronico').onclick = () => {
+            completarFinalizacion('electronico');
+            redirigirFormato('electronico');
+            cerrarModalFinalizar();
+        };
+
+        document.getElementById('opcionFormatoEndoscopios').onclick = () => {
+            completarFinalizacion('endoscopio');
+            redirigirFormato('endoscopio');
+            cerrarModalFinalizar();
+        };
+
+        document.getElementById('opcionCancelar').onclick = cerrarModalFinalizar;
+    }
+
+    // Función para cerrar el modal de finalización
+    function cerrarModalFinalizar() {
+        const modal = document.getElementById('modalFinalizar');
+        modal.style.display = 'none';
+    }
+}
+
+
+
+function redirigirFormato(tipo) {
+    if (tipo === 'electronico') {
+        window.location.href = 'formato_electronico.html';
+    } else if (tipo === 'endoscopio') {
+        window.location.href = 'formato_endoscopia.html';
+    }
+}
+
+function actualizarEstadoMantenimientos() {
+    const mantenimientos = JSON.parse(localStorage.getItem('mantenimientos')) || [];
+    const fechaActual = new Date();
+
+    mantenimientos.forEach(mantenimiento => {
+        const [fechaInicio, fechaFin] = mantenimiento.intervaloProgramado.split(' - ').map(fecha => new Date(fecha));
+
+        if (fechaActual >= fechaInicio && fechaActual <= fechaFin) {
+            mantenimiento.estado = 'En Curso';
+        } else if (mantenimiento.estado !== 'Finalizado') {
+            mantenimiento.estado = 'Pendiente';
+        }
+    });
+
+    localStorage.setItem('mantenimientos', JSON.stringify(mantenimientos));
+    cargarTablaMantenimientos();
+}
+
+function actualizarEstadoMantenimiento(numeroSerie, nuevoEstado) {
+    const filas = document.querySelectorAll('#tablaMantenimientos tbody tr'); // Selecciona las filas de mantenimiento
+
+    filas.forEach((fila) => {
+        const serie = fila.cells[3].innerText.trim(); // Número de serie en la fila
+        if (serie === numeroSerie) {
+            fila.cells[8].innerText = nuevoEstado; // Actualiza la celda de estado
+        }
+    });
+}
+
+function sincronizarDatos() {
+    const inventarioEquipos = JSON.parse(localStorage.getItem('inventarioEquipos')) || [];
+    const mantenimientos = JSON.parse(localStorage.getItem('mantenimientos')) || [];
+
+    mantenimientos.forEach(mantenimiento => {
+        const equipo = inventario.find(e => e.numeroSerie === mantenimiento.numeroSerie);
+        if (equipo) {
+            equipo.estado = mantenimiento.estado === "Finalizado" ? "OPERATIVO" : "MANTENIMIENTO";
+        }
+    });
+
+    localStorage.setItem('inventarioEquipos', JSON.stringify(inventario));
+    cargarListaEquipos();
+}
+
+
+
+
+
+
+
+function eliminarMantenimiento() {
+    const checkboxes = document.querySelectorAll('.checkboxMantenimiento:checked'); // Selecciona los checkboxes marcados
+    const mantenimientos = JSON.parse(localStorage.getItem('mantenimientos')) || [];
+
+    if (checkboxes.length === 0) {
+        alert('Selecciona al menos un mantenimiento para eliminar.');
+        return;
+    }
+
+    // Confirmación antes de eliminar
+    if (confirm(`¿Estás seguro de que quieres eliminar ${checkboxes.length} mantenimiento(s)?`)) {
+        // Obtener los índices de los mantenimientos seleccionados
+        const indicesAEliminar = Array.from(checkboxes).map(checkbox => parseInt(checkbox.dataset.index));
+
+        // Filtrar los mantenimientos que no están en los índices seleccionados
+        const mantenimientosActualizados = mantenimientos.filter((_, index) => !indicesAEliminar.includes(index));
+
+        // Guardar el nuevo array en localStorage
+        localStorage.setItem('mantenimientos', JSON.stringify(mantenimientosActualizados));
+
+        // Recargar la tabla de mantenimientos
+        cargarTablaMantenimientos();
+        alert('Mantenimiento(s) eliminado(s) con éxito.');
+    }
+}
+
+
+function editarMantenimiento() {
+    const checkboxes = document.querySelectorAll('.checkboxMantenimiento:checked'); // Selecciona todos los checkboxes marcados
+    const mantenimientos = JSON.parse(localStorage.getItem('mantenimientos')) || [];
+
+    if (checkboxes.length === 0) {
+        alert('Selecciona al menos un mantenimiento para editar.');
+        return;
+    }
+
+    // Recorremos los checkboxes seleccionados y editamos cada mantenimiento
+    checkboxes.forEach(checkbox => {
+        const index = checkbox.dataset.index; // Índice del mantenimiento en el array
+        const mantenimiento = mantenimientos[index];
+
+        // Solicitar nuevos valores mediante prompts (con valores actuales como predeterminados)
+        const nuevoTipo = prompt(`Editar tipo de mantenimiento (${mantenimiento.tipo}):`, mantenimiento.tipo);
+        const nuevaFechaInicio = prompt(`Editar inicio del intervalo (YYYY-MM-DD, actual: ${mantenimiento.fechaInicio}):`, mantenimiento.fechaInicio);
+        const nuevaFechaFin = prompt(`Editar fin del intervalo (YYYY-MM-DD, actual: ${mantenimiento.fechaFinalizacion || "N/A"}):`, mantenimiento.fechaFinalizacion);
+
+        // Actualizamos los valores si se ingresan nuevos
+        if (nuevoTipo) mantenimiento.tipo = nuevoTipo;
+        if (nuevaFechaInicio && nuevaFechaFin) {
+            mantenimiento.fechaInicio = nuevaFechaInicio;
+            mantenimiento.fechaFinalizacion = nuevaFechaFin;
+            mantenimiento.intervaloProgramado = `${nuevaFechaInicio} - ${nuevaFechaFin}`;
+        } else if (mantenimiento.tipo === 'correctivo') {
+            mantenimiento.intervaloProgramado = 'No Aplica';
+        }
+    });
+
+    // Guardar los cambios en localStorage
+    localStorage.setItem('mantenimientos', JSON.stringify(mantenimientos));
+
+    // Recargar la tabla de mantenimientos
+    cargarTablaMantenimientos();
+
+    alert(`Se han editado ${checkboxes.length} mantenimiento(s) con éxito.`);
+}
+
+
+
+
+    </script>
+</body>
+</html>
+
+
+
